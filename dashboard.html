@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Client & Student Dashboard - AssignmentWaala</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="images/fv.png" type="image/x-icon">
+  
+  <!-- Fonts & Styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/fontawesome-all.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="dashboard-body">
+
+  <div class="dashboard-wrapper">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="dashboard-sidebar" id="dashboard-sidebar">
+      <div class="sidebar-header">
+        <a href="#/dashboard" class="sidebar-brand">
+          <img src="images/logo.png" alt="AssignmentWaala Logo">
+          <span>AssignmentWaala</span>
+        </a>
+      </div>
+
+      <div class="sidebar-menu">
+        <div class="menu-category">Main Menu</div>
+        <a href="#/dashboard" class="nav-item-link active"><i class="fas fa-th-large"></i> Dashboard</a>
+        <a href="#/projects" class="nav-item-link"><i class="fas fa-folder-open"></i> My Projects</a>
+        <a href="#/submit-project" class="nav-item-link"><i class="fas fa-plus-circle"></i> Submit Project</a>
+        <a href="#/messages" class="nav-item-link"><i class="fas fa-comments"></i> Messages</a>
+        <a href="#/files" class="nav-item-link"><i class="fas fa-file-alt"></i> Files & Documents</a>
+        <a href="#/payments" class="nav-item-link"><i class="fas fa-credit-card"></i> Payments</a>
+        <a href="#/notifications" class="nav-item-link"><i class="fas fa-bell"></i> Notifications</a>
+
+        <div class="menu-category mt-3">Management</div>
+        <a href="#/revisions" class="nav-item-link"><i class="fas fa-history"></i> Revisions</a>
+        <a href="#/completed-projects" class="nav-item-link"><i class="fas fa-check-double"></i> Completed Projects</a>
+        <a href="#/profile" class="nav-item-link"><i class="fas fa-user-circle"></i> Profile</a>
+        <a href="#/settings" class="nav-item-link"><i class="fas fa-cog"></i> Settings</a>
+        <a href="#/support" class="nav-item-link"><i class="fas fa-headset"></i> Help & Support</a>
+      </div>
+
+      <div class="sidebar-footer">
+        <a href="#" id="sidebar-logout-btn" class="nav-item-link text-danger mb-0">
+          <i class="fas fa-sign-out-alt"></i> Sign Out
+        </a>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="dashboard-main">
+      <!-- TOP NAVBAR -->
+      <header class="dashboard-navbar">
+        <div class="d-flex align-items-center gap-3">
+          <button class="navbar-mobile-toggle mr-3" id="mobile-sidebar-toggle">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="navbar-page-title" id="navbar-page-title">Dashboard Overview</h1>
+        </div>
+
+        <div class="navbar-actions">
+          <a href="#/submit-project" class="btn-submit-cta">
+            <i class="fas fa-plus"></i> Submit Project
+          </a>
+
+          <a href="#/notifications" class="notification-bell-btn" title="Notifications">
+            <i class="fas fa-bell"></i>
+            <span class="notification-badge-dot" id="notif-badge-dot"></span>
+          </a>
+
+          <a href="#/profile" class="user-profile-badge">
+            <img src="images/fv.png" id="user-avatar-img" class="user-avatar-circle" alt="User Avatar">
+            <span class="user-name-text" id="user-name-span">Gareema Sharma</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- DYNAMIC APP RENDER CONTAINER -->
+      <div class="dashboard-container" id="dashboard-app-render">
+        <!-- SPA view rendered dynamically via js/dashboard.js -->
+      </div>
+    </main>
+
+  </div>
+
+  <!-- AUTHENTICATION MODAL DIALOG -->
+  <div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header border-0 pb-0">
+          <ul class="nav nav-tabs border-0" id="authTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active font-weight-bold h5 mb-0 border-0" id="auth-login-tab" data-toggle="tab" href="#login-pane" role="tab">Sign In</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link font-weight-bold h5 mb-0 border-0" id="auth-register-tab" data-toggle="tab" href="#register-pane" role="tab">Register Account</a>
+            </li>
+          </ul>
+        </div>
+        <div class="modal-body p-4">
+          <div class="tab-content" id="authTabContent">
+            <!-- LOGIN PANE -->
+            <div class="tab-pane fade show active" id="login-pane" role="tabpanel">
+              <div class="alert alert-info py-2 px-3 small mb-3">
+                <strong>Demo Student Credentials:</strong><br>
+                Email: <code>student@demo.com</code> | Password: <code>Password123!</code>
+              </div>
+              <form id="auth-login-form">
+                <div class="form-group">
+                  <label>Email Address</label>
+                  <input type="email" id="login-email" class="form-control" value="student@demo.com" required>
+                </div>
+                <div class="form-group">
+                  <label>Password</label>
+                  <input type="password" id="login-password" class="form-control" value="Password123!" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block rounded-pill font-weight-bold mt-4">Sign In to Dashboard</button>
+              </form>
+            </div>
+
+            <!-- REGISTER PANE -->
+            <div class="tab-pane fade" id="register-pane" role="tabpanel">
+              <form id="auth-register-form">
+                <div class="form-group">
+                  <label>Full Name *</label>
+                  <input type="text" id="reg-name" class="form-control" placeholder="e.g. Gareema Sharma" required>
+                </div>
+                <div class="form-group">
+                  <label>Email Address *</label>
+                  <input type="email" id="reg-email" class="form-control" placeholder="student@university.edu" required>
+                </div>
+                <div class="form-group">
+                  <label>Password *</label>
+                  <input type="password" id="reg-password" class="form-control" placeholder="Minimum 6 characters" required>
+                </div>
+                <div class="form-group">
+                  <label>Institution / University</label>
+                  <input type="text" id="reg-institution" class="form-control" placeholder="e.g. Oxford University">
+                </div>
+                <button type="submit" class="btn btn-success btn-block rounded-pill font-weight-bold mt-4">Create Account & Continue</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Dependencies -->
+  <script src="js/jquery.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/dashboard.js"></script>
+
+</body>
+</html>
