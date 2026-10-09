@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/fontawesome-all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/owl.carousel.css">
     <link rel="stylesheet" href="css/style.css">
     <style>
@@ -195,28 +196,136 @@
             border-color: #2b56f5;
             color: #2b56f5 !important;
         }
+        @keyframes pulse-whatsapp {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+                transform: scale(1);
+            }
+            70% {
+                box-shadow: 0 0 0 18px rgba(37, 211, 102, 0);
+                transform: scale(1.08);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+                transform: scale(1);
+            }
+        }
         .whatsapp-float-btn {
             position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 54px;
-            height: 54px;
+            bottom: 28px;
+            right: 28px;
+            width: 60px;
+            height: 60px;
             background-color: #25d366;
             color: #ffffff;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 2.1rem;
             box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
-            z-index: 9999;
+            z-index: 99999;
             text-decoration: none !important;
+            animation: pulse-whatsapp 2s infinite ease-in-out;
             transition: transform 0.25s ease;
         }
         .whatsapp-float-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.18);
             color: #ffffff;
         }
+
+        /* OFFER CARDS STYLING LIKE REFERENCE IMAGE */
+        .offer-card {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .offer-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(43, 86, 245, 0.15);
+            border-color: #2b56f5;
+        }
+        .offer-card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+        }
+        .offer-card-body {
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .offer-card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+        .offer-card-text {
+            color: #64748b;
+            font-size: 0.92rem;
+            line-height: 1.55;
+            margin: 0;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        .offer-card-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 10px;
+        }
+        .btn-card-outline {
+            flex: 1;
+            text-align: center;
+            padding: 9px 12px;
+            border: 1.5px solid #0f172a;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #0f172a !important;
+            font-weight: 700;
+            font-size: 0.88rem;
+            text-decoration: none !important;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .btn-card-outline:hover {
+            border-color: #2b56f5;
+            color: #2b56f5 !important;
+            background: #f8fafc;
+        }
+        .btn-card-filled {
+            flex: 1;
+            text-align: center;
+            padding: 9.5px 12px;
+            border: none;
+            border-radius: 8px;
+            background: #6366f1;
+            color: #ffffff !important;
+            font-weight: 700;
+            font-size: 0.88rem;
+            text-decoration: none !important;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .btn-card-filled:hover {
+            background: #4f46e5;
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.45);
+            transform: translateY(-1px);
+            color: #ffffff !important;
+        }
+
         .step-number-badge {
             width: 46px;
             height: 46px;
@@ -229,6 +338,278 @@
             align-items: center;
             justify-content: center;
             margin-bottom: 16px;
+        }
+
+        /* HOW IT WORKS PROCESS SECTION STYLING (EXACT MATCH TO REFERENCE IMAGE) */
+        .process-section {
+            background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 90px 0 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .process-pill-badge {
+            background-color: #f3e8ff;
+            color: #7c3aed;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 6px 22px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+        .process-title-container {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .process-main-title {
+            font-weight: 800;
+            color: #1e293b;
+            font-size: 2.5rem;
+            line-height: 1.25;
+            margin: 0;
+        }
+        .process-brand-title {
+            color: #1e293b;
+            font-size: 2.8rem;
+            font-weight: 800;
+            display: block;
+            margin-top: 4px;
+            letter-spacing: -0.5px;
+        }
+        .process-works-wrap {
+            color: #6366f1;
+            font-size: 2.8rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 4px;
+            position: relative;
+        }
+        .sparkle-icon {
+            width: 32px;
+            height: 32px;
+        }
+
+        /* PROCESS CARDS STYLING */
+        .process-card-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 36px 24px 28px 24px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+            height: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .process-card-box:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.12);
+        }
+
+        /* CARD THEMES & BORDERS */
+        .process-card-box.step-theme-1 { border: 1.5px solid #e0f2fe; }
+        .process-card-box.step-theme-2 { border: 1.5px solid #f3e8ff; }
+        .process-card-box.step-theme-3 { border: 1.5px solid #fef3c7; }
+        .process-card-box.step-theme-4 { border: 1.5px solid #d1fae5; }
+
+        /* NUMBER BADGES AT TOP-LEFT */
+        .step-number-pill {
+            position: absolute;
+            top: 14px;
+            left: 18px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .step-theme-1 .step-number-pill { background-color: #3b82f6; }
+        .step-theme-2 .step-number-pill { background-color: #8b5cf6; }
+        .step-theme-3 .step-number-pill { background-color: #f59e0b; }
+        .step-theme-4 .step-number-pill { background-color: #10b981; }
+
+        /* ICON CIRCLES */
+        .step-icon-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            font-size: 2.2rem;
+            margin-top: 10px;
+        }
+        .step-theme-1 .step-icon-circle { background-color: #e0f2fe; color: #0284c7; }
+        .step-theme-2 .step-icon-circle { background-color: #f3e8ff; color: #7c3aed; }
+        .step-theme-3 .step-icon-circle { background-color: #fef3c7; color: #d97706; }
+        .step-theme-4 .step-icon-circle { background-color: #d1fae5; color: #059669; }
+
+        .process-card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 12px;
+        }
+        .process-card-text {
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.55;
+            margin: 0;
+        }
+
+        /* CONNECTOR ARROW (DESKTOP) */
+        @media (min-width: 992px) {
+            .step-col-wrapper {
+                position: relative;
+            }
+            .step-connector-arrow {
+                position: absolute;
+                top: -18px;
+                right: -32px;
+                width: 65px;
+                height: 38px;
+                z-index: 10;
+                pointer-events: none;
+            }
+        }
+
+        /* WHY CHOOSE US SECTION STYLING (EXACT MATCH TO REFERENCE IMAGE) */
+        .why-choose-section {
+            background-color: #ffffff;
+            padding: 95px 0 90px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .why-choose-container {
+            width: 100%;
+            max-width: 1480px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+        @media (max-width: 768px) {
+            .why-choose-container {
+                padding: 0 16px;
+            }
+        }
+        .why-choose-pill-badge {
+            background-color: #f3e8ff;
+            color: #7c3aed;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 6px 22px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+        .why-choose-title-container {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .why-choose-main-title {
+            font-weight: 800;
+            color: #0f172a;
+            font-size: 2.5rem;
+            line-height: 1.25;
+            margin: 0;
+        }
+        .why-choose-main-title .gradient-accent {
+            color: #6366f1;
+            display: block;
+            margin-top: 4px;
+        }
+        .why-choose-subtitle {
+            color: #64748b;
+            font-size: 1.05rem;
+            max-width: 620px;
+            margin: 14px auto 0 auto;
+            line-height: 1.6;
+        }
+
+        /* FEATURE CARDS */
+        .why-feature-card {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 22px 24px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+        .why-feature-card:last-child {
+            margin-bottom: 0;
+        }
+        .why-feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.1);
+        }
+
+        /* FEATURE CARD BORDERS & THEMES */
+        .why-feature-card.theme-blue { border: 1.5px solid #e0f2fe; }
+        .why-feature-card.theme-green { border: 1.5px solid #d1fae5; }
+        .why-feature-card.theme-purple { border: 1.5px solid #f3e8ff; }
+        .why-feature-card.theme-amber { border: 1.5px solid #fef3c7; }
+        .why-feature-card.theme-cyan { border: 1.5px solid #e0f2fe; }
+        .why-feature-card.theme-pink { border: 1.5px solid #ffe4e6; }
+
+        /* FEATURE ICON CIRCLE */
+        .why-icon-badge {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .theme-blue .why-icon-badge { background-color: #e0f2fe; color: #0284c7; }
+        .theme-green .why-icon-badge { background-color: #d1fae5; color: #059669; }
+        .theme-purple .why-icon-badge { background-color: #f3e8ff; color: #7c3aed; }
+        .theme-amber .why-icon-badge { background-color: #fef3c7; color: #d97706; }
+        .theme-cyan .why-icon-badge { background-color: #e0f2fe; color: #0284c7; }
+        .theme-pink .why-icon-badge { background-color: #ffe4e6; color: #e11d48; }
+
+        .why-feature-content h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+        .why-feature-content p {
+            font-size: 0.88rem;
+            color: #64748b;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* ENLARGED CENTER IMAGE */
+        .why-choose-center-img-wrapper {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 0;
+        }
+        .why-choose-center-img {
+            width: 100%;
+            max-width: 680px;
+            height: auto;
+            max-height: 620px;
+            object-fit: contain;
+            transform: scale(1.12);
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.08));
         }
     </style>
 </head>
@@ -375,71 +756,102 @@
     <!-- End of Hero Banner Section -->
 
     <!-- Start of Services Section -->
-    <section id="saas_two_service" class="saas_two_service_section" style="padding: 90px 0;">
+    <section id="saas_two_service" class="saas_two_service_section" style="padding: 90px 0; background-color: #ffffff;">
         <div class="container">
-            <div class="saas_two_section_title saas2-headline text-center mb-5">
-                <span class="title_tag">What We Offer</span>
-                <h2>Comprehensive <span>Academic & Technical Support</span></h2>
+            <div class="saas_two_section_title saas2-headline text-center mb-5" style="max-width: 800px; margin: 0 auto 50px auto;">
+                <span class="title_tag" style="background: rgba(43,86,245,0.1); color: #2b56f5; padding: 6px 18px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; display: inline-block; margin-bottom: 12px;">What We Offer</span>
+                <h2 style="font-size: 2.3rem; font-weight: 800; color: #0f172a; margin-top: 8px;">Comprehensive <span style="color: #2b56f5;">Academic & Technical Support</span></h2>
+                <p style="color: #64748b; font-size: 1.05rem; margin-top: 12px;">End-to-end guidance for university assignments, coding projects, thesis research, and academic publishing with 100% original work guaranteed.</p>
             </div>
 
             <div class="service_content">
-                <div class="row justify-content-md-center">
-                    <div class="col-lg-4 col-md-6 mb-4 wow fadeFromUp" data-wow-delay="0ms">
-                        <div class="service_content_box relative-position p-4 h-100 bg-white rounded border shadow-sm">
-                            <div class="mb-3 text-primary"><i class="fas fa-pen-nib display-4"></i></div>
-                            <div class="service_text_box saas2-headline pera-content">
-                                <h3>Academic Writing</h3>
-                                <p>Support for assignments, report writing, presentations, and research papers tailored to university guidelines.</p>
+                <div class="row justify-content-center">
+                    <!-- 1. Technical & Coding Support -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="offer-card">
+                            <img src="images/what we offer/Technical &  Coding Support.jpg" alt="Technical & Coding Support" class="offer-card-img">
+                            <div class="offer-card-body">
+                                <h3 class="offer-card-title">Technical & Coding Support</h3>
+                                <p class="offer-card-text">Guidance on programming and coding projects in Python, Java, C++, Web Development, AI, ML & Data Science with full source code and documentation.</p>
+                                <div class="offer-card-actions">
+                                    <a href="dashboard.html#/services" class="btn-card-outline">View Service</a>
+                                    <a href="dashboard.html#/submit-project" class="btn-card-filled">Book Now</a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 mb-4 wow fadeFromUp" data-wow-delay="150ms">
-                        <div class="service_content_box relative-position p-4 h-100 bg-white rounded border shadow-sm">
-                            <div class="mb-3 text-primary"><i class="fas fa-code display-4"></i></div>
-                            <div class="service_text_box saas2-headline pera-content">
-                                <h3>Technical & Coding Support</h3>
-                                <p>Guidance on programming and coding projects in Python, Java, C++, Web Development, AI, ML & Data Science.</p>
+                    <!-- 2. AI Humanization and Turnitin -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="offer-card">
+                            <img src="images/what we offer/AI humanization and  Turnitin.png" alt="AI Humanization and Turnitin" class="offer-card-img">
+                            <div class="offer-card-body">
+                                <h3 class="offer-card-title">AI Humanization & Turnitin</h3>
+                                <p class="offer-card-text">Grammar refinement, AI detection removal, citation formatting, and official Turnitin similarity report generation for 100% human-written guarantee.</p>
+                                <div class="offer-card-actions">
+                                    <a href="dashboard.html#/services" class="btn-card-outline">View Service</a>
+                                    <a href="dashboard.html#/submit-project" class="btn-card-filled">Book Now</a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 mb-4 wow fadeFromUp" data-wow-delay="300ms">
-                        <div class="service_content_box relative-position p-4 h-100 bg-white rounded border shadow-sm">
-                            <div class="mb-3 text-primary"><i class="fas fa-microscope display-4"></i></div>
-                            <div class="service_text_box saas2-headline pera-content">
-                                <h3>Advanced Research</h3>
-                                <p>Mentorship for PhD theses, dissertations, literature reviews, methodology, and synopses preparation.</p>
+                    <!-- 3. 1-on-1 Tutoring -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="offer-card">
+                            <img src="images/what we offer/1 - on -1 Tutoring.png" alt="1-on-1 Tutoring" class="offer-card-img">
+                            <div class="offer-card-body">
+                                <h3 class="offer-card-title">1-on-1 Tutoring</h3>
+                                <p class="offer-card-text">Personalized live mentorship sessions to help students master complex algorithms, academic concepts, and project implementations across disciplines.</p>
+                                <div class="offer-card-actions">
+                                    <a href="dashboard.html#/services" class="btn-card-outline">View Service</a>
+                                    <a href="dashboard.html#/submit-project" class="btn-card-filled">Book Now</a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 mb-4 wow fadeFromUp" data-wow-delay="450ms">
-                        <div class="service_content_box relative-position p-4 h-100 bg-white rounded border shadow-sm">
-                            <div class="mb-3 text-primary"><i class="fas fa-chalkboard-teacher display-4"></i></div>
-                            <div class="service_text_box saas2-headline pera-content">
-                                <h3>1-on-1 Tutoring</h3>
-                                <p>Personalized guidance to help students master complex concepts across different academic disciplines.</p>
+                    <!-- 4. Academic Writing -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="offer-card">
+                            <img src="images/what we offer/Academic Writing.png" alt="Academic Writing" class="offer-card-img">
+                            <div class="offer-card-body">
+                                <h3 class="offer-card-title">Academic Writing</h3>
+                                <p class="offer-card-text">Comprehensive support for university assignments, essays, reports, presentations, and coursework adhering strictly to university guidelines and marking rubrics.</p>
+                                <div class="offer-card-actions">
+                                    <a href="dashboard.html#/services" class="btn-card-outline">View Service</a>
+                                    <a href="dashboard.html#/submit-project" class="btn-card-filled">Book Now</a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 mb-4 wow fadeFromUp" data-wow-delay="600ms">
-                        <div class="service_content_box relative-position p-4 h-100 bg-white rounded border shadow-sm">
-                            <div class="mb-3 text-primary"><i class="fas fa-check-double display-4"></i></div>
-                            <div class="service_text_box saas2-headline pera-content">
-                                <h3>Proofreading & Turnitin</h3>
-                                <p>Grammar refinement, citation formatting, and official Turnitin plagiarism similarity report generation.</p>
+                    <!-- 5. Advanced Research -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="offer-card">
+                            <img src="images/what we offer/Advance Reaserch.png" alt="Advanced Research" class="offer-card-img">
+                            <div class="offer-card-body">
+                                <h3 class="offer-card-title">Advanced Research</h3>
+                                <p class="offer-card-text">Expert mentorship for Master's and PhD theses, dissertations, systematic literature reviews, methodology formulation, and research synopses preparation.</p>
+                                <div class="offer-card-actions">
+                                    <a href="dashboard.html#/services" class="btn-card-outline">View Service</a>
+                                    <a href="dashboard.html#/submit-project" class="btn-card-filled">Book Now</a>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 mb-4 wow fadeFromUp" data-wow-delay="750ms">
-                        <div class="service_content_box relative-position p-4 h-100 bg-white rounded border shadow-sm">
-                            <div class="mb-3 text-primary"><i class="fas fa-bolt display-4"></i></div>
-                            <div class="service_text_box saas2-headline pera-content">
-                                <h3>Urgent Delivery</h3>
-                                <p>Express assignment completion handled within tight deadlines (24 to 48 hours) without compromising quality.</p>
+                    <!-- 6. Urgent Delivery -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="offer-card">
+                            <img src="images/what we offer/Urgent  Delivery.png" alt="Urgent Delivery" class="offer-card-img">
+                            <div class="offer-card-body">
+                                <h3 class="offer-card-title">Urgent Delivery</h3>
+                                <p class="offer-card-text">Express assignment and project completion within tight deadlines (24 to 48 hours) without compromising academic standards or quality.</p>
+                                <div class="offer-card-actions">
+                                    <a href="dashboard.html#/services" class="btn-card-outline">View Service</a>
+                                    <a href="dashboard.html#/submit-project" class="btn-card-filled">Book Now</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -456,46 +868,234 @@
     <!-- End of Services Section -->
 
     <!-- Start of How It Works Section -->
-    <section id="how_it_works" class="py-5 bg-light">
-        <div class="container py-4">
-            <div class="saas_two_section_title saas2-headline text-center mb-5">
-                <span class="title_tag">Simple 4-Step Process</span>
-                <h2>How <span>AssignmentWaala</span> Works</h2>
+    <section id="how_it_works" class="process-section">
+        <div class="container">
+            <div class="process-title-container">
+                <span class="process-pill-badge">Simple 4-Step Process</span>
+                <h2 class="process-main-title">
+                    How
+                    <span class="process-brand-title">AssignmentWaala</span>
+                    <span class="process-works-wrap">
+                        <svg class="sparkle-icon" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 28 5 L 8 20" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M 32 15 L 4 18" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M 30 25 L 12 28" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                        Works
+                        <svg class="sparkle-icon" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 12 5 L 32 20" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M 8 15 L 36 18" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M 10 25 L 28 28" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                </h2>
             </div>
 
-            <div class="row">
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="card border-0 shadow-sm p-4 h-100 rounded text-center">
-                        <div class="step-number-badge mx-auto">1</div>
-                        <h4 class="font-weight-bold mb-2">1. Submit Details</h4>
-                        <p class="text-muted small">Provide your project requirements, target deadline, word count, and reference materials.</p>
+            <div class="row process-steps-row">
+                <!-- Step 1 -->
+                <div class="col-lg-3 col-md-6 mb-4 step-col-wrapper">
+                    <div class="process-card-box step-theme-1">
+                        <div class="step-number-pill">1</div>
+                        <div class="step-icon-circle">
+                            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <path d="M10 9H8"/>
+                            </svg>
+                        </div>
+                        <h3 class="process-card-title">Submit Details</h3>
+                        <p class="process-card-text">Provide your project requirements, target deadline, word count, and reference materials.</p>
+                    </div>
+                    <div class="step-connector-arrow d-none d-lg-block">
+                        <svg width="65" height="38" viewBox="0 0 65 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 5 32 Q 32 4 58 28" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4 4" fill="none" />
+                            <path d="M 50 22 L 59 28 L 55 18" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="card border-0 shadow-sm p-4 h-100 rounded text-center">
-                        <div class="step-number-badge mx-auto">2</div>
-                        <h4 class="font-weight-bold mb-2">2. Expert Matching</h4>
-                        <p class="text-muted small">Our platform matches and assigns a qualified PhD expert specialized in your exact subject.</p>
+
+                <!-- Step 2 -->
+                <div class="col-lg-3 col-md-6 mb-4 step-col-wrapper">
+                    <div class="process-card-box step-theme-2">
+                        <div class="step-number-pill">2</div>
+                        <div class="step-icon-circle">
+                            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                                <circle cx="17" cy="17" r="3"/>
+                                <line x1="19.1" y1="19.1" x2="22" y2="22"/>
+                            </svg>
+                        </div>
+                        <h3 class="process-card-title">Expert Matching</h3>
+                        <p class="process-card-text">Our platform matches and assigns a qualified PhD expert specialized in your exact subject.</p>
+                    </div>
+                    <div class="step-connector-arrow d-none d-lg-block">
+                        <svg width="65" height="38" viewBox="0 0 65 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 5 32 Q 32 4 58 28" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4 4" fill="none" />
+                            <path d="M 50 22 L 59 28 L 55 18" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="card border-0 shadow-sm p-4 h-100 rounded text-center">
-                        <div class="step-number-badge mx-auto">3</div>
-                        <h4 class="font-weight-bold mb-2">3. Collaboration</h4>
-                        <p class="text-muted small">Chat directly with your expert, review progress milestones, and clarify expectations in real time.</p>
+
+                <!-- Step 3 -->
+                <div class="col-lg-3 col-md-6 mb-4 step-col-wrapper">
+                    <div class="process-card-box step-theme-3">
+                        <div class="step-number-pill">3</div>
+                        <div class="step-icon-circle">
+                            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                <line x1="8" y1="9" x2="16" y2="9"/>
+                                <line x1="8" y1="13" x2="14" y2="13"/>
+                            </svg>
+                        </div>
+                        <h3 class="process-card-title">Collaboration</h3>
+                        <p class="process-card-text">Chat directly with your expert, review progress milestones, and clarify expectations in real time.</p>
+                    </div>
+                    <div class="step-connector-arrow d-none d-lg-block">
+                        <svg width="65" height="38" viewBox="0 0 65 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 5 32 Q 32 4 58 28" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4 4" fill="none" />
+                            <path d="M 50 22 L 59 28 L 55 18" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="card border-0 shadow-sm p-4 h-100 rounded text-center">
-                        <div class="step-number-badge mx-auto">4</div>
-                        <h4 class="font-weight-bold mb-2">4. Payment & Delivery</h4>
-                        <p class="text-muted small">Receive a transparent quote, complete secure payment, and download your finished project on time.</p>
+
+                <!-- Step 4 -->
+                <div class="col-lg-3 col-md-6 mb-4 step-col-wrapper">
+                    <div class="process-card-box step-theme-4">
+                        <div class="step-number-pill">4</div>
+                        <div class="step-icon-circle">
+                            <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="4" width="20" height="16" rx="3" ry="3"/>
+                                <line x1="2" y1="10" x2="22" y2="10"/>
+                                <path d="M7 15h.01"/>
+                                <path d="M11 15h2"/>
+                                <circle cx="18" cy="15" r="2" fill="#059669"/>
+                                <path d="M17 15l.7 0.7 1.3-1.3" stroke="#ffffff" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <h3 class="process-card-title">Payment & Delivery</h3>
+                        <p class="process-card-text">Receive a transparent quote, complete secure payment, and download your finished project on time.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
     <!-- End of How It Works Section -->
+
+    <!-- Start of Why Choose Us Section -->
+    <section id="why_choose_us" class="why-choose-section">
+        <div class="why-choose-container">
+            <div class="why-choose-title-container">
+                <span class="why-choose-pill-badge">Why Choose Us</span>
+                <h2 class="why-choose-main-title">
+                    Get the right support,
+                    <span class="gradient-accent">when you need it most.</span>
+                </h2>
+                <p class="why-choose-subtitle">We’re here to help you learn, build and grow with expert guidance and flexible support — anytime, anywhere.</p>
+            </div>
+
+            <div class="row align-items-center">
+                <!-- Left 3 Feature Cards -->
+                <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                    <div class="why-feature-card theme-blue">
+                        <div class="why-icon-badge">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        </div>
+                        <div class="why-feature-content">
+                            <h4>Expert Mentors</h4>
+                            <p>Learn from experienced mentors who guide you with real-world insights and support.</p>
+                        </div>
+                    </div>
+
+                    <div class="why-feature-card theme-green">
+                        <div class="why-icon-badge">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <circle cx="12" cy="12" r="6"/>
+                                <circle cx="12" cy="12" r="2"/>
+                            </svg>
+                        </div>
+                        <div class="why-feature-content">
+                            <h4>Flexible Learning</h4>
+                            <p>Get help on your schedule, with sessions that fit your pace and goals.</p>
+                        </div>
+                    </div>
+
+                    <div class="why-feature-card theme-purple">
+                        <div class="why-icon-badge">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-2.04z"/>
+                                <path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0-.34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-2.04z"/>
+                            </svg>
+                        </div>
+                        <div class="why-feature-content">
+                            <h4>All Subjects & Skills</h4>
+                            <p>From algorithms to academics, we support a wide range of disciplines and project needs.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center Image (Enlarged to col-lg-6) -->
+                <div class="col-lg-6 col-md-12 mb-4 mb-lg-0">
+                    <div class="why-choose-center-img-wrapper">
+                        <img src="images/why choose us.png" alt="Why Choose AssignmentWaala" class="why-choose-center-img img-fluid">
+                    </div>
+                </div>
+
+                <!-- Right 3 Feature Cards -->
+                <div class="col-lg-3 col-md-12">
+                    <div class="why-feature-card theme-amber">
+                        <div class="why-icon-badge">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                                <line x1="8" y1="9" x2="16" y2="9"/>
+                                <line x1="8" y1="13" x2="14" y2="13"/>
+                            </svg>
+                        </div>
+                        <div class="why-feature-content">
+                            <h4>Personalized Guidance</h4>
+                            <p>Get customized support based on your strengths, weaknesses and learning style.</p>
+                        </div>
+                    </div>
+
+                    <div class="why-feature-card theme-cyan">
+                        <div class="why-icon-badge">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="20" x2="18" y2="10"/>
+                                <line x1="12" y1="20" x2="12" y2="4"/>
+                                <line x1="6" y1="20" x2="6" y2="14"/>
+                                <path d="M3 18l6-6 4 4 8-8"/>
+                                <polyline points="17 8 21 8 21 12"/>
+                            </svg>
+                        </div>
+                        <div class="why-feature-content">
+                            <h4>Build Real Projects</h4>
+                            <p>Turn your ideas into working projects with hands-on mentorship and feedback.</p>
+                        </div>
+                    </div>
+
+                    <div class="why-feature-card theme-pink">
+                        <div class="why-icon-badge">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <polyline points="9 12 11 14 15 10"/>
+                            </svg>
+                        </div>
+                        <div class="why-feature-content">
+                            <h4>Reliable Support</h4>
+                            <p>We’re always here — with consistent help, honest feedback, and your success in mind.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End of Why Choose Us Section -->
 
     <!-- Start of About Section -->
     <section id="saas_two_about" class="saas_two_about_section relative-position py-5">
