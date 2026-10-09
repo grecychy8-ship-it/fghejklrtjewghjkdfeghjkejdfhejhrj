@@ -185,6 +185,9 @@
       case 'support':
         renderSupportCenterView(param);
         break;
+      case 'referral':
+        renderReferralView();
+        break;
       default:
         renderDashboardOverview();
         break;
@@ -195,7 +198,7 @@
   // 1. DASHBOARD OVERVIEW VIEW
   // ==========================================
   async function renderDashboardOverview() {
-    if (pageTitleEl) pageTitleEl.textContent = 'Dashboard Overview';
+    if (pageTitleEl) pageTitleEl.textContent = 'Dashboard';
     showLoadingSkeleton();
 
     const res = await apiFetch('/dashboard/stats');
@@ -207,82 +210,118 @@
     const { stats, recent_projects, recent_notifications } = res;
 
     let html = `
-      <div class="welcome-banner-card">
-        <div class="welcome-banner-text">
-          <h2>Welcome back, ${escapeHtml(AppState.user.full_name)}! 👋</h2>
-          <p>Track your academic assignments, communicate with assigned experts, and review project milestones.</p>
-        </div>
-        <div>
-          <a href="#/submit-project" class="btn btn-light font-weight-bold shadow-sm rounded-pill px-4">
-            <i class="fas fa-plus-circle text-primary mr-2"></i> Submit New Project
+      <div style="max-width: 1400px; margin: 0 auto;">
+        <!-- Welcome Header -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 32px;">
+          <div>
+            <h1 style="font-size: 1.75rem; font-weight: 600; color: #1a1a1a; margin: 0 0 8px 0;">
+              Good afternoon, <span style="color: #2563eb;">${escapeHtml(AppState.user.full_name)}!</span>
+            </h1>
+            <p style="color: #6b7280; margin: 0; font-size: 0.95rem;">Your assignment dashboard is ready. Here's an overview of your current activities.</p>
+          </div>
+          <a href="#/submit-project" class="btn btn-primary" style="background: #2563eb; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+            <i class="fas fa-plus" style="font-size: 0.85rem;"></i> New Assignment
           </a>
         </div>
-      </div>
 
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-icon-wrapper stat-icon-blue"><i class="fas fa-layer-group"></i></div>
-          <div>
-            <div class="stat-number">${stats.total_projects}</div>
-            <div class="stat-label">Total Projects</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon-wrapper stat-icon-purple"><i class="fas fa-spinner fa-spin"></i></div>
-          <div>
-            <div class="stat-number">${stats.active_projects}</div>
-            <div class="stat-label">Active / In Progress</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon-wrapper stat-icon-yellow"><i class="fas fa-clock"></i></div>
-          <div>
-            <div class="stat-number">${stats.pending_payment_count}</div>
-            <div class="stat-label">Awaiting Payment</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-icon-wrapper stat-icon-green"><i class="fas fa-check-circle"></i></div>
-          <div>
-            <div class="stat-number">${stats.completed_projects}</div>
-            <div class="stat-label">Completed</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-lg-8">
-          <div class="card-box">
-            <div class="card-box-header">
-              <h3 class="card-box-title"><i class="fas fa-folder-open text-primary mr-2"></i> Active & Recent Projects</h3>
-              <a href="#/projects" class="btn btn-sm btn-outline-primary rounded-pill">View All</a>
+        <!-- Stats Cards Row -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 32px;">
+          <!-- Your Assignments Card -->
+          <div style="background: white; border-radius: 12px; padding: 24px; border: 1px solid #e5e7eb;">
+            <div style="color: #6b7280; font-size: 0.8rem; font-weight: 500; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Your Assignments</div>
+            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 16px;">${stats.total_projects}</div>
+            <div style="height: 6px; background: #f3f4f6; border-radius: 3px; overflow: hidden; margin-bottom: 12px;">
+              <div style="width: 0%; height: 100%; background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%); border-radius: 3px;"></div>
             </div>
-            <div class="card-box-body">
-              ${recent_projects.length === 0 ? renderEmptyState('No active projects found. Click Submit New Project to begin!') : ''}
-              ${recent_projects.map(p => renderProjectCardHtml(p)).join('')}
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+              <span style="color: #6b7280;"><strong style="color: #1a1a1a;">${stats.completed_projects}</strong> completed • <strong style="color: #1a1a1a;">0</strong> pending</span>
+              <a href="#/projects" style="color: #2563eb; text-decoration: none; font-weight: 500;">Details →</a>
+            </div>
+          </div>
+
+          <!-- Your Downloads Card -->
+          <div style="background: white; border-radius: 12px; padding: 24px; border: 1px solid #e5e7eb;">
+            <div style="color: #6b7280; font-size: 0.8rem; font-weight: 500; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Your Downloads</div>
+            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 16px;">0</div>
+            <div style="height: 6px; background: #f3f4f6; border-radius: 3px; overflow: hidden; margin-bottom: 12px;">
+              <div style="width: 0%; height: 100%; background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 100%); border-radius: 3px;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+              <span style="color: #6b7280;">0/0 accessed</span>
+              <a href="#/files" style="color: #2563eb; text-decoration: none; font-weight: 500;">Details →</a>
+            </div>
+          </div>
+
+          <!-- Invite Friends Card -->
+          <div style="background: white; border-radius: 12px; padding: 24px; border: 1px solid #e5e7eb;">
+            <div style="color: #6b7280; font-size: 0.8rem; font-weight: 500; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px;">Invite Friends</div>
+            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 16px;">0</div>
+            <div style="height: 6px; background: #f3f4f6; border-radius: 3px; overflow: hidden; margin-bottom: 12px;">
+              <div style="width: 0%; height: 100%; background: linear-gradient(90deg, #10b981 0%, #059669 100%); border-radius: 3px;"></div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem;">
+              <span style="color: #6b7280;">Rs. ₹13,500 target</span>
+              <a href="#/referral" style="color: #2563eb; text-decoration: none; font-weight: 500;">Details →</a>
             </div>
           </div>
         </div>
 
-        <div class="col-lg-4">
-          <div class="card-box">
-            <div class="card-box-header">
-              <h3 class="card-box-title"><i class="fas fa-bell text-warning mr-2"></i> Recent Activity</h3>
-              <a href="#/notifications" class="btn btn-sm btn-link">View All</a>
-            </div>
-            <div class="card-box-body p-0">
-              <div class="list-group list-group-flush">
-                ${recent_notifications.length === 0 ? '<div class="p-4 text-center text-muted">No recent notifications</div>' : ''}
-                ${recent_notifications.map(n => `
-                  <div class="list-group-item p-3 ${n.is_read ? '' : 'bg-light'}">
-                    <div class="d-flex w-100 justify-content-between align-items-center">
-                      <strong class="mb-1 text-dark" style="font-size: 0.9rem;">${escapeHtml(n.title)}</strong>
-                      <small class="text-muted">${formatDate(n.created_at)}</small>
-                    </div>
-                    <p class="mb-1 text-muted small">${escapeHtml(n.message)}</p>
-                  </div>
-                `).join('')}
+        <!-- Two Column Layout -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <!-- Track your Assignment Card -->
+          <div style="background: white; border-radius: 12px; padding: 28px; border: 1px solid #e5e7eb; min-height: 360px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <div>
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: #1a1a1a; margin: 0 0 4px 0;">Track your Assignment</h3>
+                <p style="color: #6b7280; margin: 0; font-size: 0.85rem;">Your most recent assignment activities</p>
               </div>
+              <a href="#/projects" style="color: #2563eb; text-decoration: none; font-weight: 500; font-size: 0.9rem;">Browse →</a>
+            </div>
+
+            ${stats.total_projects === 0 ? `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px; text-align: center;">
+              <div style="width: 64px; height: 64px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <i class="fas fa-file-alt" style="font-size: 28px; color: #2563eb;"></i>
+              </div>
+              <h4 style="font-size: 1rem; font-weight: 600; color: #1a1a1a; margin: 0 0 8px 0;">No assignments yet</h4>
+              <p style="color: #6b7280; margin: 0 0 20px 0; font-size: 0.9rem; max-width: 280px;">Start your academic journey by creating your first assignment</p>
+              <a href="#/submit-project" class="btn btn-primary" style="background: #2563eb; border: none; padding: 10px 28px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: white;">
+                <i class="fas fa-plus" style="font-size: 0.8rem;"></i> New Assignment
+              </a>
+            </div>
+            ` : `
+            <div style="padding: 20px 0;">
+              ${recent_projects.slice(0, 3).map(p => `
+                <div style="padding: 16px; border-bottom: 1px solid #f3f4f6; cursor: pointer;" onclick="window.location.hash='#/projects/${p.id}'">
+                  <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div style="flex: 1;">
+                      <div style="font-weight: 600; color: #1a1a1a; margin-bottom: 4px;">${escapeHtml(p.title)}</div>
+                      <div style="font-size: 0.8rem; color: #6b7280;">${escapeHtml(p.subject)} • Due: ${p.deadline}</div>
+                    </div>
+                    <span style="padding: 4px 12px; background: ${p.payment_status === 'Paid' ? '#d1fae5' : '#fef3c7'}; color: ${p.payment_status === 'Paid' ? '#059669' : '#d97706'}; border-radius: 12px; font-size: 0.75rem; font-weight: 600; white-space: nowrap;">${p.status}</span>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+            `}
+          </div>
+
+          <!-- Pending Payments Card -->
+          <div style="background: white; border-radius: 12px; padding: 28px; border: 1px solid #e5e7eb; min-height: 360px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+              <div>
+                <h3 style="font-size: 1.1rem; font-weight: 700; color: #1a1a1a; margin: 0 0 4px 0;">Pending Payments</h3>
+                <p style="color: #6b7280; margin: 0; font-size: 0.85rem;">Your outstanding payment obligations</p>
+              </div>
+              <a href="#/payments" style="color: #2563eb; text-decoration: none; font-weight: 500; font-size: 0.9rem;">View History →</a>
+            </div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 48px 24px; text-align: center;">
+              <div style="width: 64px; height: 64px; background: #d1fae5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                <i class="fas fa-check-circle" style="font-size: 28px; color: #10b981;"></i>
+              </div>
+              <h4 style="font-size: 1rem; font-weight: 600; color: #1a1a1a; margin: 0 0 8px 0;">All payments up to date</h4>
+              <p style="color: #6b7280; margin: 0; font-size: 0.9rem; max-width: 280px;">You have no pending payments at the moment</p>
             </div>
           </div>
         </div>
@@ -342,41 +381,192 @@
   // 2. MY PROJECTS MANAGEMENT VIEW
   // ==========================================
   async function renderProjectsList() {
-    if (pageTitleEl) pageTitleEl.textContent = 'My Projects';
+    if (pageTitleEl) pageTitleEl.textContent = 'Assignments';
     showLoadingSkeleton();
 
-    const res = await apiFetch(`/projects?status=${AppState.activeTab}`);
+    const res = await apiFetch(`/projects?status=${AppState.activeTab === 'All' ? '' : AppState.activeTab}`);
     if (!res.success) {
       showErrorState(res.message);
       return;
     }
 
-    const projects = res.projects;
-    const tabs = ['All', 'Submitted', 'Payment Pending', 'In Progress', 'Submitted for Review', 'Revision Requested', 'Completed', 'Cancelled'];
+    const projects = res.projects || [];
+    
+    // Calculate stats
+    const totalAssignments = projects.length;
+    const pendingCount = projects.filter(p => p.status === 'Submitted' || p.status === 'Payment Pending').length;
+    const inProgressCount = projects.filter(p => p.status === 'In Progress').length;
+    const completedCount = projects.filter(p => p.status === 'Completed').length;
 
     let html = `
-      <div class="card-box">
-        <div class="card-box-header">
-          <ul class="nav nav-pills card-header-pills" id="project-status-tabs">
-            ${tabs.map(tab => `
-              <li class="nav-item">
-                <a class="nav-link ${AppState.activeTab === tab ? 'active' : ''}" href="#" onclick="window.setProjectTab('${tab}')">${tab}</a>
-              </li>
-            `).join('')}
-          </ul>
+      <div style="max-width: 1400px; margin: 0 auto;">
+        <!-- Page Header -->
+        <div style="margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <i class="fas fa-file-alt" style="color: #2563eb; font-size: 1.4rem;"></i>
+            <h1 style="font-size: 1.75rem; font-weight: 700; color: #1a1a1a; margin: 0;">My Assignments</h1>
+          </div>
+          <p style="color: #6b7280; margin: 0; font-size: 0.95rem;">Manage and track all your assignment submissions</p>
         </div>
-        <div class="card-box-body">
-          <div class="row mb-4">
-            <div class="col-md-6">
-              <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text bg-white"><i class="fas fa-search"></i></span></div>
-                <input type="text" id="project-search-input" class="form-control border-left-0" placeholder="Search by project ID, title or subject..." onkeyup="window.filterProjectsBySearch(this.value)">
+
+        <!-- Stats Cards Row -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+          <!-- Total Assignments -->
+          <div style="background: #eff6ff; border-radius: 12px; padding: 20px; border: 1px solid #dbeafe; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <div style="color: #1e40af; font-size: 0.8rem; font-weight: 600; margin-bottom: 8px;">Total Assignments</div>
+                <div style="font-size: 2rem; font-weight: 700; color: #1e3a8a;">${totalAssignments}</div>
+              </div>
+              <div style="background: white; width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-file-alt" style="color: #2563eb; font-size: 1.3rem;"></i>
               </div>
             </div>
           </div>
 
+          <!-- Pending -->
+          <div style="background: #fef3c7; border-radius: 12px; padding: 20px; border: 1px solid #fde68a; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <div style="color: #b45309; font-size: 0.8rem; font-weight: 600; margin-bottom: 8px;">Pending</div>
+                <div style="font-size: 2rem; font-weight: 700; color: #92400e;">${pendingCount}</div>
+              </div>
+              <div style="background: white; width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-clock" style="color: #f59e0b; font-size: 1.3rem;"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- In Progress -->
+          <div style="background: #f3e8ff; border-radius: 12px; padding: 20px; border: 1px solid #e9d5ff; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <div style="color: #7e22ce; font-size: 0.8rem; font-weight: 600; margin-bottom: 8px;">In Progress</div>
+                <div style="font-size: 2rem; font-weight: 700; color: #6b21a8;">${inProgressCount}</div>
+              </div>
+              <div style="background: white; width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-spinner" style="color: #a855f7; font-size: 1.3rem;"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Completed -->
+          <div style="background: #d1fae5; border-radius: 12px; padding: 20px; border: 1px solid #a7f3d0; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <div style="color: #065f46; font-size: 0.8rem; font-weight: 600; margin-bottom: 8px;">Completed</div>
+                <div style="font-size: 2rem; font-weight: 700; color: #047857;">${completedCount}</div>
+              </div>
+              <div style="background: white; width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-check-circle" style="color: #10b981; font-size: 1.3rem;"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content Card -->
+        <div style="background: white; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden;">
+          <!-- Tabs Header -->
+          <div style="border-bottom: 1px solid #e5e7eb; padding: 16px 24px; display: flex; gap: 0;">
+            ${['All', 'Pending', 'In Progress', 'Under Review', 'Completed', 'Cancelled'].map(tab => `
+              <button 
+                onclick="window.setProjectTab('${tab}')" 
+                style="background: ${AppState.activeTab === tab ? '#2563eb' : 'transparent'}; 
+                       color: ${AppState.activeTab === tab ? 'white' : '#6b7280'}; 
+                       border: none; 
+                       padding: 8px 18px; 
+                       border-radius: 6px; 
+                       font-size: 0.85rem; 
+                       font-weight: 600; 
+                       cursor: pointer; 
+                       transition: all 0.2s;
+                       margin-right: 8px;">
+                ${tab}
+              </button>
+            `).join('')}
+          </div>
+
+          <!-- Search and Actions Bar -->
+          <div style="padding: 20px 24px; border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center;">
+            <div style="position: relative; flex: 1; max-width: 400px;">
+              <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.9rem;"></i>
+              <input 
+                type="text" 
+                id="project-search-input" 
+                placeholder="Search assignments..." 
+                onkeyup="window.filterProjectsBySearch(this.value)"
+                style="width: 100%; padding: 10px 12px 10px 38px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.9rem; outline: none;">
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <button style="background: white; border: 1px solid #e5e7eb; padding: 10px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #374151; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <i class="fas fa-redo" style="font-size: 0.8rem;"></i> Refresh
+              </button>
+              <a href="#/submit-project" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; text-decoration: none;">
+                <i class="fas fa-plus" style="font-size: 0.8rem;"></i> New Request
+              </a>
+            </div>
+          </div>
+
+          <!-- Table Header -->
+          <div style="display: grid; grid-template-columns: 3fr 1.5fr 1.5fr 1.5fr 1.5fr 1fr; padding: 16px 24px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; font-size: 0.8rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              Assignment <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              Status <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              Experts <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              Due Date <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              Price <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+            </div>
+            <div>Actions</div>
+          </div>
+
+          <!-- Table Body / Empty State -->
           <div id="projects-list-container">
-            ${projects.length === 0 ? renderEmptyState('No projects match your filter query.') : projects.map(p => renderProjectCardHtml(p)).join('')}
+            ${projects.length === 0 ? `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 24px; text-align: center;">
+              <div style="width: 80px; height: 80px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+                <i class="fas fa-file-alt" style="font-size: 36px; color: #2563eb;"></i>
+              </div>
+              <h3 style="font-size: 1.1rem; font-weight: 700; color: #1a1a1a; margin: 0 0 8px 0;">No Assignments found</h3>
+              <p style="color: #6b7280; margin: 0 0 24px 0; font-size: 0.95rem; max-width: 380px;">You haven't created any assignment requests yet. Get started by creating your first assignment request.</p>
+              <a href="#/submit-project" style="background: #2563eb; color: white; border: none; padding: 12px 32px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none;">
+                <i class="fas fa-plus" style="font-size: 0.85rem;"></i> New Request
+              </a>
+            </div>
+            ` : projects.map(p => `
+            <div style="display: grid; grid-template-columns: 3fr 1.5fr 1.5fr 1.5fr 1.5fr 1fr; padding: 20px 24px; border-bottom: 1px solid #f3f4f6; align-items: center; transition: background 0.2s; cursor: pointer;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'" onclick="window.location.hash='#/projects/${p.id}'">
+              <div>
+                <div style="font-weight: 600; color: #1a1a1a; margin-bottom: 4px; font-size: 0.95rem;">${escapeHtml(p.title)}</div>
+                <div style="font-size: 0.8rem; color: #6b7280;">${escapeHtml(p.subject)}</div>
+              </div>
+              <div>
+                <span style="padding: 5px 12px; background: ${getStatusBgColor(p.status)}; color: ${getStatusTextColor(p.status)}; border-radius: 12px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; display: inline-block;">
+                  ${p.status}
+                </span>
+              </div>
+              <div style="font-size: 0.85rem; color: #374151;">
+                ${p.expert_name ? escapeHtml(p.expert_name) : 'Assigning...'}
+              </div>
+              <div style="font-size: 0.85rem; color: #374151;">
+                ${p.deadline || 'N/A'}
+              </div>
+              <div style="font-size: 0.9rem; font-weight: 600; color: #1a1a1a;">
+                $${p.total_amount}
+              </div>
+              <div>
+                <button onclick="event.stopPropagation(); window.location.hash='#/projects/${p.id}'" style="background: transparent; border: none; color: #6b7280; cursor: pointer; padding: 6px; font-size: 1rem;">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+              </div>
+            </div>
+            `).join('')}
           </div>
         </div>
       </div>
@@ -384,18 +574,88 @@
 
     mainContentEl.innerHTML = html;
 
+    // Global functions
     window.setProjectTab = (tab) => {
       AppState.activeTab = tab;
       renderProjectsList();
     };
 
     window.filterProjectsBySearch = (query) => {
-      const filtered = projects.filter(p => p.title.toLowerCase().includes(query.toLowerCase()) || p.id.toLowerCase().includes(query.toLowerCase()));
+      const filtered = projects.filter(p => 
+        p.title.toLowerCase().includes(query.toLowerCase()) || 
+        p.id.toLowerCase().includes(query.toLowerCase()) ||
+        p.subject.toLowerCase().includes(query.toLowerCase())
+      );
       const container = document.getElementById('projects-list-container');
       if (container) {
-        container.innerHTML = filtered.length === 0 ? renderEmptyState('No matching projects found.') : filtered.map(p => renderProjectCardHtml(p)).join('');
+        if (filtered.length === 0) {
+          container.innerHTML = `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 24px; text-align: center;">
+              <div style="width: 80px; height: 80px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+                <i class="fas fa-search" style="font-size: 36px; color: #2563eb;"></i>
+              </div>
+              <h3 style="font-size: 1.1rem; font-weight: 700; color: #1a1a1a; margin: 0 0 8px 0;">No matching assignments</h3>
+              <p style="color: #6b7280; margin: 0; font-size: 0.95rem;">Try adjusting your search terms</p>
+            </div>
+          `;
+        } else {
+          container.innerHTML = filtered.map(p => `
+            <div style="display: grid; grid-template-columns: 3fr 1.5fr 1.5fr 1.5fr 1.5fr 1fr; padding: 20px 24px; border-bottom: 1px solid #f3f4f6; align-items: center; transition: background 0.2s; cursor: pointer;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'" onclick="window.location.hash='#/projects/${p.id}'">
+              <div>
+                <div style="font-weight: 600; color: #1a1a1a; margin-bottom: 4px; font-size: 0.95rem;">${escapeHtml(p.title)}</div>
+                <div style="font-size: 0.8rem; color: #6b7280;">${escapeHtml(p.subject)}</div>
+              </div>
+              <div>
+                <span style="padding: 5px 12px; background: ${getStatusBgColor(p.status)}; color: ${getStatusTextColor(p.status)}; border-radius: 12px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; display: inline-block;">
+                  ${p.status}
+                </span>
+              </div>
+              <div style="font-size: 0.85rem; color: #374151;">
+                ${p.expert_name ? escapeHtml(p.expert_name) : 'Assigning...'}
+              </div>
+              <div style="font-size: 0.85rem; color: #374151;">
+                ${p.deadline || 'N/A'}
+              </div>
+              <div style="font-size: 0.9rem; font-weight: 600; color: #1a1a1a;">
+                $${p.total_amount}
+              </div>
+              <div>
+                <button onclick="event.stopPropagation(); window.location.hash='#/projects/${p.id}'" style="background: transparent; border: none; color: #6b7280; cursor: pointer; padding: 6px; font-size: 1rem;">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+              </div>
+            </div>
+          `).join('');
+        }
       }
     };
+  }
+
+  // Helper functions for status colors
+  function getStatusBgColor(status) {
+    const colorMap = {
+      'Submitted': '#fef3c7',
+      'Payment Pending': '#fef3c7',
+      'In Progress': '#f3e8ff',
+      'Submitted for Review': '#dbeafe',
+      'Revision Requested': '#fee2e2',
+      'Completed': '#d1fae5',
+      'Cancelled': '#f3f4f6'
+    };
+    return colorMap[status] || '#f3f4f6';
+  }
+
+  function getStatusTextColor(status) {
+    const colorMap = {
+      'Submitted': '#92400e',
+      'Payment Pending': '#92400e',
+      'In Progress': '#6b21a8',
+      'Submitted for Review': '#1e40af',
+      'Revision Requested': '#991b1b',
+      'Completed': '#065f46',
+      'Cancelled': '#6b7280'
+    };
+    return colorMap[status] || '#6b7280';
   }
 
   // ==========================================
@@ -561,233 +821,295 @@
   // 4. SUBMIT PROJECT MULTI-STEP WIZARD VIEW
   // ==========================================
   function renderSubmitProjectWizard() {
-    if (pageTitleEl) pageTitleEl.textContent = 'Submit New Academic Project';
+    if (pageTitleEl) pageTitleEl.textContent = 'Create New Assignment';
 
     let html = `
-      <div class="card-box">
-        <div class="card-box-body">
-          <form id="multi-step-project-form" onsubmit="return false;">
-            <div class="wizard-steps-header">
-              <div class="wizard-step-tab active" id="step-tab-1"><div class="wizard-step-number">1</div>Basic Info</div>
-              <div class="wizard-step-tab" id="step-tab-2"><div class="wizard-step-number">2</div>Requirements</div>
-              <div class="wizard-step-tab" id="step-tab-3"><div class="wizard-step-number">3</div>Deadline & Priority</div>
-              <div class="wizard-step-tab" id="step-tab-4"><div class="wizard-step-number">4</div>Upload Files</div>
-              <div class="wizard-step-tab" id="step-tab-5"><div class="wizard-step-number">5</div>Review & Submit</div>
-            </div>
+      <div style="background: white; border-radius: 8px; padding: 32px; margin-bottom: 24px;">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 32px;">
+          <div>
+            <h2 style="font-size: 28px; font-weight: 700; color: #1f2937; margin: 0 0 8px 0;">Create New Assignment</h2>
+            <p style="font-size: 15px; color: #6b7280; margin: 0;">Submit your assignment for expert help</p>
+          </div>
+          <button type="button" onclick="window.location.hash='#/assignments'" style="background: transparent; border: 1px solid #d1d5db; border-radius: 6px; padding: 8px 16px; font-size: 14px; color: #6b7280; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+            <i class="fas fa-times"></i> Cancel
+          </button>
+        </div>
 
-            <!-- STEP 1 -->
-            <div class="wizard-step-content" id="step-content-1">
-              <h4 class="font-weight-bold mb-4">Step 1: Basic Project Information</h4>
-              <div class="form-group">
-                <label>Project Title *</label>
-                <input type="text" id="wiz-title" class="form-control form-control-lg" placeholder="e.g. Econometric Analysis of Financial Markets" required>
-              </div>
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <label>Category *</label>
-                  <select id="wiz-category" class="form-control">
-                    <option>Computer Science & IT</option>
-                    <option>Business & Management</option>
-                    <option>Medicine & Health</option>
-                    <option>Engineering</option>
-                    <option>Social Sciences</option>
-                    <option>Law & Humanities</option>
-                  </select>
-                </div>
-                <div class="col-md-6 form-group">
-                  <label>Subject / Field *</label>
-                  <input type="text" id="wiz-subject" class="form-control" placeholder="e.g. Machine Learning, Corporate Finance" required>
-                </div>
-                <div class="col-md-6 form-group">
-                  <label>Academic Level</label>
-                  <select id="wiz-academic-level" class="form-control">
-                    <option>Undergraduate</option>
-                    <option>Postgraduate / Masters</option>
-                    <option>PhD / Doctorate</option>
-                  </select>
-                </div>
-                <div class="col-md-6 form-group">
-                  <label>Project Type</label>
-                  <select id="wiz-project-type" class="form-control">
-                    <option>Research Paper</option>
-                    <option>Essay</option>
-                    <option>Thesis Dissertation</option>
-                    <option>Case Study</option>
-                    <option>Programming Assignment</option>
-                  </select>
+        <!-- Two Column Layout -->
+        <div style="display: grid; grid-template-columns: 1fr 400px; gap: 32px;">
+          <!-- Left Column: Form -->
+          <div>
+            <form id="assignment-form" onsubmit="return false;">
+              <!-- Assignment Title -->
+              <div style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 8px;">Assignment Title *</label>
+                <div style="position: relative;">
+                  <input type="text" id="assignment-title" maxlength="100" placeholder="Enter assignment title" style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; color: #1f2937;" required>
+                  <span id="title-counter" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 12px; color: #9ca3af;">0/100</span>
                 </div>
               </div>
-              <div class="d-flex justify-content-end mt-4">
-                <button type="button" class="btn btn-primary px-5 rounded-pill" onclick="window.nextWizStep(2)">Next: Requirements <i class="fas fa-arrow-right ml-1"></i></button>
-              </div>
-            </div>
 
-            <!-- STEP 2 -->
-            <div class="wizard-step-content d-none" id="step-content-2">
-              <h4 class="font-weight-bold mb-4">Step 2: Detailed Requirements</h4>
-              <div class="form-group">
-                <label>Detailed Guidelines & Instructions *</label>
-                <textarea id="wiz-description" class="form-control" rows="5" placeholder="Paste your assignment prompt, guidelines, grading rubric, or research questions here..."></textarea>
+              <!-- Assignment Type -->
+              <div style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 8px;">Assignment Type *</label>
+                <select id="assignment-type" style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; color: #1f2937; background: white;" required>
+                  <option value="">Select type</option>
+                  <option value="Essay">Essay</option>
+                  <option value="Research Paper">Research Paper</option>
+                  <option value="Case Study">Case Study</option>
+                  <option value="Thesis">Thesis</option>
+                  <option value="Programming">Programming Assignment</option>
+                  <option value="Report">Report</option>
+                  <option value="Presentation">Presentation</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
-              <div class="row">
-                <div class="col-md-4 form-group">
-                  <label>Expected Word Count</label>
-                  <input type="number" id="wiz-word-count" class="form-control" value="2500">
-                </div>
-                <div class="col-md-4 form-group">
-                  <label>Citation Style</label>
-                  <select id="wiz-citation" class="form-control">
-                    <option>APA 7th</option>
-                    <option>Harvard</option>
-                    <option>IEEE</option>
-                    <option>MLA</option>
-                    <option>Chicago</option>
-                  </select>
-                </div>
-                <div class="col-md-4 form-group">
-                  <label>Formatting</label>
-                  <input type="text" id="wiz-formatting" class="form-control" value="Double Spaced, 12pt Times New Roman">
-                </div>
-              </div>
-              <div class="d-flex justify-content-between mt-4">
-                <button type="button" class="btn btn-secondary px-4 rounded-pill" onclick="window.nextWizStep(1)">Back</button>
-                <button type="button" class="btn btn-primary px-5 rounded-pill" onclick="window.nextWizStep(3)">Next: Deadline <i class="fas fa-arrow-right ml-1"></i></button>
-              </div>
-            </div>
 
-            <!-- STEP 3 -->
-            <div class="wizard-step-content d-none" id="step-content-3">
-              <h4 class="font-weight-bold mb-4">Step 3: Deadline & Priority</h4>
-              <div class="row">
-                <div class="col-md-6 form-group">
-                  <label>Target Submission Deadline *</label>
-                  <input type="date" id="wiz-deadline" class="form-control" required>
-                </div>
-                <div class="col-md-6 form-group">
-                  <label>Urgency / Priority</label>
-                  <select id="wiz-priority" class="form-control">
-                    <option>Standard (7+ Days)</option>
-                    <option selected>Medium (3-6 Days)</option>
-                    <option>Urgent (24-48 Hours)</option>
-                  </select>
-                </div>
+              <!-- Academic Stream -->
+              <div style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 8px;">Academic Stream *</label>
+                <select id="academic-stream" style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; color: #1f2937; background: white;" required>
+                  <option value="">Select stream</option>
+                  <option value="Computer Science & IT">Computer Science & IT</option>
+                  <option value="Business & Management">Business & Management</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="Medical & Health">Medical & Health</option>
+                  <option value="Social Sciences">Social Sciences</option>
+                  <option value="Law & Humanities">Law & Humanities</option>
+                  <option value="Natural Sciences">Natural Sciences</option>
+                  <option value="Mathematics">Mathematics</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
-              <div class="d-flex justify-content-between mt-4">
-                <button type="button" class="btn btn-secondary px-4 rounded-pill" onclick="window.nextWizStep(2)">Back</button>
-                <button type="button" class="btn btn-primary px-5 rounded-pill" onclick="window.nextWizStep(4)">Next: Attach Files <i class="fas fa-arrow-right ml-1"></i></button>
-              </div>
-            </div>
 
-            <!-- STEP 4 -->
-            <div class="wizard-step-content d-none" id="step-content-4">
-              <h4 class="font-weight-bold mb-4">Step 4: Attach Reference Documents</h4>
-              <div class="border-dashed p-5 text-center bg-light rounded mb-3" style="border: 2px dashed #cbd5e1;">
-                <i class="fas fa-cloud-upload-alt text-primary display-4 mb-3"></i>
-                <h5>Drag & Drop your PDFs, DOCX, ZIP files here</h5>
-                <p class="text-muted small">Supported formats: PDF, DOC, DOCX, PPTX, XLSX, ZIP, PNG, JPG (Max 50MB)</p>
-                <input type="file" id="wiz-files-input" multiple class="d-none">
-                <button type="button" class="btn btn-outline-primary rounded-pill px-4" onclick="document.getElementById('wiz-files-input').click()">Browse Files</button>
+              <!-- Due Date -->
+              <div style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 8px;">Due Date *</label>
+                <input type="date" id="due-date" style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; color: #1f2937;" required>
               </div>
-              <div id="file-list-preview" class="mb-3"></div>
-              <div class="d-flex justify-content-between mt-4">
-                <button type="button" class="btn btn-secondary px-4 rounded-pill" onclick="window.nextWizStep(3)">Back</button>
-                <button type="button" class="btn btn-primary px-5 rounded-pill" onclick="window.nextWizStep(5)">Next: Review Submission <i class="fas fa-arrow-right ml-1"></i></button>
-              </div>
-            </div>
 
-            <!-- STEP 5 -->
-            <div class="wizard-step-content d-none" id="step-content-5">
-              <h4 class="font-weight-bold mb-4">Step 5: Review & Confirm Submission</h4>
-              <div class="card bg-light border-0 p-4 mb-4">
-                <div id="wiz-summary-box"></div>
+              <!-- Assignment Description -->
+              <div style="margin-bottom: 24px;">
+                <label style="display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 8px;">Assignment Description *</label>
+                <div style="position: relative;">
+                  <textarea id="assignment-description" maxlength="2000" rows="6" placeholder="Provide detailed requirements, instructions, and any specific guidelines..." style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; color: #1f2937; resize: vertical; font-family: inherit;" required></textarea>
+                  <span id="description-counter" style="position: absolute; right: 12px; bottom: 12px; font-size: 12px; color: #9ca3af;">0/2000</span>
+                </div>
               </div>
-              <div class="d-flex justify-content-between mt-4">
-                <button type="button" class="btn btn-secondary px-4 rounded-pill" onclick="window.nextWizStep(4)">Back</button>
-                <button type="button" class="btn btn-success px-5 rounded-pill font-weight-bold" id="btn-submit-final-project" onclick="window.submitProjectFinal()">
-                  <i class="fas fa-paper-plane mr-2"></i> Submit Project Now
+
+              <!-- Supporting Documents -->
+              <div style="margin-bottom: 32px;">
+                <label style="display: block; font-size: 14px; font-weight: 600; color: #374151; margin-bottom: 8px;">Supporting Documents</label>
+                <div id="upload-area" style="border: 2px dashed #d1d5db; border-radius: 8px; padding: 32px; text-align: center; background: #f9fafb; cursor: pointer;">
+                  <i class="fas fa-cloud-upload-alt" style="font-size: 48px; color: #9ca3af; margin-bottom: 16px;"></i>
+                  <p style="font-size: 14px; color: #6b7280; margin: 0 0 8px 0;"><strong>Drag & drop files here or click to browse</strong></p>
+                  <p style="font-size: 12px; color: #9ca3af; margin: 0;">Supported formats: PDF, DOC, DOCX, PPT, XLS, ZIP, PNG, JPG (Max 50MB)</p>
+                  <input type="file" id="file-input" multiple style="display: none;" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.png,.jpg,.jpeg">
+                </div>
+                <div id="file-list" style="margin-top: 12px;"></div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                <button type="button" onclick="window.location.hash='#/assignments'" style="background: white; border: 1px solid #d1d5db; border-radius: 6px; padding: 10px 24px; font-size: 14px; font-weight: 500; color: #6b7280; cursor: pointer;">
+                  Cancel
+                </button>
+                <button type="button" onclick="window.resetAssignmentForm()" style="background: white; border: 1px solid #d1d5db; border-radius: 6px; padding: 10px 24px; font-size: 14px; font-weight: 500; color: #6b7280; cursor: pointer;">
+                  Reset
+                </button>
+                <button type="submit" id="submit-btn" style="background: #2563eb; border: none; border-radius: 6px; padding: 10px 32px; font-size: 14px; font-weight: 600; color: white; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                  <i class="fas fa-paper-plane"></i> Create Assignment
                 </button>
               </div>
+            </form>
+          </div>
+
+          <!-- Right Column: Tips & Process -->
+          <div>
+            <!-- Tips for Success -->
+            <div style="background: #dcfce7; border: 1px solid #86efac; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
+              <h3 style="font-size: 16px; font-weight: 700; color: #166534; margin: 0 0 16px 0; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-lightbulb"></i> Tips for Success
+              </h3>
+              <ul style="margin: 0; padding-left: 20px; color: #166534; font-size: 13px; line-height: 1.8;">
+                <li>Be specific about your requirements</li>
+                <li>Include all relevant materials and guidelines</li>
+                <li>Set realistic deadlines for quality work</li>
+                <li>Mention citation style and formatting preferences</li>
+                <li>Upload sample documents if available</li>
+              </ul>
             </div>
-          </form>
+
+            <!-- How It Works -->
+            <div style="background: #f3e8ff; border: 1px solid #d8b4fe; border-radius: 8px; padding: 20px;">
+              <h3 style="font-size: 16px; font-weight: 700; color: #6b21a8; margin: 0 0 20px 0; display: flex; align-items: center; gap: 8px;">
+                <i class="fas fa-info-circle"></i> How It Works
+              </h3>
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+                <!-- Step 1 -->
+                <div style="display: flex; gap: 12px;">
+                  <div style="flex-shrink: 0; width: 32px; height: 32px; background: #6b21a8; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px;">1</div>
+                  <div>
+                    <h4 style="font-size: 14px; font-weight: 600; color: #6b21a8; margin: 0 0 4px 0;">Submit Assignment</h4>
+                    <p style="font-size: 12px; color: #7c3aed; margin: 0; line-height: 1.6;">Fill out the form with all assignment details and requirements</p>
+                  </div>
+                </div>
+                <!-- Step 2 -->
+                <div style="display: flex; gap: 12px;">
+                  <div style="flex-shrink: 0; width: 32px; height: 32px; background: #6b21a8; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px;">2</div>
+                  <div>
+                    <h4 style="font-size: 14px; font-weight: 600; color: #6b21a8; margin: 0 0 4px 0;">Expert Review</h4>
+                    <p style="font-size: 12px; color: #7c3aed; margin: 0; line-height: 1.6;">Our experts will review and start working on your assignment</p>
+                  </div>
+                </div>
+                <!-- Step 3 -->
+                <div style="display: flex; gap: 12px;">
+                  <div style="flex-shrink: 0; width: 32px; height: 32px; background: #6b21a8; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px;">3</div>
+                  <div>
+                    <h4 style="font-size: 14px; font-weight: 600; color: #6b21a8; margin: 0 0 4px 0;">Track Progress</h4>
+                    <p style="font-size: 12px; color: #7c3aed; margin: 0; line-height: 1.6;">Monitor the status and communicate via messages</p>
+                  </div>
+                </div>
+                <!-- Step 4 -->
+                <div style="display: flex; gap: 12px;">
+                  <div style="flex-shrink: 0; width: 32px; height: 32px; background: #6b21a8; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px;">4</div>
+                  <div>
+                    <h4 style="font-size: 14px; font-weight: 600; color: #6b21a8; margin: 0 0 4px 0;">Receive & Review</h4>
+                    <p style="font-size: 12px; color: #7c3aed; margin: 0; line-height: 1.6;">Get your completed assignment and request revisions if needed</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     `;
 
     mainContentEl.innerHTML = html;
 
-    // Set default deadline date (7 days from today)
-    const d = new Date();
-    d.setDate(d.getDate() + 7);
-    const deadlineStr = d.toISOString().split('T')[0];
-    document.getElementById('wiz-deadline').value = deadlineStr;
+    // Set minimum date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('due-date').setAttribute('min', today);
 
-    // File input preview listener
-    const fileInput = document.getElementById('wiz-files-input');
-    if (fileInput) {
-      fileInput.addEventListener('change', () => {
-        const preview = document.getElementById('file-list-preview');
-        preview.innerHTML = Array.from(fileInput.files).map(f => `
-          <div class="alert alert-info py-2 px-3 d-flex justify-content-between align-items-center mb-2">
-            <span><i class="fas fa-file-alt mr-2"></i>${escapeHtml(f.name)} (${Math.round(f.size/1024)} KB)</span>
-            <span class="badge badge-success">Ready</span>
-          </div>
-        `).join('');
-      });
+    // Character counters
+    const titleInput = document.getElementById('assignment-title');
+    const titleCounter = document.getElementById('title-counter');
+    const descInput = document.getElementById('assignment-description');
+    const descCounter = document.getElementById('description-counter');
+
+    titleInput.addEventListener('input', () => {
+      titleCounter.textContent = `${titleInput.value.length}/100`;
+    });
+
+    descInput.addEventListener('input', () => {
+      descCounter.textContent = `${descInput.value.length}/2000`;
+    });
+
+    // File upload functionality
+    const uploadArea = document.getElementById('upload-area');
+    const fileInput = document.getElementById('file-input');
+    const fileList = document.getElementById('file-list');
+    let selectedFiles = [];
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.style.borderColor = '#2563eb';
+      uploadArea.style.background = '#eff6ff';
+    });
+
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.style.borderColor = '#d1d5db';
+      uploadArea.style.background = '#f9fafb';
+    });
+
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.style.borderColor = '#d1d5db';
+      uploadArea.style.background = '#f9fafb';
+      handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+    });
+
+    function handleFiles(files) {
+      selectedFiles = Array.from(files);
+      displayFiles();
     }
 
-    window.nextWizStep = (step) => {
-      document.querySelectorAll('.wizard-step-content').forEach(el => el.classList.add('d-none'));
-      document.querySelectorAll('.wizard-step-tab').forEach(el => el.classList.remove('active'));
-
-      document.getElementById(`step-content-${step}`).classList.remove('d-none');
-      document.getElementById(`step-tab-${step}`).classList.add('active');
-
-      if (step === 5) {
-        // Render summary
-        const summaryBox = document.getElementById('wiz-summary-box');
-        summaryBox.innerHTML = `
-          <h5><strong>Title:</strong> ${escapeHtml(document.getElementById('wiz-title').value || 'Untitled')}</h5>
-          <p><strong>Category & Subject:</strong> ${document.getElementById('wiz-category').value} - ${escapeHtml(document.getElementById('wiz-subject').value)}</p>
-          <p><strong>Academic Level & Type:</strong> ${document.getElementById('wiz-academic-level').value} (${document.getElementById('wiz-project-type').value})</p>
-          <p><strong>Word Count & Citation:</strong> ${document.getElementById('wiz-word-count').value} words | ${document.getElementById('wiz-citation').value}</p>
-          <p><strong>Target Deadline:</strong> ${document.getElementById('wiz-deadline').value}</p>
-          <p><strong>Uploaded Files:</strong> ${fileInput.files.length} attached document(s)</p>
-        `;
+    function displayFiles() {
+      if (selectedFiles.length === 0) {
+        fileList.innerHTML = '';
+        return;
       }
+
+      fileList.innerHTML = selectedFiles.map((file, index) => `
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;">
+            <i class="fas fa-file-alt" style="color: #6b7280;"></i>
+            <span style="font-size: 13px; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(file.name)}</span>
+            <span style="font-size: 12px; color: #9ca3af;">(${(file.size / 1024).toFixed(1)} KB)</span>
+          </div>
+          <button type="button" onclick="window.removeFile(${index})" style="background: transparent; border: none; color: #ef4444; cursor: pointer; padding: 4px 8px;">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `).join('');
+    }
+
+    window.removeFile = (index) => {
+      selectedFiles.splice(index, 1);
+      displayFiles();
     };
 
-    window.submitProjectFinal = async () => {
-      const btn = document.getElementById('btn-submit-final-project');
-      btn.disabled = true;
-      btn.innerHTML = `<i class="fas fa-spinner fa-spin mr-2"></i> Creating Project...`;
+    window.resetAssignmentForm = () => {
+      document.getElementById('assignment-form').reset();
+      selectedFiles = [];
+      displayFiles();
+      titleCounter.textContent = '0/100';
+      descCounter.textContent = '0/2000';
+    };
+
+    // Form submission
+    document.getElementById('assignment-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById('submit-btn');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating...';
 
       const formData = new FormData();
-      formData.append('title', document.getElementById('wiz-title').value || 'Academic Project');
-      formData.append('category', document.getElementById('wiz-category').value);
-      formData.append('subject', document.getElementById('wiz-subject').value || 'General');
-      formData.append('academic_level', document.getElementById('wiz-academic-level').value);
-      formData.append('project_type', document.getElementById('wiz-project-type').value);
-      formData.append('description', document.getElementById('wiz-description').value || '');
-      formData.append('word_count', document.getElementById('wiz-word-count').value || 2500);
-      formData.append('citation_style', document.getElementById('wiz-citation').value);
-      formData.append('formatting', document.getElementById('wiz-formatting').value);
-      formData.append('deadline', document.getElementById('wiz-deadline').value);
-      formData.append('priority', document.getElementById('wiz-priority').value);
+      formData.append('title', titleInput.value);
+      formData.append('type', document.getElementById('assignment-type').value);
+      formData.append('stream', document.getElementById('academic-stream').value);
+      formData.append('due_date', document.getElementById('due-date').value);
+      formData.append('description', descInput.value);
 
-      for (let i = 0; i < fileInput.files.length; i++) {
-        formData.append('files', fileInput.files[i]);
-      }
+      selectedFiles.forEach(file => {
+        formData.append('files', file);
+      });
 
-      const res = await apiFetch('/projects', 'POST', formData, true);
-      if (res.success) {
-        alert('Project created successfully!');
-        window.location.hash = `#/projects/${res.project_id}`;
-      } else {
-        alert(res.message || 'Failed to submit project.');
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fas fa-paper-plane mr-2"></i> Submit Project Now`;
+      try {
+        const res = await apiFetch('/projects', 'POST', formData, true);
+        if (res.success) {
+          alert('Assignment created successfully!');
+          window.location.hash = '#/assignments';
+        } else {
+          alert(res.message || 'Failed to create assignment.');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+      } catch (error) {
+        alert('Error creating assignment. Please try again.');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
       }
-    };
+    });
   }
 
   // ==========================================
@@ -947,7 +1269,7 @@
   // 7. PAYMENTS VIEW
   // ==========================================
   async function renderPaymentsView() {
-    if (pageTitleEl) pageTitleEl.textContent = 'Payments & Invoice Records';
+    if (pageTitleEl) pageTitleEl.textContent = 'Payments & Invoices';
     showLoadingSkeleton();
 
     const res = await apiFetch('/payments');
@@ -956,70 +1278,187 @@
       return;
     }
 
-    const payments = res.payments;
+    const payments = res.payments || [];
+    
+    // Calculate stats
+    const pendingCount = payments.filter(p => p.status === 'Pending').length;
+    const completedCount = payments.filter(p => p.status === 'Paid').length;
+    const totalAmount = payments.reduce((sum, p) => sum + (p.final_amount || 0), 0);
 
     let html = `
-      <div class="card-box">
-        <div class="card-box-header">
-          <h3 class="card-box-title"><i class="fas fa-credit-card text-success mr-2"></i> Official Financial Statements & Invoices</h3>
+      <div style="max-width: 1400px; margin: 0 auto;">
+        <!-- Page Header -->
+        <div style="margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <i class="fas fa-credit-card" style="color: #2563eb; font-size: 1.4rem;"></i>
+            <h1 style="font-size: 1.75rem; font-weight: 700; color: #1a1a1a; margin: 0;">Payments & Invoices</h1>
+          </div>
+          <p style="color: #6b7280; margin: 0; font-size: 0.95rem;">Manage your payments and track your history</p>
         </div>
-        <div class="card-box-body">
-          ${payments.length === 0 ? renderEmptyState('No payment records or invoices found.') : `
-            <div class="table-responsive">
-              <table class="table table-hover">
-                <thead class="thead-light">
-                  <tr>
-                    <th>Invoice #</th>
-                    <th>Project ID</th>
-                    <th>Project Title</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                    <th>Payment Method</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${payments.map(p => `
-                    <tr>
-                      <td><strong>${p.invoice_number}</strong></td>
-                      <td><span class="project-id-tag">${p.project_id}</span></td>
-                      <td>${escapeHtml(p.project_title)}</td>
-                      <td><strong class="text-dark">$${p.final_amount}</strong></td>
-                      <td>
-                        <span class="badge ${p.status === 'Paid' ? 'badge-success' : 'badge-warning'} px-3 py-1">
-                          ${p.status}
-                        </span>
-                      </td>
-                      <td>${p.payment_method || 'Credit Card'}</td>
-                      <td>${formatDate(p.created_at)}</td>
-                      <td>
-                        ${p.status === 'Pending' ? `
-                          <button class="btn btn-sm btn-warning rounded-pill font-weight-bold mr-1" onclick="window.triggerPaymentModal('${p.project_id}', ${p.final_amount})">
-                            Pay Invoice
-                          </button>
-                        ` : ''}
-                        <button class="btn btn-sm btn-outline-secondary rounded-pill" onclick="window.viewInvoiceModal('${p.invoice_number}')">
-                          View Invoice
-                        </button>
-                      </td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
+
+        <!-- Stats Cards Row -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+          <!-- Pending -->
+          <div style="background: #fef3c7; border-radius: 12px; padding: 20px; border: 1px solid #fde68a; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                  <i class="fas fa-clock" style="color: #b45309; font-size: 0.9rem;"></i>
+                  <div style="color: #b45309; font-size: 0.8rem; font-weight: 600;">Pending</div>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: #92400e;">₹${pendingCount}</div>
+                <div style="color: #b45309; font-size: 0.75rem; margin-top: 4px;">0 pending payments</div>
+              </div>
+              <div style="background: white; width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-exclamation-circle" style="color: #f59e0b; font-size: 1.3rem;"></i>
+              </div>
             </div>
-          `}
+          </div>
+
+          <!-- Completed -->
+          <div style="background: #d1fae5; border-radius: 12px; padding: 20px; border: 1px solid #a7f3d0; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                  <i class="fas fa-check-circle" style="color: #065f46; font-size: 0.9rem;"></i>
+                  <div style="color: #065f46; font-size: 0.8rem; font-weight: 600;">Completed</div>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: #047857;">₹${completedCount}</div>
+                <div style="color: #065f46; font-size: 0.75rem; margin-top: 4px;">0 completed</div>
+              </div>
+              <div style="background: white; width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-check-circle" style="color: #10b981; font-size: 1.3rem;"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Total -->
+          <div style="background: #eff6ff; border-radius: 12px; padding: 20px; border: 1px solid #dbeafe; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                  <i class="fas fa-receipt" style="color: #1e40af; font-size: 0.9rem;"></i>
+                  <div style="color: #1e40af; font-size: 0.8rem; font-weight: 600;">Total</div>
+                </div>
+                <div style="font-size: 2rem; font-weight: 700; color: #1e3a8a;">₹0</div>
+                <div style="color: #1e40af; font-size: 0.75rem; margin-top: 4px;">0 total transactions</div>
+              </div>
+              <div style="background: white; width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-rupee-sign" style="color: #2563eb; font-size: 1.3rem;"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content Card -->
+        <div style="background: white; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden;">
+          <!-- Tabs Header -->
+          <div style="border-bottom: 1px solid #e5e7eb; padding: 16px 24px; display: flex; gap: 0;">
+            ${['All', 'Pending', 'Paid', 'Failed'].map(tab => `
+              <button 
+                onclick="window.setPaymentTab('${tab}')" 
+                style="background: ${AppState.activeTab === tab ? '#2563eb' : 'transparent'}; 
+                       color: ${AppState.activeTab === tab ? 'white' : '#6b7280'}; 
+                       border: none; 
+                       padding: 8px 18px; 
+                       border-radius: 6px; 
+                       font-size: 0.85rem; 
+                       font-weight: 600; 
+                       cursor: pointer; 
+                       transition: all 0.2s;
+                       margin-right: 8px;">
+                ${tab}
+              </button>
+            `).join('')}
+          </div>
+
+          <!-- Search and Actions Bar -->
+          <div style="padding: 20px 24px; border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center;">
+            <div style="position: relative; flex: 1; max-width: 400px;">
+              <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.9rem;"></i>
+              <input 
+                type="text" 
+                id="payment-search-input" 
+                placeholder="Search payments..." 
+                style="width: 100%; padding: 10px 12px 10px 38px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.9rem; outline: none;">
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <select style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #374151; cursor: pointer; outline: none;">
+                <option>All Assignments</option>
+              </select>
+              <button style="background: white; border: 1px solid #e5e7eb; padding: 10px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #374151; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <i class="fas fa-redo" style="font-size: 0.8rem;"></i> Refresh
+              </button>
+            </div>
+          </div>
+
+          <!-- Table Header -->
+          <div style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr 1fr; padding: 16px 24px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; font-size: 0.8rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              Assignment <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              Status <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              Amount <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              Date <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+            </div>
+            <div>Actions</div>
+          </div>
+
+          <!-- Table Body / Empty State -->
+          <div id="payments-list-container">
+            ${payments.length === 0 ? `
+            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 24px; text-align: center;">
+              <div style="width: 80px; height: 80px; background: #f3f4f6; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+                <i class="fas fa-rupee-sign" style="font-size: 36px; color: #6b7280;"></i>
+              </div>
+              <h3 style="font-size: 1rem; font-weight: 600; color: #6b7280; margin: 0 0 8px 0;">No payments yet</h3>
+            </div>
+            ` : payments.map(p => `
+            <div style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1fr 1fr; padding: 20px 24px; border-bottom: 1px solid #f3f4f6; align-items: center; transition: background 0.2s;" onmouseover="this.style.background='#f9fafb'" onmouseout="this.style.background='white'">
+              <div>
+                <div style="font-weight: 600; color: #1a1a1a; margin-bottom: 4px; font-size: 0.95rem;">${p.invoice_number}</div>
+                <div style="font-size: 0.8rem; color: #6b7280;">${escapeHtml(p.project_title)}</div>
+              </div>
+              <div>
+                <span style="padding: 5px 12px; background: ${p.status === 'Paid' ? '#d1fae5' : '#fef3c7'}; color: ${p.status === 'Paid' ? '#065f46' : '#92400e'}; border-radius: 12px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; display: inline-block;">
+                  ${p.status}
+                </span>
+              </div>
+              <div style="font-size: 0.9rem; font-weight: 600; color: #1a1a1a;">
+                ₹${p.final_amount}
+              </div>
+              <div style="font-size: 0.85rem; color: #374151;">
+                ${formatDate(p.created_at)}
+              </div>
+              <div>
+                <button onclick="window.viewInvoiceModal('${p.invoice_number}')" style="background: transparent; border: none; color: #6b7280; cursor: pointer; padding: 6px; font-size: 1rem;">
+                  <i class="fas fa-ellipsis-v"></i>
+                </button>
+              </div>
+            </div>
+            `).join('')}
+          </div>
         </div>
       </div>
     `;
 
     mainContentEl.innerHTML = html;
 
-    window.triggerPaymentModal = (pid, amt) => openPaymentModal(pid, amt);
+    // Global functions
+    window.setPaymentTab = (tab) => {
+      AppState.activeTab = tab;
+      renderPaymentsView();
+    };
+
     window.viewInvoiceModal = async (invId) => {
       const r = await apiFetch(`/payments/invoice/${invId}`);
       if (r.success) {
-        alert(`Invoice ${r.invoice.invoice_number}\nAmount: $${r.invoice.final_amount}\nStatus: ${r.invoice.status}\nClient: ${r.invoice.client_name}`);
+        alert(`Invoice ${r.invoice.invoice_number}\nAmount: ₹${r.invoice.final_amount}\nStatus: ${r.invoice.status}\nClient: ${r.invoice.client_name}`);
       }
     };
   }
@@ -1191,70 +1630,525 @@
   // 10. SUPPORT CENTER VIEW
   // ==========================================
   async function renderSupportCenterView(ticketId = null) {
-    if (pageTitleEl) pageTitleEl.textContent = 'Student Support Center & Help Desk';
+    if (pageTitleEl) pageTitleEl.textContent = 'Support Center';
     showLoadingSkeleton();
 
-    const res = await apiFetch('/support/tickets');
-    if (!res.success) {
-      showErrorState(res.message);
-      return;
-    }
-
-    const tickets = res.tickets;
+    // For now, using empty data since we don't have active issues
+    const issues = [];
 
     let html = `
-      <div class="card-box">
-        <div class="card-box-header">
-          <h3 class="card-box-title"><i class="fas fa-life-ring text-info mr-2"></i> Support Tickets & Help Center</h3>
-          <button class="btn btn-primary rounded-pill px-4" onclick="window.openNewTicketModal()">
-            <i class="fas fa-plus-circle mr-1"></i> Open New Support Ticket
-          </button>
-        </div>
-        <div class="card-box-body">
-          ${tickets.length === 0 ? renderEmptyState('No support tickets found.') : `
-            <div class="table-responsive">
-              <table class="table table-hover">
-                <thead class="thead-light">
-                  <tr>
-                    <th>Ticket ID</th>
-                    <th>Subject</th>
-                    <th>Category</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${tickets.map(t => `
-                    <tr>
-                      <td><strong>${t.id}</strong></td>
-                      <td><strong>${escapeHtml(t.subject)}</strong></td>
-                      <td>${escapeHtml(t.category)}</td>
-                      <td><span class="badge badge-secondary">${t.priority}</span></td>
-                      <td><span class="badge ${t.status === 'Open' ? 'badge-success' : 'badge-info'}">${t.status}</span></td>
-                      <td>${formatDate(t.created_at)}</td>
-                    </tr>
-                  `).join('')}
-                </tbody>
-              </table>
+      <div style="max-width: 1400px; margin: 0 auto;">
+        <!-- Header Banner -->
+        <div style="background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%); border-radius: 16px; padding: 32px; margin-bottom: 24px; position: relative; overflow: hidden;">
+          <div style="position: relative; z-index: 1;">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+              <div style="background: white; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                <i class="fas fa-life-ring" style="color: #2563eb; font-size: 1.5rem;"></i>
+              </div>
+              <h1 style="font-size: 1.75rem; font-weight: 700; color: #1e3a8a; margin: 0;">Support Center</h1>
             </div>
-          `}
+            <p style="color: #1e40af; margin: 0 0 20px 0; font-size: 1rem;">Get help with your assignments</p>
+            <p style="color: #3b82f6; margin: 0; font-size: 0.9rem; max-width: 600px;">Need assistance? Report issues, track progress, and get quick support for all your assignment needs.</p>
+          </div>
+          <div style="position: absolute; top: 20px; right: 20px; display: flex; gap: 12px;">
+            <button onclick="window.openNewIssueModal()" style="background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+              <i class="fas fa-plus" style="font-size: 0.85rem;"></i> Report Issue
+            </button>
+            <button style="background: white; color: #2563eb; border: 1px solid #dbeafe; padding: 12px 24px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-comments" style="font-size: 0.85rem;"></i> Live Chat
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats Cards Row -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+          <!-- Total Issues -->
+          <div style="background: white; border-radius: 12px; padding: 20px; border: 1px solid #e5e7eb;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+              <i class="fas fa-file-alt" style="color: #2563eb; font-size: 0.9rem;"></i>
+              <div style="color: #6b7280; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Total Issues</div>
+            </div>
+            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">0</div>
+            <div style="color: #6b7280; font-size: 0.8rem;">All time issues reported</div>
+          </div>
+
+          <!-- Active Issues -->
+          <div style="background: white; border-radius: 12px; padding: 20px; border: 1px solid #e5e7eb;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+              <i class="fas fa-exclamation-circle" style="color: #f59e0b; font-size: 0.9rem;"></i>
+              <div style="color: #6b7280; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Active Issues</div>
+            </div>
+            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">0</div>
+            <div style="color: #6b7280; font-size: 0.8rem;">Pending resolution</div>
+          </div>
+
+          <!-- Resolved Issues -->
+          <div style="background: white; border-radius: 12px; padding: 20px; border: 1px solid #e5e7eb;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+              <i class="fas fa-check-circle" style="color: #10b981; font-size: 0.9rem;"></i>
+              <div style="color: #6b7280; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Resolved Issues</div>
+            </div>
+            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">0</div>
+            <div style="color: #6b7280; font-size: 0.8rem;">Successfully resolved</div>
+          </div>
+
+          <!-- Resolution Rate -->
+          <div style="background: white; border-radius: 12px; padding: 20px; border: 1px solid #e5e7eb;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+              <i class="fas fa-percentage" style="color: #8b5cf6; font-size: 0.9rem;"></i>
+              <div style="color: #6b7280; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Resolution Rate</div>
+            </div>
+            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">0%</div>
+            <div style="color: #6b7280; font-size: 0.8rem;">Resolution success rate</div>
+          </div>
+        </div>
+
+        <!-- Main Content Card -->
+        <div style="background: white; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden;">
+          <!-- Search and Filters Bar -->
+          <div style="padding: 20px 24px; border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center;">
+            <div style="position: relative; flex: 1; max-width: 400px;">
+              <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 0.9rem;"></i>
+              <input 
+                type="text" 
+                id="issue-search-input" 
+                placeholder="Search your issues..." 
+                style="width: 100%; padding: 10px 12px 10px 38px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.9rem; outline: none;">
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <select style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.85rem; font-weight: 500; color: #374151; cursor: pointer; outline: none;">
+                <option>All Types</option>
+                <option>Technical</option>
+                <option>Payment</option>
+                <option>Academic</option>
+              </select>
+              <select style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.85rem; font-weight: 500; color: #374151; cursor: pointer; outline: none;">
+                <option>All Priorities</option>
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+              </select>
+              <select style="padding: 10px 16px; border: 1px solid #e5e7eb; border-radius: 8px; font-size: 0.85rem; font-weight: 500; color: #374151; cursor: pointer; outline: none;">
+                <option>All Status</option>
+                <option>Open</option>
+                <option>In Progress</option>
+                <option>Resolved</option>
+              </select>
+              <button style="background: white; border: 1px solid #e5e7eb; padding: 10px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #374151; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                <i class="fas fa-redo" style="font-size: 0.8rem;"></i> Refresh
+              </button>
+            </div>
+          </div>
+
+          <!-- Tabs -->
+          <div style="border-bottom: 1px solid #e5e7eb; padding: 0 24px; display: flex; gap: 0;">
+            <button style="background: transparent; color: #2563eb; border: none; border-bottom: 2px solid #2563eb; padding: 16px 20px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-circle-notch" style="font-size: 0.8rem;"></i> Active (0)
+            </button>
+            <button style="background: transparent; color: #6b7280; border: none; border-bottom: 2px solid transparent; padding: 16px 20px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-check-circle" style="font-size: 0.8rem;"></i> Resolved (0)
+            </button>
+          </div>
+
+          <!-- Table Header -->
+          <div style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1.5fr 1fr 1fr; padding: 16px 24px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; font-size: 0.8rem; font-weight: 700; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;">
+            <div style="display: flex; align-items: center; gap: 6px;">
+              Assignment <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              Status <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              Amount <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              Date <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+            </div>
+            <div></div>
+            <div>Actions</div>
+          </div>
+
+          <!-- Empty State -->
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 24px; text-align: center;">
+            <div style="width: 120px; height: 120px; background: #d1fae5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; position: relative;">
+              <div style="position: absolute; inset: 10px; background: rgba(255, 255, 255, 0.5); border-radius: 50%;"></div>
+              <i class="fas fa-check-circle" style="font-size: 48px; color: #10b981; position: relative; z-index: 1;"></i>
+            </div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: #1a1a1a; margin: 0 0 8px 0;">All Clear! 🎉</h3>
+            <p style="color: #6b7280; margin: 0 0 24px 0; font-size: 0.95rem; max-width: 420px;">You don't have any active issues. Everything looks great!</p>
+            <button onclick="window.openNewIssueModal()" style="background: white; color: #6b7280; border: 1px solid #e5e7eb; padding: 10px 24px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-plus" style="font-size: 0.75rem;"></i> Report New Issue
+            </button>
+          </div>
         </div>
       </div>
     `;
 
     mainContentEl.innerHTML = html;
 
-    window.openNewTicketModal = () => {
-      const subject = prompt('Enter support ticket subject:');
-      const message = prompt('Describe your inquiry or issue:');
-      if (subject && message) {
-        apiFetch('/support/tickets', 'POST', { subject, category: 'Academic Guidance', initial_message: message }).then(r => {
-          if (r.success) {
-            alert('Support ticket created!');
-            renderSupportCenterView();
-          }
+    // Global function for creating new issue
+    window.openNewIssueModal = () => {
+      // Create modal overlay
+      const modalOverlay = document.createElement('div');
+      modalOverlay.id = 'issue-modal-overlay';
+      modalOverlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px;';
+
+      // Create modal content
+      const modalContent = document.createElement('div');
+      modalContent.style.cssText = 'background: #f5f5f5; border-radius: 12px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);';
+
+      modalContent.innerHTML = `
+        <div style="padding: 28px 32px; background: white; border-radius: 12px 12px 0 0;">
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+            <h2 style="font-size: 24px; font-weight: 700; color: #1f2937; margin: 0;">Report New Issue</h2>
+            <button onclick="window.closeIssueModal()" style="background: transparent; border: none; color: #9ca3af; cursor: pointer; font-size: 28px; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; margin-top: -4px;">
+              ×
+            </button>
+          </div>
+          <p style="font-size: 15px; color: #6b7280; margin: 0;">Describe your concern and we'll help resolve it quickly</p>
+        </div>
+
+        <div style="padding: 32px; background: #f5f5f5;">
+          <form id="issue-form" onsubmit="return false;">
+            <!-- Issue Type -->
+            <div style="margin-bottom: 24px;">
+              <label style="display: block; font-size: 15px; font-weight: 600; color: #1f2937; margin-bottom: 10px;">
+                Issue Type <span style="color: #ef4444;">*</span>
+              </label>
+              <select id="issue-type" required style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 15px; color: #6b7280; background: white; appearance: none; background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23cbd5e0%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-repeat: no-repeat; background-position: right 16px center; background-size: 18px; padding-right: 45px;">
+                <option value="" disabled selected>Select issue type</option>
+                <option value="Payment Issue">Payment Issue</option>
+                <option value="Assignment Quality">Assignment Quality</option>
+                <option value="Deadline Concern">Deadline Concern</option>
+                <option value="Technical Problem">Technical Problem</option>
+                <option value="Account Issue">Account Issue</option>
+                <option value="Communication">Communication</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <!-- Related Assignment -->
+            <div style="margin-bottom: 24px;">
+              <label style="display: block; font-size: 15px; font-weight: 600; color: #1f2937; margin-bottom: 10px;">
+                Related Assignment <span style="color: #9ca3af; font-weight: 400; font-size: 14px;">(Optional)</span>
+              </label>
+              <select id="related-assignment" style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 15px; color: #1f2937; background: white; appearance: none; background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23cbd5e0%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-repeat: no-repeat; background-position: right 16px center; background-size: 18px; padding-right: 45px;">
+                <option value="">No specific assignment</option>
+              </select>
+            </div>
+
+            <!-- Issue Title -->
+            <div style="margin-bottom: 24px;">
+              <label style="display: block; font-size: 15px; font-weight: 600; color: #1f2937; margin-bottom: 10px;">
+                Issue Title <span style="color: #ef4444;">*</span>
+              </label>
+              <input type="text" id="issue-title" required placeholder="Brief description of the issue" style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 15px; color: #1f2937; background: white;">
+            </div>
+
+            <!-- Detailed Description -->
+            <div style="margin-bottom: 24px;">
+              <label style="display: block; font-size: 15px; font-weight: 600; color: #1f2937; margin-bottom: 10px;">
+                Detailed Description <span style="color: #ef4444;">*</span>
+              </label>
+              <textarea id="issue-description" required maxlength="2000" rows="7" placeholder="Provide detailed information about the issue..." style="width: 100%; padding: 14px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 15px; color: #1f2937; resize: vertical; font-family: inherit; background: white; line-height: 1.6;"></textarea>
+              <div style="font-size: 13px; color: #9ca3af; margin-top: 8px;">
+                <span id="desc-char-count">0</span>/2000 characters
+              </div>
+            </div>
+
+            <!-- Attachments -->
+            <div style="margin-bottom: 28px;">
+              <label style="display: block; font-size: 15px; font-weight: 600; color: #1f2937; margin-bottom: 10px;">
+                Attachments <span style="color: #9ca3af; font-weight: 400; font-size: 14px;">(Optional)</span>
+              </label>
+              <div id="issue-upload-area" style="border: 1px solid #d1d5db; border-radius: 8px; padding: 28px 20px; text-align: center; cursor: pointer; background: white;">
+                <i class="fas fa-paperclip" style="font-size: 24px; color: #6b7280; margin-bottom: 10px; display: block;"></i>
+                <p style="font-size: 15px; color: #1f2937; margin: 0; font-weight: 500;">Add Files</p>
+              </div>
+              <input type="file" id="issue-file-input" multiple style="display: none;" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
+              <div style="font-size: 13px; color: #6b7280; margin-top: 10px;">
+                Max 50MB per file • Supports: Images, PDF, Word documents
+              </div>
+              <div id="issue-file-list" style="margin-top: 12px;"></div>
+            </div>
+
+            <!-- Submit Button -->
+            <div style="display: flex; justify-content: flex-end;">
+              <button type="submit" id="submit-issue-btn" style="background: #2563eb; color: white; border: none; border-radius: 8px; padding: 13px 32px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);">
+                <i class="fas fa-paper-plane" style="font-size: 14px;"></i> Submit Issue
+              </button>
+            </div>
+          </form>
+        </div>
+      `;
+
+      modalOverlay.appendChild(modalContent);
+      document.body.appendChild(modalOverlay);
+
+      // Character counter
+      const descTextarea = document.getElementById('issue-description');
+      const charCount = document.getElementById('desc-char-count');
+      descTextarea.addEventListener('input', () => {
+        charCount.textContent = descTextarea.value.length;
+      });
+
+      // File upload
+      const uploadArea = document.getElementById('issue-upload-area');
+      const fileInput = document.getElementById('issue-file-input');
+      const fileList = document.getElementById('issue-file-list');
+      let selectedFiles = [];
+
+      uploadArea.addEventListener('click', () => fileInput.click());
+
+      fileInput.addEventListener('change', (e) => {
+        selectedFiles = Array.from(e.target.files);
+        displayIssueFiles();
+      });
+
+      function displayIssueFiles() {
+        if (selectedFiles.length === 0) {
+          fileList.innerHTML = '';
+          return;
+        }
+
+        fileList.innerHTML = selectedFiles.map((file, index) => `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: white; border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+              <i class="fas fa-file" style="color: #6b7280; font-size: 12px;"></i>
+              <span style="font-size: 13px; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(file.name)}</span>
+              <span style="font-size: 11px; color: #9ca3af;">(${(file.size / 1024).toFixed(1)} KB)</span>
+            </div>
+            <button type="button" onclick="window.removeIssueFile(${index})" style="background: transparent; border: none; color: #ef4444; cursor: pointer; padding: 2px 6px; font-size: 16px;">
+              ×
+            </button>
+          </div>
+        `).join('');
+      }
+
+      window.removeIssueFile = (index) => {
+        selectedFiles.splice(index, 1);
+        displayIssueFiles();
+      };
+
+      // Form submission
+      document.getElementById('issue-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const issueType = document.getElementById('issue-type').value;
+        const issueTitle = document.getElementById('issue-title').value;
+        const issueDescription = document.getElementById('issue-description').value;
+        const relatedAssignment = document.getElementById('related-assignment').value;
+
+        if (!issueType || !issueTitle || !issueDescription) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+
+        const submitBtn = document.getElementById('submit-issue-btn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+        const formData = new FormData();
+        formData.append('subject', issueTitle);
+        formData.append('category', issueType);
+        formData.append('initial_message', issueDescription);
+        if (relatedAssignment) formData.append('related_assignment', relatedAssignment);
+
+        selectedFiles.forEach(file => {
+          formData.append('files', file);
         });
+
+        try {
+          const res = await apiFetch('/support/tickets', 'POST', formData, true);
+          if (res.success) {
+            alert('Issue reported successfully!');
+            window.closeIssueModal();
+            renderSupportCenterView();
+          } else {
+            alert(res.message || 'Failed to report issue.');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Issue';
+          }
+        } catch (error) {
+          alert('Error submitting issue. Please try again.');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Issue';
+        }
+      });
+
+      // Close on overlay click
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+          window.closeIssueModal();
+        }
+      });
+    };
+
+    // Close modal function
+    window.closeIssueModal = () => {
+      const modal = document.getElementById('issue-modal-overlay');
+      if (modal) {
+        modal.remove();
+      }
+    };
+  }
+
+  // ==========================================
+  // 11. REFERRAL VIEW
+  // ==========================================
+  function renderReferralView() {
+    if (pageTitleEl) pageTitleEl.textContent = 'Refer & Earn';
+
+    const referralCode = 'REF-3C3FM';
+    const walletBalance = 0;
+    const totalInvites = 0;
+    const signedUp = 0;
+    const completed = 0;
+    const totalEarned = 0;
+
+    let html = `
+      <div style="max-width: 1400px; margin: 0 auto;">
+        <!-- Page Header -->
+        <div style="margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <i class="fas fa-gift" style="color: #2563eb; font-size: 1.4rem;"></i>
+            <h1 style="font-size: 1.75rem; font-weight: 700; color: #1a1a1a; margin: 0;">Refer & Earn ₹200</h1>
+          </div>
+          <p style="color: #6b7280; margin: 0; font-size: 0.95rem;">Invite friends and earn cashback when they complete their first assignment</p>
+        </div>
+
+        <!-- Tabs -->
+        <div style="display: flex; gap: 8px; margin-bottom: 24px;">
+          <button style="background: white; color: #1a1a1a; border: 1px solid #e5e7eb; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-gift" style="font-size: 0.85rem;"></i> Refer & Earn
+          </button>
+          <button style="background: transparent; color: #6b7280; border: 1px solid transparent; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-clock" style="font-size: 0.85rem;"></i> Withdrawals
+          </button>
+        </div>
+
+        <!-- Referral Code Card -->
+        <div style="background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%); border-radius: 12px; padding: 28px; margin-bottom: 24px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+            <i class="fas fa-qrcode" style="color: #2563eb; font-size: 1rem;"></i>
+            <h3 style="font-size: 1rem; font-weight: 700; color: #1e3a8a; margin: 0;">Your Referral Code</h3>
+          </div>
+          
+          <div style="background: white; border-radius: 10px; padding: 20px; margin-bottom: 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div style="font-size: 2rem; font-weight: 800; color: #1a1a1a; letter-spacing: 2px; font-family: 'Courier New', monospace;">${referralCode}</div>
+              <div style="display: flex; gap: 8px;">
+                <button onclick="window.copyReferralCode('${referralCode}')" style="background: #f3f4f6; color: #374151; border: none; padding: 10px 20px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                  <i class="fas fa-copy" style="font-size: 0.8rem;"></i> Edit
+                </button>
+                <button onclick="window.shareReferralCode('${referralCode}')" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);">
+                  <i class="fas fa-share-alt" style="font-size: 0.8rem;"></i> Share
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <p style="color: #3b82f6; margin: 0; font-size: 0.9rem;">Share this code with friends. They get help with their assignments and you earn ₹200 when they complete their first order!</p>
+        </div>
+
+        <!-- Wallet Balance Card -->
+        <div style="background: white; border-radius: 12px; padding: 24px; border: 1px solid #e5e7eb; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+              <i class="fas fa-wallet" style="color: #10b981; font-size: 0.9rem;"></i>
+              <div style="color: #6b7280; font-size: 0.8rem; font-weight: 600;">Wallet Balance</div>
+            </div>
+            <div style="font-size: 2.5rem; font-weight: 800; color: #1a1a1a;">₹${walletBalance}</div>
+            <div style="color: #6b7280; font-size: 0.85rem; margin-top: 4px;">Total cashback earned</div>
+          </div>
+          <div style="text-align: right;">
+            <button style="background: white; color: #6b7280; border: 1px solid #e5e7eb; padding: 10px 24px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; margin-bottom: 8px; display: block; width: 100%;">
+              View History
+            </button>
+          </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;">
+          <!-- Total Invites -->
+          <div style="background: #eff6ff; border-radius: 12px; padding: 20px; border: 1px solid #dbeafe;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+              <i class="fas fa-users" style="color: #2563eb; font-size: 0.9rem;"></i>
+              <div style="color: #1e40af; font-size: 0.75rem; font-weight: 600;">Total Invites</div>
+            </div>
+            <div style="font-size: 2rem; font-weight: 700; color: #1e3a8a; margin-bottom: 4px;">${totalInvites}</div>
+          </div>
+
+          <!-- Signed Up -->
+          <div style="background: #fef3c7; border-radius: 12px; padding: 20px; border: 1px solid #fde68a;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+              <i class="fas fa-user-plus" style="color: #f59e0b; font-size: 0.9rem;"></i>
+              <div style="color: #b45309; font-size: 0.75rem; font-weight: 600;">Signed Up</div>
+            </div>
+            <div style="font-size: 2rem; font-weight: 700; color: #92400e; margin-bottom: 4px;">${signedUp}</div>
+          </div>
+
+          <!-- Completed -->
+          <div style="background: #d1fae5; border-radius: 12px; padding: 20px; border: 1px solid #a7f3d0;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+              <i class="fas fa-check-circle" style="color: #10b981; font-size: 0.9rem;"></i>
+              <div style="color: #065f46; font-size: 0.75rem; font-weight: 600;">Completed</div>
+            </div>
+            <div style="font-size: 2rem; font-weight: 700; color: #047857; margin-bottom: 4px;">${completed}</div>
+          </div>
+
+          <!-- Total Earned -->
+          <div style="background: #f3e8ff; border-radius: 12px; padding: 20px; border: 1px solid #e9d5ff;">
+            <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 12px;">
+              <i class="fas fa-rupee-sign" style="color: #8b5cf6; font-size: 0.9rem;"></i>
+              <div style="color: #7e22ce; font-size: 0.75rem; font-weight: 600;">Total Earned</div>
+            </div>
+            <div style="font-size: 2rem; font-weight: 700; color: #6b21a8; margin-bottom: 4px;">₹${totalEarned}</div>
+          </div>
+        </div>
+
+        <!-- Referral History -->
+        <div style="background: white; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden;">
+          <div style="padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="font-size: 1rem; font-weight: 700; color: #1a1a1a; margin: 0;">Referral History</h3>
+            <button style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+              <i class="fas fa-paper-plane" style="font-size: 0.8rem;"></i> Send Invite
+            </button>
+          </div>
+
+          <!-- Empty State -->
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 24px; text-align: center;">
+            <div style="width: 80px; height: 80px; background: #eff6ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 24px;">
+              <i class="fas fa-user-friends" style="font-size: 36px; color: #2563eb;"></i>
+            </div>
+            <h3 style="font-size: 1.1rem; font-weight: 700; color: #1a1a1a; margin: 0 0 8px 0;">No referrals yet</h3>
+            <p style="color: #2563eb; margin: 0 0 24px 0; font-size: 0.95rem; max-width: 420px;">Start inviting friends to earn ₹200 for each successful referral!</p>
+            <button onclick="window.shareReferralCode('${referralCode}')" style="background: #2563eb; color: white; border: none; padding: 12px 32px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+              <i class="fas fa-share-alt" style="font-size: 0.85rem;"></i> Send Your First Invite
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    mainContentEl.innerHTML = html;
+
+    // Global functions
+    window.copyReferralCode = (code) => {
+      navigator.clipboard.writeText(code).then(() => {
+        alert('Referral code copied to clipboard: ' + code);
+      });
+    };
+
+    window.shareReferralCode = (code) => {
+      const text = `Hey! Use my referral code ${code} on AssignmentWaala and get help with your assignments. You'll get great support and I'll earn ₹200!`;
+      if (navigator.share) {
+        navigator.share({
+          title: 'AssignmentWaala Referral',
+          text: text
+        });
+      } else {
+        prompt('Share this message:', text);
       }
     };
   }

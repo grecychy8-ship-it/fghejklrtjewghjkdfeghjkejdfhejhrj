@@ -30,7 +30,7 @@
 
 body.dashboard-body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: var(--bg-main);
+  background-color: #f9fafb;
   color: var(--text-main);
   margin: 0;
   padding: 0;
@@ -75,11 +75,8 @@ body.dashboard-body {
   text-decoration: none;
   color: #ffffff;
   font-weight: 700;
-  font-size: 1.2rem;
-}
-
-.sidebar-brand img {
-  height: 36px;
+  font-size: 1.35rem;
+  letter-spacing: -0.3px;
 }
 
 .sidebar-menu {
@@ -89,12 +86,12 @@ body.dashboard-body {
 }
 
 .menu-category {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: rgba(255,255,255,0.4);
+  letter-spacing: 1.2px;
+  color: rgba(255,255,255,0.35);
   padding: 12px 14px 6px 14px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .nav-item-link {
