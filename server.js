@@ -828,6 +828,30 @@ app.post('/api/support/tickets/:id/messages', authenticateToken, (req, res) => {
   });
 });
 
+// Contact Inquiries Submission Endpoint
+app.post('/api/contact', (req, res) => {
+  const { full_name, email, subject, message } = req.body;
+  if (!full_name || !email || !message) {
+    return res.status(400).json({ success: false, message: 'Please provide full name, email, and message.' });
+  }
+
+  db.run(
+    `INSERT INTO contact_inquiries (full_name, email, subject, message) VALUES (?, ?, ?, ?)`,
+    [full_name, email, subject || 'General Inquiry', message],
+    function (err) {
+      if (err) {
+        console.error('Contact inquiry save error:', err);
+        return res.status(500).json({ success: false, message: 'Failed to record your message. Please try again.' });
+      }
+      return res.status(201).json({
+        success: true,
+        message: 'Thank you! Your message has been sent successfully. Our team will contact you shortly.',
+        inquiry_id: this.lastID
+      });
+    }
+  );
+});
+
 // Fallback Route for SPA Dashboard Navigation
 app.get(/^\/dashboard/, (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard.html'));
@@ -836,7 +860,7 @@ app.get(/^\/dashboard/, (req, res) => {
 // Start Express Server
 app.listen(PORT, () => {
   console.log(`=======================================================`);
-  console.log(`🚀 AssignmentWaala Client Dashboard Server Running`);
+  console.log(`🚀 Assignment Dai Client Dashboard Server Running`);
   console.log(`📡 URL: http://localhost:${PORT}`);
   console.log(`📱 SPA Route: http://localhost:${PORT}/dashboard.html`);
   console.log(`=======================================================`);

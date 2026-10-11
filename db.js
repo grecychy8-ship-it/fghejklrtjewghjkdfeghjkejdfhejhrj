@@ -266,6 +266,19 @@ db.serialize(() => {
     )
   `);
 
+  // 16. Contact Inquiries Table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS contact_inquiries (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      full_name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      subject TEXT NOT NULL,
+      message TEXT NOT NULL,
+      status TEXT DEFAULT 'New',
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
   // Seed Default Demo Experts if empty
   db.get("SELECT COUNT(*) AS count FROM experts", (err, row) => {
     if (!err && row.count === 0) {

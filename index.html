@@ -2,16 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>AssignmentWaala - #1 Academic Project Help Platform</title>
+    <title>Assignment Dai - #1 Academic Project Help Platform</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="images/fv.png" type="image/x-icon">
     <link rel="icon" href="images/fv.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
     <link rel="stylesheet" href="css/fontawesome-all.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/owl.carousel.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile-responsive.css">
     <style>
         /* OVERRIDE HEADER STYLES FOR PERFECT ALIGNMENT & ZERO OVERLAPS */
         .saas_two_main_header {
@@ -611,6 +615,474 @@
             transform: scale(1.12);
             filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.08));
         }
+
+        /* SERVICES WIDE CONTAINER TO MINIMIZE LEFT/RIGHT GAPS */
+        .services-wide-container {
+            width: 100%;
+            max-width: 1480px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+        @media (max-width: 768px) {
+            .services-wide-container {
+                padding: 0 16px;
+            }
+        }
+
+        /* MODERN FAQ SECTION STYLING */
+        .modern-faq-section {
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            padding: 100px 0 90px;
+            position: relative;
+        }
+        .faq-pill-badge {
+            background-color: #f3e8ff;
+            color: #7c3aed;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 6px 22px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+        .faq-title-container {
+            text-align: center;
+            max-width: 780px;
+            margin: 0 auto 50px auto;
+        }
+        .faq-main-title {
+            font-weight: 800;
+            color: #0f172a;
+            font-size: 2.5rem;
+            line-height: 1.25;
+            margin-bottom: 14px;
+        }
+        .faq-main-title .gradient-accent {
+            color: #6366f1;
+        }
+        .faq-subtitle {
+            color: #64748b;
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* FAQ ACCORDION CARDS */
+        .faq-card {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        .faq-card:hover {
+            border-color: #c7d2fe;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.06);
+        }
+        .faq-card.active-card,
+        .faq-card:has(.faq-header-btn:not(.collapsed)) {
+            border-color: #6366f1;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.1);
+        }
+        .faq-header-btn {
+            width: 100%;
+            background: transparent !important;
+            border: none !important;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+            cursor: pointer;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a !important;
+            text-decoration: none !important;
+            transition: color 0.2s ease;
+            gap: 16px;
+        }
+        .faq-header-btn:focus {
+            outline: none;
+            box-shadow: none;
+        }
+        .s2-faq_section .s2_faq_content button:after,
+        .s2-faq_section .s2_faq_content .collapsed:after,
+        .faq-header-btn:after {
+            display: none !important; /* override template corrupted question mark */
+        }
+        .faq-q-text {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+        }
+        .faq-q-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            color: #6366f1;
+            font-size: 0.85rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .faq-card.active-card .faq-q-number,
+        .faq-header-btn:not(.collapsed) .faq-q-number {
+            background: #6366f1;
+            color: #ffffff;
+        }
+        .faq-chevron-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .faq-card.active-card .faq-chevron-icon,
+        .faq-header-btn:not(.collapsed) .faq-chevron-icon {
+            transform: rotate(180deg);
+            background: #6366f1;
+            color: #ffffff;
+            border-color: #6366f1;
+        }
+        .faq-body-content {
+            padding: 0 24px 24px 70px;
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.65;
+        }
+        @media (max-width: 768px) {
+            .faq-body-content {
+                padding: 0 20px 20px 20px;
+            }
+            .faq-header-btn {
+                padding: 16px 18px;
+            }
+        }
+
+        /* FAQ STILL HAVE QUESTIONS BANNER */
+        .faq-cta-banner {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            border-radius: 20px;
+            padding: 36px 40px;
+            margin-top: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #ffffff;
+            box-shadow: 0 15px 40px rgba(30, 27, 75, 0.2);
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        .faq-cta-text h4 {
+            color: #ffffff;
+            font-size: 1.45rem;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        .faq-cta-text p {
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+        .faq-cta-buttons {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn-faq-whatsapp {
+            background-color: #25d366;
+            color: #ffffff !important;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none !important;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            transition: all 0.25s ease;
+        }
+        .btn-faq-whatsapp:hover {
+            background-color: #20ba5a;
+            transform: translateY(-2px);
+        }
+        .btn-faq-submit {
+            background-color: #6366f1;
+            color: #ffffff !important;
+            padding: 12px 26px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none !important;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            transition: all 0.25s ease;
+        }
+        .btn-faq-submit:hover {
+            background-color: #4f46e5;
+            transform: translateY(-2px);
+        }
+
+        /* ==========================================================
+           ABOUT ASSIGNMENT DAI SECTION STYLES
+           ========================================================== */
+        .about-dai-section {
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            padding: 105px 0 95px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .about-dai-container {
+            width: 100%;
+            max-width: 1480px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+        @media (max-width: 768px) {
+            .about-dai-container {
+                padding: 0 16px;
+            }
+        }
+        .about-image-wrapper {
+            position: relative;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .about-image-ambient-glow {
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.12) 0%, rgba(224, 231, 255, 0.5) 50%, rgba(255, 255, 255, 0) 75%);
+            border-radius: 50%;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .about-main-3d-img {
+            position: relative;
+            z-index: 2;
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 35px rgba(15, 23, 42, 0.08));
+            transition: transform 0.4s ease;
+        }
+        .about-main-3d-img:hover {
+            transform: translateY(-5px);
+        }
+        .about-float-badge {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+            border: 1px solid #f1f5f9;
+            z-index: 3;
+            animation: float-soft 4s ease-in-out infinite alternate;
+        }
+        @keyframes float-soft {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); }
+        }
+        .about-badge-top-left {
+            top: 15px;
+            left: 5px;
+        }
+        .about-badge-bottom-right {
+            bottom: 20px;
+            right: 15px;
+            animation-delay: 2s;
+        }
+        .float-badge-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .badge-blue { background: #eff6ff; color: #2563eb; }
+        .badge-green { background: #ecfdf5; color: #059669; }
+        .float-badge-text strong {
+            display: block;
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+        .float-badge-text span {
+            font-size: 0.76rem;
+            color: #64748b;
+            font-weight: 600;
+        }
+        .about-content-box {
+            padding-left: 20px;
+        }
+        @media (max-width: 991.98px) {
+            .about-content-box {
+                padding-left: 0;
+                margin-top: 35px;
+            }
+        }
+        .about-pill-tag {
+            background: #eff6ff;
+            color: #2563eb;
+            font-weight: 700;
+            font-size: 0.88rem;
+            padding: 6px 18px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 18px;
+            border: 1px solid #dbeafe;
+        }
+        .about-tag-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #2563eb;
+        }
+        /* OUR STORY HEADER & PARAGRAPH TYPOGRAPHY */
+        .our-story-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+        .story-icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+            flex-shrink: 0;
+        }
+        .story-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.35rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+        }
+        .our-story-body {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+        .story-paragraph {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.05rem;
+            color: #475569;
+            line-height: 1.75;
+            margin: 0;
+            font-weight: 400;
+        }
+        .about-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        .btn-about-primary {
+            background-color: #2563eb;
+            color: #ffffff !important;
+            padding: 13px 28px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.96rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none !important;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            transition: all 0.25s ease;
+        }
+        .btn-about-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+        }
+        .btn-about-whatsapp {
+            background-color: #25d366;
+            color: #ffffff !important;
+            padding: 13px 26px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.96rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none !important;
+            box-shadow: 0 4px 14px rgba(37, 211, 102, 0.35);
+            transition: all 0.25s ease;
+        }
+        .btn-about-whatsapp:hover {
+            background-color: #20ba5a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.45);
+        }
+        .about-trust-footnote {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #475569;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+        .about-trust-footnote i.fa-star {
+            color: #f59e0b;
+        }
+        @media (max-width: 768px) {
+            .about-dai-section {
+                padding: 60px 0 !important;
+            }
+            .about-main-heading {
+                font-size: 2.1rem !important;
+            }
+            .about-float-badge {
+                display: none !important;
+            }
+            .about-main-3d-img {
+                max-width: 100% !important;
+                margin: 0 auto;
+            }
+            .about-actions-group a {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 
@@ -622,7 +1094,7 @@
     </div>
 
     <!-- Floating WhatsApp Quick Support -->
-    <a href="https://wa.me/?text=Hello%20AssignmentWaala%20Support" target="_blank" class="whatsapp-float-btn" title="Contact Support on WhatsApp">
+    <a href="https://wa.me/?text=Hello%20Assignment%20Dai%20Support" target="_blank" class="whatsapp-float-btn" title="Contact Support on WhatsApp">
         <i class="fab fa-whatsapp"></i>
     </a>
 
@@ -630,13 +1102,9 @@
     <header id="header_main" class="saas_two_main_header">
         <div class="container-fluid px-lg-5">
             <div class="header-flex-wrapper">
-                <!-- Brand Logo (Pure SVG Academic Icon + AssignmentWaala text) -->
-                <a href="index.html" class="brand-logo-text">
-                    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 3L1 9L12 15L21 10.09V17H23V9L12 3Z" fill="#2b56f5"/>
-                        <path d="M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z" fill="#2b56f5"/>
-                    </svg>
-                    <span>AssignmentWaala</span>
+                <!-- Brand Logo (Official Assignment Dai Logo) -->
+                <a href="index.html" class="brand-logo-link">
+                    <img src="images/logo1.png" alt="Assignment Dai" class="brand-logo-img">
                 </a>
 
                 <!-- Desktop Navigation Menu -->
@@ -648,7 +1116,7 @@
                         <li><a href="#testimonials" class="header-nav-link">Testimonials</a></li>
                         <li><a href="#s2-faq" class="header-nav-link">FAQ</a></li>
                         <li><a href="#saas_two_about" class="header-nav-link">About</a></li>
-                        <li><a href="#contact_sec" class="header-nav-link">Contact</a></li>
+                        <li><a href="contact.html" class="header-nav-link">Contact</a></li>
                     </ul>
                 </nav>
 
@@ -658,46 +1126,134 @@
                     <a href="dashboard.html#/submit-project" class="btn-blue-primary" style="padding: 10px 24px; font-size: 0.9rem;">Submit Project</a>
                 </div>
 
-                <!-- Mobile Menu Button -->
-                <button class="d-lg-none border-0 bg-transparent text-dark h3 mb-0 s2-open_mobile_menu">
+                <!-- Modern Mobile Menu Trigger Button -->
+                <button class="d-lg-none btn-mobile-toggle aw-open-drawer-btn s2-open_mobile_menu" aria-label="Open mobile menu">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
+        </div>
+    </header>
+    <!-- End of Header Section -->
 
-            <!-- Mobile Drawer Menu -->
-            <div class="s2-mobile_menu relative-position">
-                <div class="s2-mobile_menu_wrap">
-                    <div class="mobile_menu_overlay s2-open_mobile_menu"></div>
-                    <div class="s2-mobile_menu_content">
-                        <div class="s2-mobile_menu_close s2-open_mobile_menu">
-                            <i class="far fa-times-circle"></i>
-                        </div>
-                        <div class="m-brand-logo text-center mb-3">
-                            <a href="index.html" class="brand-logo-text justify-content-center">
-                                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M12 3L1 9L12 15L21 10.09V17H23V9L12 3Z" fill="#2b56f5"/>
-                                    <path d="M5 13.18V17.18L12 21L19 17.18V13.18L12 17L5 13.18Z" fill="#2b56f5"/>
-                                </svg>
-                                <span>AssignmentWaala</span>
-                            </a>
-                        </div>
-                        <nav class="s2-mobile-main-navigation clearfix ul-li">
-                            <ul id="m-main-nav" class="navbar-nav text-capitalize clearfix">
-                                <li><a href="#saas_two_banner">Home</a></li>
-                                <li><a href="#saas_two_service">Services</a></li>
-                                <li><a href="#how_it_works">How It Works</a></li>
-                                <li><a href="#testimonials">Testimonials</a></li>
-                                <li><a href="#s2-faq">FAQ</a></li>
-                                <li><a href="#saas_two_about">About</a></li>
-                                <li><a href="#contact_sec">Contact</a></li>
-                                <li class="mt-3"><a href="dashboard.html" class="btn btn-primary text-white text-center">Login / Dashboard</a></li>
-                            </ul>
-                        </nav>
+    <!-- Modern Premium Mobile Navigation Drawer -->
+    <div id="awMobileDrawer" class="aw-mobile-drawer">
+        <!-- Backdrop with Glassmorphism Blur -->
+        <div class="aw-drawer-backdrop" id="awDrawerBackdrop"></div>
+
+        <!-- Sliding Sheet Container -->
+        <div class="aw-drawer-panel">
+            <!-- Drawer Header -->
+            <div class="aw-drawer-header">
+                <a href="index.html" class="aw-drawer-brand">
+                    <img src="images/logo1.png" alt="Assignment Dai" class="aw-drawer-logo-img">
+                </a>
+                <button type="button" class="aw-drawer-close-btn" id="awDrawerCloseBtn" aria-label="Close menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- 24/7 Live Scholars Status Badge -->
+            <div class="aw-drawer-status-wrap">
+                <div class="aw-drawer-status-pill">
+                    <span class="aw-pulse-dot"></span>
+                    <span>Scholars Online &bull; 24/7 Active</span>
+                </div>
+            </div>
+
+            <!-- Scrollable Navigation Area -->
+            <div class="aw-drawer-scroll-body">
+                <div class="aw-nav-section-title">NAVIGATION MENU</div>
+                <ul class="aw-nav-list">
+                    <li>
+                        <a href="#saas_two_banner" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-home"><i class="fas fa-home"></i></span>
+                            <span class="aw-nav-text">Home</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#saas_two_service" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-services"><i class="fas fa-graduation-cap"></i></span>
+                            <span class="aw-nav-text">Services</span>
+                            <span class="aw-nav-tag">6 Areas</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#how_it_works" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-process"><i class="fas fa-layer-group"></i></span>
+                            <span class="aw-nav-text">How It Works</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#why_choose_us" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-why"><i class="fas fa-shield-alt"></i></span>
+                            <span class="aw-nav-text">Why Choose Us</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#testimonials" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-testimonials"><i class="fas fa-star"></i></span>
+                            <span class="aw-nav-text">Testimonials</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#s2-faq" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-faq"><i class="fas fa-question-circle"></i></span>
+                            <span class="aw-nav-text">FAQ</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#saas_two_about" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-about"><i class="fas fa-info-circle"></i></span>
+                            <span class="aw-nav-text">About Us</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="contact.html" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-contact"><i class="fas fa-envelope"></i></span>
+                            <span class="aw-nav-text">Contact Us</span>
+                            <span class="aw-nav-tag tag-primary">Instant</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Quick Action Area -->
+                <div class="aw-drawer-actions">
+                    <a href="dashboard.html#/submit-project" class="aw-btn-primary-action">
+                        <i class="fas fa-paper-plane mr-2"></i> Submit Project
+                        <i class="fas fa-arrow-right ml-auto"></i>
+                    </a>
+                    <a href="dashboard.html" class="aw-btn-secondary-action">
+                        <i class="fas fa-user-circle mr-2"></i> Login / Dashboard
+                    </a>
+                </div>
+
+                <!-- Instant Support Mini Card -->
+                <div class="aw-drawer-support-box">
+                    <div class="aw-support-header">
+                        <i class="fas fa-headset mr-2 text-primary"></i>
+                        <strong>Need Instant Help?</strong>
+                    </div>
+                    <p class="aw-support-desc">Talk directly to an academic coordinator for quotes or questions.</p>
+                    <div class="aw-support-btn-group">
+                        <a href="https://wa.me/?text=Hello%20Assignment%20Dai%20Support" target="_blank" class="aw-btn-wa">
+                            <i class="fab fa-whatsapp mr-1"></i> WhatsApp
+                        </a>
+                        <a href="tel:+9779801234567" class="aw-btn-tel">
+                            <i class="fas fa-phone-alt mr-1"></i> Call
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-    </header>
+    </div>
     <!-- End of Header Section -->
 
     <!-- Start of Hero Banner Section -->
@@ -744,7 +1300,7 @@
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="hero-session-img-wrapper">
-                        <img src="images/hero session image.png" alt="AssignmentWaala Student Guidance" class="hero-session-img img-fluid">
+                        <img src="images/hero session image.png" alt="Assignment Dai Student Guidance" class="hero-session-img img-fluid">
                     </div>
                 </div>
             </div>
@@ -757,7 +1313,7 @@
 
     <!-- Start of Services Section -->
     <section id="saas_two_service" class="saas_two_service_section" style="padding: 90px 0; background-color: #ffffff;">
-        <div class="container">
+        <div class="services-wide-container">
             <div class="saas_two_section_title saas2-headline text-center mb-5" style="max-width: 800px; margin: 0 auto 50px auto;">
                 <span class="title_tag" style="background: rgba(43,86,245,0.1); color: #2b56f5; padding: 6px 18px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; display: inline-block; margin-bottom: 12px;">What We Offer</span>
                 <h2 style="font-size: 2.3rem; font-weight: 800; color: #0f172a; margin-top: 8px;">Comprehensive <span style="color: #2b56f5;">Academic & Technical Support</span></h2>
@@ -869,12 +1425,12 @@
 
     <!-- Start of How It Works Section -->
     <section id="how_it_works" class="process-section">
-        <div class="container">
+        <div class="services-wide-container">
             <div class="process-title-container">
                 <span class="process-pill-badge">Simple 4-Step Process</span>
                 <h2 class="process-main-title">
                     How
-                    <span class="process-brand-title">AssignmentWaala</span>
+                    <span class="process-brand-title">Assignment Dai</span>
                     <span class="process-works-wrap">
                         <svg class="sparkle-icon" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M 28 5 L 8 20" stroke="#f59e0b" stroke-width="3" stroke-linecap="round"/>
@@ -1043,7 +1599,7 @@
                 <!-- Center Image (Enlarged to col-lg-6) -->
                 <div class="col-lg-6 col-md-12 mb-4 mb-lg-0">
                     <div class="why-choose-center-img-wrapper">
-                        <img src="images/why choose us.png" alt="Why Choose AssignmentWaala" class="why-choose-center-img img-fluid">
+                        <img src="images/why choose us.png" alt="Why Choose Assignment Dai" class="why-choose-center-img img-fluid">
                     </div>
                 </div>
 
@@ -1097,31 +1653,75 @@
     </section>
     <!-- End of Why Choose Us Section -->
 
-    <!-- Start of About Section -->
-    <section id="saas_two_about" class="saas_two_about_section relative-position py-5">
-        <div class="container">
-            <div class="about_content_s2 my-4">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 col-md-12">
-                        <div class="s2-about_img text-center">
-                            <img src="images/s_ab1.png" alt="Academic Excellence" class="img-fluid">
+    <!-- Start of About Assignment Dai Section -->
+    <section id="saas_two_about" class="about-dai-section">
+        <div class="about-dai-container">
+            <div class="row align-items-center">
+                <!-- Left Column: 3D Illustration & Floating Badges -->
+                <div class="col-lg-6 col-md-12 mb-5 mb-lg-0">
+                    <div class="about-image-wrapper">
+                        <div class="about-image-ambient-glow"></div>
+                        <img src="images/about image.png" alt="Assignment Dai Academic Guidance and Mentorship" class="about-main-3d-img img-fluid">
+                        
+                        <!-- Floating Trust Badges -->
+                        <div class="about-float-badge about-badge-top-left">
+                            <div class="float-badge-icon badge-blue">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div class="float-badge-text">
+                                <strong>100+ Verified Mentors</strong>
+                                <span>PhD & Engineering Scholars</span>
+                            </div>
+                        </div>
+
+                        <div class="about-float-badge about-badge-bottom-right">
+                            <div class="float-badge-icon badge-green">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="float-badge-text">
+                                <strong>100% Original Work</strong>
+                                <span>Turnitin Plagiarism Free</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-12">
-                        <div class="s2-about_text_icon">
-                            <div class="s2-about_text saas2-headline pera-content">
-                                <span class="badge badge-primary px-3 py-1 mb-2">About AssignmentWaala</span>
-                                <h3>Empowering Students To Achieve <span>Academic Excellence</span></h3>
-                                <p>AssignmentWaala is a premier academic project help platform that connects students with verified university scholars, software architects, and PhD researchers. We deliver plagiarism-free, high-quality project solutions on time with full confidentiality.</p>
-                                <a href="dashboard.html#/submit-project" class="btn-blue-primary mt-3">Start Your Project <i class="fas fa-arrow-right ml-1"></i></a>
-                            </div>
+                </div>
+
+                <!-- Right Column: Our Story -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="about-content-box">
+                        <!-- Our Story Header -->
+                        <div class="our-story-header">
+                            <h2 class="story-title">Our Story</h2>
+                        </div>
+
+                        <!-- Our Story Paragraphs -->
+                        <div class="our-story-body">
+                            <p class="story-paragraph">
+                                Assignment Dai was founded with a simple yet powerful vision: to make quality academic guidance accessible to every student. We recognized that many students struggle not because they lack potential, but because they need personalized guidance and mentorship to unlock their capabilities.
+                            </p>
+
+                            <p class="story-paragraph">
+                                What started as a small initiative has grown into a comprehensive academic support platform, connecting students with expert mentors across various disciplines. We don't just help with assignments &ndash; we guide students to understand concepts, develop critical thinking skills, and build confidence in their academic journey.
+                            </p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="about-actions-group">
+                            <a href="dashboard.html#/submit-project" class="btn-about-primary">
+                                <span>Start Your Project</span>
+                                <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                            <a href="https://wa.me/?text=Hello%20Assignment%20Dai%2C%20I%20need%20help%20with%20my%20assignment" target="_blank" class="btn-about-whatsapp">
+                                <i class="fab fa-whatsapp"></i>
+                                <span>Chat With Us</span>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- End of About Section -->
+    <!-- End of About Assignment Dai Section -->
 
     <!-- Start of Testimonials Section -->
     <section id="testimonials" class="py-5 bg-light">
@@ -1135,24 +1735,24 @@
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card border-0 shadow-sm p-4 h-100 rounded">
                         <div class="text-warning mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                        <p class="text-muted font-italic mb-3">"AssignmentWaala helped me deliver my Machine Learning PyTorch thesis chapter on time. The empirical benchmarks were spot on and plagiarism-free!"</p>
-                        <strong class="text-dark">Sarah Jenkins</strong>
-                        <small class="text-muted">MSc Data Science, Oxford University</small>
+                        <p class="text-muted font-italic mb-3">"Assignment Dai helped me deliver my Machine Learning PyTorch thesis chapter on time. The empirical benchmarks were spot on and plagiarism-free!"</p>
+                        <strong class="text-dark">Aayush Shrestha</strong>
+                        <small class="text-muted">MSc Data Science</small>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card border-0 shadow-sm p-4 h-100 rounded">
                         <div class="text-warning mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                         <p class="text-muted font-italic mb-3">"Outstanding corporate finance case study help. The financial modeling spreadsheets were clean, and the Turnitin score was 0%."</p>
-                        <strong class="text-dark">David Miller</strong>
-                        <small class="text-muted">MBA Candidate, London Business School</small>
+                        <strong class="text-dark">Bikash Gurung</strong>
+                        <small class="text-muted">MBA Candidate</small>
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card border-0 shadow-sm p-4 h-100 rounded">
                         <div class="text-warning mb-2"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
                         <p class="text-muted font-italic mb-3">"The direct chat feature with the assigned expert was super helpful. I could clarify requirements anytime during the project!"</p>
-                        <strong class="text-dark">Priya Sharma</strong>
+                        <strong class="text-dark">Pooja Thapa</strong>
                         <small class="text-muted">BTech Computer Science</small>
                     </div>
                 </div>
@@ -1162,150 +1762,119 @@
     <!-- End of Testimonials Section -->
 
     <!-- Start of FAQ Section -->
-    <section id="s2-faq" class="s2-faq_section relative-position py-5">
-        <div class="container">
-            <div class="saas_two_section_title saas2-headline text-center mb-5">
-                <span class="title_tag">Frequently Asked Questions</span>
-                <h2>Got Questions About <span>AssignmentWaala</span>?</h2>
+    <section id="s2-faq" class="modern-faq-section relative-position">
+        <div class="services-wide-container">
+            <div class="faq-title-container">
+                <span class="faq-pill-badge">Frequently Asked Questions</span>
+                <h2 class="faq-main-title">Everything You Need To Know <span class="gradient-accent">About Assignment Dai</span></h2>
+                <p class="faq-subtitle">Clear, transparent answers to help you understand our academic support, expert allocation, Turnitin verification, and pricing guarantees.</p>
             </div>
-            <div class="s2_faq_content">
-                <div class="accordion" id="accordionExample">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-12">
-                            <div class="s2_faq">
-                                <div class="s2_faq-header" id="headingOne">
-                                    <button class="" data-toggle="collapse" data-target="#collapseOne" aria-controls="collapseOne">
-                                        01. How does AssignmentWaala guarantee plagiarism-free work?
-                                    </button>
-                                </div>
-                                <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
-                                    <div class="s2_faq-body">
-                                        Every project is completed from scratch by verified academic subject experts. We verify every deliverable through Turnitin and provide an official similarity report.
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="s2_faq">
-                                <div class="s2_faq-header" id="headingTwo">
-                                    <button class="collapsed" data-toggle="collapse" data-target="#collapseTwo">
-                                        02. What is your refund policy if requirements are not met?
-                                    </button>
-                                </div>
-                                <div id="collapseTwo" class="collapse" data-parent="#accordionExample">
-                                    <div class="s2_faq-body">
-                                        We offer a transparent refund policy for specific circumstances such as failure to assign an expert within 24 hours, unresolvable quality issues, or late delivery beyond agreed deadlines.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="s2_faq">
-                                <div class="s2_faq-header" id="headingThree">
-                                    <button class="collapsed" data-toggle="collapse" data-target="#collapseThree">
-                                        03. How fast can an expert assign and deliver an urgent project?
-                                    </button>
-                                </div>
-                                <div id="collapseThree" class="collapse" data-parent="#accordionExample">
-                                    <div class="s2_faq-body">
-                                        Our express academic team can assign an expert and complete urgent projects in as little as 24 to 48 hours without compromising research depth.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="s2_faq">
-                                <div class="s2_faq-header" id="headingFour">
-                                    <button class="collapsed" data-toggle="collapse" data-target="#collapseFour">
-                                        04. Can I directly chat with the assigned expert during the project?
-                                    </button>
-                                </div>
-                                <div id="collapseFour" class="collapse" data-parent="#accordionExample">
-                                    <div class="s2_faq-body">
-                                        Yes! Our client dashboard includes direct 1-on-1 messaging with your assigned expert to discuss requirements, upload files, and review milestone drafts.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6 col-md-12">
-                            <div class="s2_faq">
-                                <div class="s2_faq-header" id="heading5">
-                                    <button class="" data-toggle="collapse" data-target="#collapse5">
-                                        05. How is the pricing quote calculated for my project?
-                                    </button>
-                                </div>
-                                <div id="collapse5" class="collapse show" data-parent="#accordionExample">
-                                    <div class="s2_faq-body">
-                                        Pricing is transparently calculated based on word count, technical complexity, academic level (Undergraduate, Masters, PhD), and deadline urgency.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="s2_faq">
-                                <div class="s2_faq-header" id="heading6">
-                                    <button class="collapsed" data-toggle="collapse" data-target="#collapse6">
-                                        06. Are my personal data and assignment details confidential?
-                                    </button>
-                                </div>
-                                <div id="collapse6" class="collapse" data-parent="#accordionExample">
-                                    <div class="s2_faq-body">
-                                        100% confidential. We use SSL encryption and non-disclosure protocols so your personal information and academic identity are strictly protected.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="s2_faq">
-                                <div class="s2_faq-header" id="heading7">
-                                    <button class="collapsed" data-toggle="collapse" data-target="#collapse7">
-                                        07. What formatting standards and citation styles are supported?
-                                    </button>
-                                </div>
-                                <div id="collapse7" class="collapse" data-parent="#accordionExample">
-                                    <div class="s2_faq-body">
-                                        We support APA 7th, Harvard, IEEE, MLA, Chicago, Vancouver, OSCOLA, and custom university style sheets.
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="s2_faq">
-                                <div class="s2_faq-header" id="heading8">
-                                    <button class="collapsed" data-toggle="collapse" data-target="#collapse8">
-                                        08. How do I track real-time project progress?
-                                    </button>
-                                </div>
-                                <div id="collapse8" class="collapse" data-parent="#accordionExample">
-                                    <div class="s2_faq-body">
-                                        Log in to your Client Dashboard to view your real-time milestone percentage, timeline updates, quote breakdowns, and uploaded deliverable files.
-                                    </div>
-                                </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10 col-xl-9 col-md-12">
+                    <!-- Q1 -->
+                    <div class="faq-card">
+                        <button class="faq-header-btn" type="button" data-toggle="collapse" data-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">
+                            <span class="faq-q-text">
+                                <span class="faq-q-number">01</span>
+                                How does Assignment Dai guarantee 100% original, plagiarism-free work?
+                            </span>
+                            <span class="faq-chevron-icon"><i class="fas fa-chevron-down"></i></span>
+                        </button>
+                        <div id="faqCollapse1" class="collapse show" data-parent="#s2-faq">
+                            <div class="faq-body-content">
+                                Every assignment, thesis, and coding project is crafted from scratch according to your university rubric. Before delivery, all files undergo rigorous Turnitin similarity scanning and AI-detection checks. You receive the official Turnitin report alongside your finished files with 0% unauthorized similarity guaranteed.
                             </div>
                         </div>
                     </div>
+
+                    <!-- Q2 -->
+                    <div class="faq-card">
+                        <button class="faq-header-btn collapsed" type="button" data-toggle="collapse" data-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
+                            <span class="faq-q-text">
+                                <span class="faq-q-number">02</span>
+                                Who are the experts assigned to work on my assignment or project?
+                            </span>
+                            <span class="faq-chevron-icon"><i class="fas fa-chevron-down"></i></span>
+                        </button>
+                        <div id="faqCollapse2" class="collapse" data-parent="#s2-faq">
+                            <div class="faq-body-content">
+                                Your project is exclusively assigned to verified subject-matter specialists holding Master’s or PhD credentials from top universities. We match you with experts across STEM, Computer Science, Business & Finance, Law, Nursing, and Humanities based on your exact topic and marking syllabus.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="faq-card">
+                        <button class="faq-header-btn collapsed" type="button" data-toggle="collapse" data-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
+                            <span class="faq-q-text">
+                                <span class="faq-q-number">03</span>
+                                Can I communicate directly with my assigned expert in real time?
+                            </span>
+                            <span class="faq-chevron-icon"><i class="fas fa-chevron-down"></i></span>
+                        </button>
+                        <div id="faqCollapse3" class="collapse" data-parent="#s2-faq">
+                            <div class="faq-body-content">
+                                Absolutely. Our built-in Client Dashboard features direct 1-on-1 private messaging. You can share files, clarify professor feedback, monitor draft milestones, and discuss technical parameters directly with your expert without any middlemen or delays.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="faq-card">
+                        <button class="faq-header-btn collapsed" type="button" data-toggle="collapse" data-target="#faqCollapse4" aria-expanded="false" aria-controls="faqCollapse4">
+                            <span class="faq-q-text">
+                                <span class="faq-q-number">04</span>
+                                How fast can you deliver an urgent assignment or coding task?
+                            </span>
+                            <span class="faq-chevron-icon"><i class="fas fa-chevron-down"></i></span>
+                        </button>
+                        <div id="faqCollapse4" class="collapse" data-parent="#s2-faq">
+                            <div class="faq-body-content">
+                                We specialize in express emergency turnaround. Depending on the scope, our express academic squad can assign an expert and complete projects in as little as 24 to 48 hours without compromising research depth, citation accuracy, or coding quality.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Q5 -->
+                    <div class="faq-card">
+                        <button class="faq-header-btn collapsed" type="button" data-toggle="collapse" data-target="#faqCollapse5" aria-expanded="false" aria-controls="faqCollapse5">
+                            <span class="faq-q-text">
+                                <span class="faq-q-number">05</span>
+                                What happens if I need revisions or my professor requests corrections?
+                            </span>
+                            <span class="faq-chevron-icon"><i class="fas fa-chevron-down"></i></span>
+                        </button>
+                        <div id="faqCollapse5" class="collapse" data-parent="#s2-faq">
+                            <div class="faq-body-content">
+                                We provide 100% free, unlimited revisions within the original project scope. If your professor requests updates or adjustments, simply raise a revision request through your Client Dashboard and your expert will implement the modifications promptly.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Still Have Questions CTA Banner -->
+            <div class="faq-cta-banner">
+                <div class="faq-cta-text">
+                    <h4>Still Have Questions About Your Assignment?</h4>
+                    <p>Our academic advisors are online 24/7. Get instant answers or a free custom quote in under 5 minutes.</p>
+                </div>
+                <div class="faq-cta-buttons">
+                    <a href="https://wa.me/?text=Hello%20Assignment%20Dai%20Team%2C%20I%20have%20a%20question%20regarding%20my%20assignment." target="_blank" class="btn-faq-whatsapp">
+                        <i class="fab fa-whatsapp"></i> Chat on WhatsApp
+                    </a>
+                    <a href="dashboard.html#/submit-project" class="btn-faq-submit">
+                        <i class="fas fa-paper-plane mr-1"></i> Submit Project Details
+                    </a>
                 </div>
             </div>
         </div>
     </section>
     <!-- End of FAQ Section -->
 
-    <!-- Start of Contact / Footer Section -->
-    <footer id="saas_two_footer" class="saas_two_footer_section relative-position">
-        <div id="contact_sec" class="s2-newslatter_section relative-position">
-            <div class="container">
-                <div class="s2-newslatter_content relative-position">
-                    <div class="s2-newslatter_title text-center saas2-headline pera-content">
-                        <h2>Subscribe to AssignmentWaala!</h2>
-                        <p>Get the latest academic writing tips, research guides, and special discount codes.</p>
-                    </div>
-                    <div class="s2-newslatter-form relative-position">
-                        <form action="#">
-                            <input class="email" name="email" type="email" placeholder="Enter your student email address">
-                            <div class="nws-button position-absolute text-capitalize">
-                                <button class="hover-btn" type="submit"> Subscribe</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+    <!-- Start of Footer Section -->
+    <footer id="saas_two_footer" class="saas_two_footer_section relative-position" style="padding-top: 60px;">
         <div class="footer_content pera-content">
             <div class="container">
                 <div class="row">
@@ -1313,10 +1882,12 @@
                         <div class="s2_footer_widget clearfix ul-li-block saas2-headline">
                             <div class="s2_footer_about">
                                 <div class="s2-footer_logo mb-3">
-                                    <span style="font-weight: 800; font-size: 1.5rem; color: #ffffff;">AssignmentWaala</span>
+                                    <a href="index.html" class="footer-logo-brand">
+                                        <img src="images/logo1.png" alt="Assignment Dai" class="footer-logo-img">
+                                    </a>
                                 </div>
                                 <div class="footer_about mb-3">
-                                    AssignmentWaala Academic Writing & Homework Assistance Platform. Connecting university students with top subject scholars worldwide.
+                                    Assignment Dai Academic Writing & Homework Assistance Platform. Connecting university students with top subject scholars worldwide.
                                 </div>
                                 <span>Support Hours: </span>
                                 <p>Mon - Sun: 24/7 Round-the-Clock Support</p>
@@ -1338,6 +1909,7 @@
                                     <li><a href="#testimonials"> Testimonials</a></li>
                                     <li><a href="#s2-faq"> FAQ</a></li>
                                     <li><a href="#saas_two_about"> About Us</a></li>
+                                    <li><a href="contact.html"> Contact Us</a></li>
                                     <li><a href="dashboard.html"> Client Dashboard</a></li>
                                     <li><a href="dashboard.html#/submit-project"> Submit Project</a></li>
                                 </ul>
@@ -1347,15 +1919,17 @@
 
                     <div class="col-lg-4 col-md-12">
                         <div class="s2_footer_widget clearfix ul-li-block saas2-headline">
-                            <div class="s2_footer_social">
+                            <div class="s2_footer_support_box">
                                 <h3 class="s2_widget_title">
-                                    <span>Student Support Desk</span> 
+                                    <span>Support Desk</span> 
                                     <i></i>
                                 </h3>
                                 <p>Have an urgent project? Get an instant quote from our academic coordinators.</p>
-                                <a href="dashboard.html#/submit-project" class="btn-blue-primary btn-block text-center mt-3">
-                                    <i class="fas fa-headset mr-1"></i> Open Support Desk
-                                </a>
+                                <div class="mt-3">
+                                    <a href="dashboard.html#/submit-project" class="footer-support-bar-btn">
+                                        <i class="fas fa-headset mr-2"></i> Open Support Desk
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1365,7 +1939,7 @@
     </footer>
 
     <div class="s2-copyright text-center py-3">
-        © 2026 <strong>AssignmentWaala</strong>. All rights reserved. Premium Academic Assistance Platform.
+        © 2026 <strong>Assignment Dai</strong>. All rights reserved. Premium Academic Assistance Platform.
     </div>
 
     <!-- JS library -->
@@ -1377,5 +1951,6 @@
     <script src="js/slick.js"></script>
     <script src="js/wow.min.js"></script>
     <script src="js/script.js"></script>
+    <script src="js/mobile-drawer.js"></script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ASSIGNMENTWAALA CLIENT DASHBOARD SPA CLIENT CONTROLLER
+   ASSIGNMENT DAI CLIENT DASHBOARD SPA CLIENT CONTROLLER
    ========================================================================== */
 
 (function () {
@@ -2141,10 +2141,10 @@
     };
 
     window.shareReferralCode = (code) => {
-      const text = `Hey! Use my referral code ${code} on AssignmentWaala and get help with your assignments. You'll get great support and I'll earn ₹200!`;
+      const text = `Hey! Use my referral code ${code} on Assignment Dai and get help with your assignments. You'll get great support and I'll earn Rs 200!`;
       if (navigator.share) {
         navigator.share({
-          title: 'AssignmentWaala Referral',
+          title: 'Assignment Dai Referral',
           text: text
         });
       } else {
