@@ -768,30 +768,52 @@ app.get('/api/support/tickets', authenticateToken, (req, res) => {
   });
 });
 
-app.post('/api/support/tickets', authenticateToken, (req, res) => {
+app.post('/api/support/tickets', authenticateToken, upload.array('files'), (req, res) => {
   const clientId = req.user.id;
-  const { subject, category, priority, initial_message } = req.body;
+  const { subject, category, priority, initial_message, related_assignment } = req.body;
 
   if (!subject || !initial_message) {
     return res.status(400).json({ success: false, message: 'Subject and message are required.' });
   }
 
   const ticketId = `TCK-${Math.floor(100 + Math.random() * 900)}`;
+  const projectId = related_assignment || null;
 
   db.run(
-    `INSERT INTO support_tickets (id, client_id, subject, category, priority, status) VALUES (?, ?, ?, ?, ?, 'Open')`,
-    [ticketId, clientId, subject, category || 'General Inquiry', priority || 'Medium'],
+    `INSERT INTO support_tickets (id, client_id, subject, category, priority, status, project_id) VALUES (?, ?, ?, ?, ?, 'Open', ?)`,
+    [ticketId, clientId, subject, category || 'General Inquiry', priority || 'Medium', projectId],
     function (err) {
-      if (err) return res.status(500).json({ success: false, message: 'Error creating support ticket.' });
-
-      db.run(
-        `INSERT INTO support_messages (ticket_id, sender_id, sender_name, sender_role, message) VALUES (?, ?, ?, 'client', ?)`,
-        [ticketId, clientId, req.user.full_name || 'Client', initial_message]
-      );
-
-      return res.status(201).json({ success: true, message: 'Support ticket submitted!', ticket_id: ticketId });
+      if (err) {
+        // Fallback in case project_id column is not in schema
+        return db.run(
+          `INSERT INTO support_tickets (id, client_id, subject, category, priority, status) VALUES (?, ?, ?, ?, ?, 'Open')`,
+          [ticketId, clientId, subject, category || 'General Inquiry', priority || 'Medium'],
+          function (err2) {
+            if (err2) return res.status(500).json({ success: false, message: 'Error creating support ticket.' });
+            saveTicketMessageAndRespond();
+          }
+        );
+      }
+      saveTicketMessageAndRespond();
     }
   );
+
+  function saveTicketMessageAndRespond() {
+    let attachmentUrls = null;
+    if (req.files && req.files.length > 0) {
+      attachmentUrls = req.files.map(f => '/uploads/' + f.filename).join(',');
+    }
+
+    db.run(
+      `INSERT INTO support_messages (ticket_id, sender_id, sender_name, sender_role, message, attachment_url) VALUES (?, ?, ?, 'client', ?, ?)`,
+      [ticketId, clientId, req.user.full_name || 'Client', initial_message, attachmentUrls],
+      function (msgErr) {
+        if (msgErr) console.error('Error inserting support message:', msgErr);
+        logAudit(projectId, clientId, 'create_ticket', `Created support ticket ${ticketId}: ${subject}`);
+        return res.status(201).json({ success: true, message: 'Support ticket submitted successfully!', ticket_id: ticketId });
+      }
+    );
+  }
 });
 
 app.get('/api/support/tickets/:id', authenticateToken, (req, res) => {

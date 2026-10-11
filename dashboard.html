@@ -26,20 +26,20 @@
 
       <div class="sidebar-menu">
         <div class="menu-category">MAIN MENU</div>
-        <a href="#/dashboard" class="nav-item-link active"><i class="fas fa-home"></i> Dashboard</a>
-        <a href="#/projects" class="nav-item-link"><i class="fas fa-file-alt"></i> Assignments</a>
-        <a href="#/messages" class="nav-item-link"><i class="fas fa-comments"></i> Messages</a>
-        <a href="#/payments" class="nav-item-link"><i class="fas fa-credit-card"></i> Payments & Invoices</a>
-        <a href="#/support" class="nav-item-link"><i class="fas fa-life-ring"></i> Issues & Support</a>
-        <a href="#/referral" class="nav-item-link"><i class="fas fa-gift"></i> Refer & Earn</a>
+        <a href="#/dashboard" class="nav-item-link active"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+        <a href="#/projects" class="nav-item-link"><i class="fas fa-file-alt"></i> <span>Assignments</span></a>
+        <a href="#/messages" class="nav-item-link"><i class="fas fa-comments"></i> <span>Messages</span></a>
+        <a href="#/payments" class="nav-item-link"><i class="fas fa-credit-card"></i> <span>Payments & Invoices</span></a>
+        <a href="#/support" class="nav-item-link"><i class="fas fa-life-ring"></i> <span>Issues & Support</span></a>
+        <a href="#/referral" class="nav-item-link"><i class="fas fa-gift"></i> <span>Refer & Earn</span></a>
 
         <div class="menu-category mt-3">MANAGEMENT</div>
-        <a href="#/profile" class="nav-item-link"><i class="fas fa-user-circle"></i> Profile</a>
+        <a href="#/profile" class="nav-item-link"><i class="fas fa-user-circle"></i> <span>Profile</span></a>
       </div>
 
       <div class="sidebar-footer">
         <a href="#" id="sidebar-logout-btn" class="nav-item-link text-danger mb-0">
-          <i class="fas fa-sign-out-alt"></i> Sign Out
+          <i class="fas fa-sign-out-alt"></i> <span>Sign Out</span>
         </a>
       </div>
     </aside>
@@ -49,26 +49,20 @@
       <!-- TOP NAVBAR -->
       <header class="dashboard-navbar">
         <div class="d-flex align-items-center gap-3">
-          <button class="navbar-mobile-toggle mr-3" id="mobile-sidebar-toggle">
-            <i class="fas fa-bars"></i>
+          <button class="navbar-mobile-toggle" id="mobile-sidebar-toggle" style="display: flex;" title="Toggle Sidebar">
+            <i class="fas fa-columns"></i>
           </button>
-          <h1 class="navbar-page-title" id="navbar-page-title">Dashboard</h1>
         </div>
 
         <div class="navbar-actions">
-          <a href="#/submit-project" class="btn-submit-cta">
-            <i class="fas fa-plus"></i> New Assignment
-          </a>
-
           <a href="#/notifications" class="notification-bell-btn" title="Notifications">
             <i class="fas fa-bell"></i>
-            <span class="notification-badge-dot" id="notif-badge-dot"></span>
+            <span class="notification-badge-dot" id="notif-badge-dot" style="display: none;"></span>
           </a>
 
-          <a href="#/profile" class="user-profile-badge">
-            <img src="images/fv.png" id="user-avatar-img" class="user-avatar-circle" alt="User Avatar">
-            <span class="user-name-text" id="user-name-span">Harshit Chaudhary</span>
-          </a>
+          <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle theme">
+            <i class="fas fa-sun"></i>
+          </button>
         </div>
       </header>
 

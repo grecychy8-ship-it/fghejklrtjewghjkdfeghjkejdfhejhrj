@@ -233,6 +233,7 @@ db.serialize(() => {
       category TEXT NOT NULL,
       priority TEXT DEFAULT 'Medium',
       status TEXT DEFAULT 'Open',
+      project_id TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (client_id) REFERENCES users(id)
