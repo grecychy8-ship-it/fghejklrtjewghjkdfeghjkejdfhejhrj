@@ -299,12 +299,28 @@ db.serialize(() => {
       const hashedPassword = await bcrypt.hash('Password123!', salt);
       db.run(`
         INSERT INTO users (full_name, email, password_hash, phone, role, institution, academic_level, country, preferred_communication, avatar_url)
-        VALUES ('Gareema Sharma', 'student@demo.com', ?, '+1 415 555 0199', 'client', 'Oxford University', 'Postgraduate', 'United Kingdom', 'Email & Dashboard', 'images/fv.png')
+        VALUES ('Gareema Sharma', 'student@demo.com', ?, '+1 415 555 0199', 'client', 'Tribhuvan University', 'Postgraduate', 'Nepal', 'Email & Dashboard', 'images/fv.png')
       `, [hashedPassword], function(err) {
         if (!err) {
           const userId = this.lastID;
           console.log("Seeded demo user student@demo.com (ID: " + userId + ")");
           seedDemoData(userId);
+        }
+      });
+    }
+  });
+
+  // Seed Default Administrator Account (Email: admin@assignmentdai.com / Password: Admin123!)
+  db.get("SELECT COUNT(*) AS count FROM users WHERE email = 'admin@assignmentdai.com'", async (err, row) => {
+    if (!err && row.count === 0) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash('Admin123!', salt);
+      db.run(`
+        INSERT INTO users (full_name, email, password_hash, phone, role, institution, academic_level, country, preferred_communication, avatar_url)
+        VALUES ('Assignment Dai Admin', 'admin@assignmentdai.com', ?, '+977 980-123-4567', 'admin', 'Assignment Dai Operations', 'Administrator', 'Nepal', 'Email & Dashboard', 'images/logo1.png')
+      `, [hashedPassword], function(err) {
+        if (!err) {
+          console.log("Seeded default admin user admin@assignmentdai.com (ID: " + this.lastID + ")");
         }
       });
     }

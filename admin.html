@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Admin Operations Console - Assignment Dai</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="images/fv.png" type="image/x-icon">
+
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body class="admin-body">
+
+  <!-- ========================================================
+       1. SECURE ADMIN LOGIN SCREEN (When Not Authenticated)
+       ======================================================== -->
+  <div id="adminLoginView" class="admin-login-wrapper">
+    <div class="admin-login-card">
+      <div class="admin-login-logo-wrap">
+        <img src="images/logo1.png" alt="Assignment Dai" class="admin-login-logo">
+        <br>
+        <span class="admin-login-badge"><i class="fas fa-lock mr-1"></i> Admin Portal</span>
+      </div>
+
+      <h2 class="admin-login-title">Administrator Login</h2>
+      <p class="admin-login-subtitle">Sign in to manage academic assignments, expert allocation, quotations, and student accounts.</p>
+
+      <div id="loginAlert" class="alert alert-danger py-2 px-3 small mb-3" style="display: none;"></div>
+
+      <form id="adminLoginForm">
+        <div class="admin-form-group">
+          <label>Admin Email</label>
+          <div class="admin-input-wrap">
+            <i class="fas fa-envelope prefix-icon"></i>
+            <input type="email" id="adminEmail" value="admin@assignmentdai.com" required placeholder="admin@assignmentdai.com">
+          </div>
+        </div>
+
+        <div class="admin-form-group">
+          <label>Password</label>
+          <div class="admin-input-wrap">
+            <i class="fas fa-key prefix-icon"></i>
+            <input type="password" id="adminPassword" value="Admin123!" required placeholder="••••••••">
+          </div>
+        </div>
+
+        <button type="submit" id="btnLoginSubmit" class="admin-btn-primary mt-4">
+          <i class="fas fa-shield-alt mr-2"></i> Secure Admin Sign In
+        </button>
+      </form>
+
+      <div class="admin-demo-box">
+        <strong><i class="fas fa-info-circle text-primary mr-1"></i> Default Admin Credentials:</strong><br>
+        Email: <code>admin@assignmentdai.com</code><br>
+        Password: <code>Admin123!</code>
+      </div>
+
+      <div class="text-center mt-3">
+        <a href="index.html" class="small text-muted font-weight-bold">
+          <i class="fas fa-arrow-left mr-1"></i> Return to Public Website
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       2. AUTHENTICATED ADMIN CONSOLE LAYOUT
+       ======================================================== -->
+  <div id="adminAppView" class="admin-layout" style="display: none;">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <!-- Sidebar Header -->
+      <div class="admin-sidebar-header">
+        <a href="#/dashboard" class="admin-sidebar-brand">
+          <img src="images/logo1.png" alt="Assignment Dai" class="admin-sidebar-logo">
+        </a>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="admin-sidebar-nav">
+        <div class="nav-section-title">Core Operations</div>
+        <a href="#/dashboard" class="admin-nav-item active">
+          <i class="fas fa-chart-line"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#/projects" class="admin-nav-item">
+          <i class="fas fa-tasks"></i>
+          <span>Assignments</span>
+        </a>
+        <a href="#/quotes" class="admin-nav-item">
+          <i class="fas fa-file-invoice-dollar"></i>
+          <span>Quotations</span>
+          <span class="badge-counter" id="badgePendingQuotes">0</span>
+        </a>
+
+        <div class="nav-section-title">Platform Management</div>
+        <a href="#/users" class="admin-nav-item">
+          <i class="fas fa-user-graduate"></i>
+          <span>Students</span>
+        </a>
+        <a href="#/experts" class="admin-nav-item">
+          <i class="fas fa-chalkboard-teacher"></i>
+          <span>Academic Mentors</span>
+        </a>
+        <a href="#/payments" class="admin-nav-item">
+          <i class="fas fa-credit-card"></i>
+          <span>Payments & Billing</span>
+        </a>
+
+        <div class="nav-section-title">Student Communications</div>
+        <a href="#/support" class="admin-nav-item">
+          <i class="fas fa-headset"></i>
+          <span>Support Tickets</span>
+          <span class="badge-counter" id="badgeOpenTickets">0</span>
+        </a>
+        <a href="#/inquiries" class="admin-nav-item">
+          <i class="fas fa-envelope-open-text"></i>
+          <span>Contact Leads</span>
+          <span class="badge-counter" id="badgeNewInquiries">0</span>
+        </a>
+
+        <div class="nav-section-title">Quick Links</div>
+        <a href="dashboard.html" target="_blank" class="admin-nav-item">
+          <i class="fas fa-external-link-alt"></i>
+          <span>Student Portal</span>
+        </a>
+        <a href="index.html" class="admin-nav-item">
+          <i class="fas fa-globe"></i>
+          <span>View Website</span>
+        </a>
+      </div>
+
+      <!-- Sidebar Footer (Admin Profile) -->
+      <div class="admin-sidebar-footer">
+        <div class="admin-user-pill">
+          <div class="admin-user-avatar">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div class="admin-user-info">
+            <div class="admin-user-name" id="adminCurrentUserName">Admin</div>
+            <div class="admin-user-role" id="adminCurrentUserRole">Super Admin</div>
+          </div>
+          <button class="btn btn-xs btn-outline-danger text-white border-0 ml-auto" onclick="adminLogout()" title="Sign Out">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT VIEW -->
+    <main class="admin-main">
+      <!-- TOPBAR -->
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button class="sidebar-toggle-btn" onclick="toggleAdminSidebar()" aria-label="Toggle sidebar">
+            <i class="fas fa-bars"></i>
+          </button>
+          <div>
+            <div class="topbar-breadcrumbs">
+              <a href="#/dashboard">Assignment Dai</a>
+              <i class="fas fa-chevron-right" style="font-size: 0.65rem;"></i>
+              <span id="topbarSectionTag" class="text-primary font-weight-bold">Operations</span>
+            </div>
+            <h1 class="page-headline" id="pageHeadline">Dashboard Overview</h1>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="live-indicator-pill d-none d-lg-inline-flex">
+            <span class="pulse-circle"></span>
+            <span>API Online & Healthy</span>
+          </div>
+
+          <a href="#/quotes" class="topbar-action-btn d-none d-sm-inline-flex">
+            <i class="fas fa-file-invoice-dollar"></i> Cost Estimator
+          </a>
+
+          <button class="btn btn-sm btn-outline-danger rounded-pill px-3 font-weight-bold" onclick="adminLogout()">
+            <i class="fas fa-sign-out-alt mr-1"></i> Logout
+          </button>
+        </div>
+      </header>
+
+      <!-- DYNAMIC CONTENT CONTAINER -->
+      <div class="admin-content" id="adminMainContent">
+        <!-- Rendered dynamically by js/admin.js -->
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ========================================================
+       3. INTERACTIVE ADMIN MODALS
+       ======================================================== -->
+
+  <!-- MODAL 1: PROJECT MANAGEMENT -->
+  <div class="modal fade" id="projectManagementModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content admin-modal">
+        <div class="modal-header admin-modal-header d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center flex-wrap gap-2">
+            <h5 class="modal-title font-weight-bold text-dark mb-0">
+              <i class="fas fa-sliders-h text-primary mr-2"></i> Assignment Project Management
+            </h5>
+            <span id="projectModalIdBadge" class="badge badge-light border text-primary font-weight-bold ml-2"></span>
+            <span id="projectModalStatusBadge" class="ml-2"></span>
+          </div>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body p-4" id="projectModalBody">
+          <!-- Filled dynamically -->
+        </div>
+        <div class="modal-footer admin-modal-footer d-flex justify-content-between align-items-center flex-wrap">
+          <div id="projectModalFooterQuoteArea">
+            <!-- Dynamic quote shortcut -->
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-secondary rounded-pill px-3" data-dismiss="modal">Close</button>
+            <button type="submit" form="projectUpdateForm" class="btn btn-primary rounded-pill font-weight-bold px-4">
+              <i class="fas fa-save mr-1"></i> Save Changes & Notify Student
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: FORMAL QUOTATION GENERATOR -->
+  <div class="modal fade" id="quoteModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content admin-modal">
+        <div class="modal-header admin-modal-header">
+          <h5 class="modal-title font-weight-bold text-dark">
+            <i class="fas fa-receipt text-warning mr-2"></i> Generate Official Assignment Quotation
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form onsubmit="submitQuote(event)">
+          <div class="modal-body p-4">
+            <input type="hidden" id="quoteProjectId">
+
+            <div class="form-group mb-3">
+              <label class="font-weight-600 small">Estimated Base Fee ($)</label>
+              <input type="number" step="0.01" id="quoteEstimatedPrice" class="form-control" required oninput="calculateQuoteTotal()">
+            </div>
+
+            <div class="row">
+              <div class="col-6 form-group mb-3">
+                <label class="font-weight-600 small">Service & QA Fee ($)</label>
+                <input type="number" step="0.01" id="quoteServiceFee" class="form-control" value="10.00" oninput="calculateQuoteTotal()">
+              </div>
+              <div class="col-6 form-group mb-3">
+                <label class="font-weight-600 small">Special Discount ($)</label>
+                <input type="number" step="0.01" id="quoteDiscount" class="form-control" value="15.00" oninput="calculateQuoteTotal()">
+              </div>
+            </div>
+
+            <div class="form-group mb-3">
+              <label class="font-weight-bold text-primary">Final Quoted Price ($)</label>
+              <input type="number" step="0.01" id="quoteFinalAmount" class="form-control font-weight-bold text-primary form-control-lg" required>
+            </div>
+
+            <div class="form-group mb-3">
+              <label class="font-weight-600 small">Payment Expiry / Deadline</label>
+              <input type="date" id="quoteDeadline" class="form-control" required>
+            </div>
+
+            <div class="form-group mb-2">
+              <label class="font-weight-600 small">Coordinator Notes to Student</label>
+              <textarea id="quoteNotes" class="form-control" rows="2" placeholder="Notes regarding scope, deliverables, Turnitin report..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer admin-modal-footer">
+            <button type="button" class="btn btn-secondary rounded-pill" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary rounded-pill font-weight-bold px-4">
+              <i class="fas fa-paper-plane mr-1"></i> Send Quote to Student
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ADD NEW STUDENT USER -->
+  <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content admin-modal">
+        <div class="modal-header admin-modal-header">
+          <h5 class="modal-title font-weight-bold text-dark">
+            <i class="fas fa-user-plus text-primary mr-2"></i> Register New Student Account
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form onsubmit="submitAddUser(event)">
+          <div class="modal-body p-4">
+            <div class="form-group mb-3">
+              <label class="font-weight-600 small">Full Name *</label>
+              <input type="text" name="full_name" class="form-control" required placeholder="e.g. Rohan Adhikari">
+            </div>
+            <div class="form-group mb-3">
+              <label class="font-weight-600 small">Email Address *</label>
+              <input type="email" name="email" class="form-control" required placeholder="student@university.edu">
+            </div>
+            <div class="form-group mb-3">
+              <label class="font-weight-600 small">Initial Password *</label>
+              <input type="password" name="password" class="form-control" required placeholder="Minimum 6 characters">
+            </div>
+            <div class="row">
+              <div class="col-6 form-group mb-3">
+                <label class="font-weight-600 small">Phone / WhatsApp</label>
+                <input type="text" name="phone" class="form-control" placeholder="+977 980-0000000">
+              </div>
+              <div class="col-6 form-group mb-3">
+                <label class="font-weight-600 small">Role</label>
+                <select name="role" class="form-control">
+                  <option value="client">Student (Client)</option>
+                  <option value="admin">Administrator</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-6 form-group mb-3">
+                <label class="font-weight-600 small">Institution</label>
+                <input type="text" name="institution" class="form-control" placeholder="Tribhuvan University">
+              </div>
+              <div class="col-6 form-group mb-3">
+                <label class="font-weight-600 small">Academic Level</label>
+                <select name="academic_level" class="form-control">
+                  <option value="Undergraduate">Undergraduate</option>
+                  <option value="Postgraduate">Postgraduate</option>
+                  <option value="PhD">PhD / Doctorate</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer admin-modal-footer">
+            <button type="button" class="btn btn-secondary rounded-pill" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary rounded-pill font-weight-bold px-4">Create Account</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: ADD ACADEMIC MENTOR -->
+  <div class="modal fade" id="addExpertModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content admin-modal">
+        <div class="modal-header admin-modal-header">
+          <h5 class="modal-title font-weight-bold text-dark">
+            <i class="fas fa-plus-circle text-info mr-2"></i> Add Academic Mentor to Roster
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form onsubmit="submitAddExpert(event)">
+          <div class="modal-body p-4">
+            <div class="form-group mb-3">
+              <label class="font-weight-600 small">Mentor Full Name *</label>
+              <input type="text" name="full_name" class="form-control" required placeholder="e.g. Dr. Bikash Sharma">
+            </div>
+            <div class="form-group mb-3">
+              <label class="font-weight-600 small">Subject Specialties & Expertise *</label>
+              <input type="text" name="expertise" class="form-control" required placeholder="e.g. Machine Learning, Data Science & Python">
+            </div>
+            <div class="row">
+              <div class="col-6 form-group mb-3">
+                <label class="font-weight-600 small">Rating (1-5)</label>
+                <input type="number" step="0.05" name="rating" class="form-control" value="4.95">
+              </div>
+              <div class="col-6 form-group mb-3">
+                <label class="font-weight-600 small">Experience (Years)</label>
+                <input type="number" name="experience_years" class="form-control" value="6">
+              </div>
+            </div>
+            <div class="form-group mb-3">
+              <label class="font-weight-600 small">Avatar Image URL (Optional)</label>
+              <input type="text" name="avatar_url" class="form-control" value="images/tm.jpg">
+            </div>
+            <div class="form-group mb-2">
+              <label class="font-weight-600 small">Professional Bio & Credentials</label>
+              <textarea name="bio" class="form-control" rows="2" placeholder="PhD in Computer Engineering, 8 years mentoring university students."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer admin-modal-footer">
+            <button type="button" class="btn btn-secondary rounded-pill" data-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-primary rounded-pill font-weight-bold px-4">Add Mentor</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: SUPPORT TICKET CHAT THREAD -->
+  <div class="modal fade" id="ticketModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+      <div class="modal-content admin-modal">
+        <div class="modal-header admin-modal-header">
+          <h5 class="modal-title font-weight-bold text-dark">
+            <i class="fas fa-comments text-primary mr-2"></i> Student Support Conversation
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body p-4" id="ticketModalBody">
+          <!-- Filled dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Dependencies -->
+  <script src="js/jquery.js"></script>
+  <script src="js/popper.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/admin.js"></script>
+
+</body>
+</html>

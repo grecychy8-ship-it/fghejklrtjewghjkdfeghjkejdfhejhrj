@@ -644,8 +644,8 @@ body.aw-drawer-open {
     padding: 2px 0 !important;
 }
 .brand-logo-img {
-    height: 48px !important;
-    max-height: 48px !important;
+    height: 60px !important;
+    max-height: 60px !important;
     width: auto !important;
     object-fit: contain !important;
     display: block !important;
@@ -733,8 +733,8 @@ body.aw-drawer-open {
 
 @media (max-width: 768px) {
     .brand-logo-img {
-        height: 38px !important;
-        max-height: 38px !important;
+        height: 46px !important;
+        max-height: 46px !important;
     }
     .footer-support-bar-btn {
         max-width: 100% !important;

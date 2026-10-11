@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 
 const db = require('./db');
-const { authenticateToken, JWT_SECRET } = require('./middleware/auth');
+const { authenticateToken, requireAdmin, JWT_SECRET } = require('./middleware/auth');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -852,7 +852,538 @@ app.post('/api/contact', (req, res) => {
   );
 });
 
-// Fallback Route for SPA Dashboard Navigation
+// ==========================================
+// 12. FULLY FUNCTIONAL ADMIN PANEL ENDPOINTS
+// ==========================================
+
+// POST /api/admin/login
+app.post('/api/admin/login', (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: 'Please provide admin email and password.' });
+  }
+
+  db.get('SELECT * FROM users WHERE email = ?', [email.toLowerCase().trim()], async (err, user) => {
+    if (err || !user) {
+      return res.status(401).json({ success: false, message: 'Invalid credentials. Administrator account not found.' });
+    }
+
+    if (user.role !== 'admin') {
+      return res.status(403).json({ success: false, message: 'Access denied. Account does not have administrator privileges.' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password_hash);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: 'Invalid credentials. Incorrect password.' });
+    }
+
+    const adminPayload = {
+      id: user.id,
+      email: user.email,
+      full_name: user.full_name,
+      role: 'admin',
+      phone: user.phone,
+      avatar_url: user.avatar_url || 'images/logo1.png'
+    };
+
+    const token = jwt.sign(adminPayload, JWT_SECRET, { expiresIn: '7d' });
+
+    return res.json({
+      success: true,
+      message: 'Admin authentication successful!',
+      token,
+      user: adminPayload
+    });
+  });
+});
+
+// GET /api/admin/me
+app.get('/api/admin/me', requireAdmin, (req, res) => {
+  db.get('SELECT id, full_name, email, phone, role, avatar_url, created_at FROM users WHERE id = ?', [req.user.id], (err, user) => {
+    if (err || !user) return res.status(404).json({ success: false, message: 'Admin user not found.' });
+    return res.json({ success: true, user });
+  });
+});
+
+// GET /api/admin/stats
+app.get('/api/admin/stats', requireAdmin, async (req, res) => {
+  try {
+    const runQuery = (sql, params = []) => new Promise((resolve, reject) => {
+      db.get(sql, params, (err, row) => err ? reject(err) : resolve(row));
+    });
+
+    const runAll = (sql, params = []) => new Promise((resolve, reject) => {
+      db.all(sql, params, (err, rows) => err ? reject(err) : resolve(rows));
+    });
+
+    const revRow = await runQuery("SELECT SUM(paid_amount) AS total_revenue FROM projects");
+    const projRow = await runQuery("SELECT COUNT(*) AS total_projects, SUM(CASE WHEN status NOT IN ('Completed', 'Cancelled') THEN 1 ELSE 0 END) AS active_projects, SUM(CASE WHEN status = 'Completed' THEN 1 ELSE 0 END) AS completed_projects FROM projects");
+    const quoteRow = await runQuery("SELECT COUNT(*) AS pending_quotes FROM quotes WHERE status = 'Pending'");
+    const userRow = await runQuery("SELECT COUNT(*) AS total_students FROM users WHERE role = 'client'");
+    const expRow = await runQuery("SELECT COUNT(*) AS total_experts FROM experts");
+    const tckRow = await runQuery("SELECT COUNT(*) AS open_tickets FROM support_tickets WHERE status != 'Resolved'");
+    const inqRow = await runQuery("SELECT COUNT(*) AS new_inquiries FROM contact_inquiries WHERE status = 'New'");
+
+    const recentProjects = await runAll(`
+      SELECT p.id, p.title, p.category, p.status, p.progress_percent, p.total_amount, p.paid_amount, p.payment_status, p.deadline, p.created_at,
+             u.full_name AS client_name, u.email AS client_email,
+             e.full_name AS expert_name
+      FROM projects p
+      LEFT JOIN users u ON p.client_id = u.id
+      LEFT JOIN experts e ON p.assigned_expert_id = e.id
+      ORDER BY p.created_at DESC LIMIT 6
+    `);
+
+    const recentInquiries = await runAll(`
+      SELECT * FROM contact_inquiries ORDER BY created_at DESC LIMIT 5
+    `);
+
+    const recentPayments = await runAll(`
+      SELECT pm.*, u.full_name AS client_name, p.title AS project_title
+      FROM payments pm
+      LEFT JOIN users u ON pm.client_id = u.id
+      LEFT JOIN projects p ON pm.project_id = p.id
+      ORDER BY pm.created_at DESC LIMIT 5
+    `);
+
+    return res.json({
+      success: true,
+      stats: {
+        total_revenue: (revRow && revRow.total_revenue) || 0,
+        total_projects: (projRow && projRow.total_projects) || 0,
+        active_projects: (projRow && projRow.active_projects) || 0,
+        completed_projects: (projRow && projRow.completed_projects) || 0,
+        pending_quotes: (quoteRow && quoteRow.pending_quotes) || 0,
+        total_students: (userRow && userRow.total_students) || 0,
+        total_experts: (expRow && expRow.total_experts) || 0,
+        open_tickets: (tckRow && tckRow.open_tickets) || 0,
+        new_inquiries: (inqRow && inqRow.new_inquiries) || 0
+      },
+      recent_projects: recentProjects || [],
+      recent_inquiries: recentInquiries || [],
+      recent_payments: recentPayments || []
+    });
+  } catch (error) {
+    console.error('Admin stats error:', error);
+    return res.status(500).json({ success: false, message: 'Server error fetching admin stats.' });
+  }
+});
+
+// GET /api/admin/projects
+app.get('/api/admin/projects', requireAdmin, (req, res) => {
+  const { status, search } = req.query;
+  let query = `
+    SELECT p.*,
+           u.full_name AS client_name, u.email AS client_email, u.phone AS client_phone, u.institution AS client_institution,
+           e.full_name AS expert_name, e.expertise AS expert_expertise
+    FROM projects p
+    LEFT JOIN users u ON p.client_id = u.id
+    LEFT JOIN experts e ON p.assigned_expert_id = e.id
+    WHERE 1=1
+  `;
+  const params = [];
+
+  if (status && status !== 'all') {
+    query += ` AND p.status = ?`;
+    params.push(status);
+  }
+
+  if (search) {
+    query += ` AND (p.id LIKE ? OR p.title LIKE ? OR u.full_name LIKE ? OR u.email LIKE ?)`;
+    const s = `%${search}%`;
+    params.push(s, s, s, s);
+  }
+
+  query += ` ORDER BY p.created_at DESC`;
+
+  db.all(query, params, (err, projects) => {
+    if (err) return res.status(500).json({ success: false, message: 'Failed to fetch projects.' });
+    return res.json({ success: true, projects: projects || [] });
+  });
+});
+
+// GET /api/admin/projects/:id
+app.get('/api/admin/projects/:id', requireAdmin, (req, res) => {
+  const projectId = req.params.id;
+
+  db.get(`
+    SELECT p.*,
+           u.full_name AS client_name, u.email AS client_email, u.phone AS client_phone, u.institution AS client_institution,
+           e.full_name AS expert_name, e.expertise AS expert_expertise, e.avatar_url AS expert_avatar
+    FROM projects p
+    LEFT JOIN users u ON p.client_id = u.id
+    LEFT JOIN experts e ON p.assigned_expert_id = e.id
+    WHERE p.id = ?
+  `, [projectId], (err, project) => {
+    if (err || !project) return res.status(404).json({ success: false, message: 'Project not found.' });
+
+    db.get('SELECT * FROM quotes WHERE project_id = ?', [projectId], (err, quote) => {
+      db.all('SELECT * FROM project_timeline WHERE project_id = ? ORDER BY timestamp ASC', [projectId], (err, timeline) => {
+        db.all('SELECT * FROM attachments WHERE project_id = ? ORDER BY created_at DESC', [projectId], (err, attachments) => {
+          db.all('SELECT * FROM payments WHERE project_id = ? ORDER BY created_at DESC', [projectId], (err, payments) => {
+            return res.json({
+              success: true,
+              project,
+              quote,
+              timeline: timeline || [],
+              attachments: attachments || [],
+              payments: payments || []
+            });
+          });
+        });
+      });
+    });
+  });
+});
+
+// PUT /api/admin/projects/:id
+app.put('/api/admin/projects/:id', requireAdmin, (req, res) => {
+  const projectId = req.params.id;
+  const { status, progress_percent, assigned_expert_id, priority, deadline, total_amount, payment_status, timeline_note } = req.body;
+
+  db.get('SELECT * FROM projects WHERE id = ?', [projectId], (err, project) => {
+    if (err || !project) return res.status(404).json({ success: false, message: 'Project not found.' });
+
+    const newStatus = status !== undefined ? status : project.status;
+    const newProgress = progress_percent !== undefined ? parseInt(progress_percent) : project.progress_percent;
+    const newExpert = assigned_expert_id !== undefined ? (assigned_expert_id ? parseInt(assigned_expert_id) : null) : project.assigned_expert_id;
+    const newPriority = priority || project.priority;
+    const newDeadline = deadline || project.deadline;
+    const newAmount = total_amount !== undefined ? parseFloat(total_amount) : project.total_amount;
+    const newPaymentStatus = payment_status || project.payment_status;
+
+    db.run(`
+      UPDATE projects
+      SET status = ?, progress_percent = ?, assigned_expert_id = ?, priority = ?, deadline = ?, total_amount = ?, payment_status = ?, updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `, [newStatus, newProgress, newExpert, newPriority, newDeadline, newAmount, newPaymentStatus, projectId], function (err) {
+      if (err) return res.status(500).json({ success: false, message: 'Failed to update project.' });
+
+      if (newStatus !== project.status || timeline_note) {
+        const title = timeline_note ? 'Admin Update' : `Status updated to ${newStatus}`;
+        const desc = timeline_note || `Project status changed from ${project.status} to ${newStatus}. Progress: ${newProgress}%`;
+        db.run(
+          `INSERT INTO project_timeline (project_id, status, title, description, responsible_party) VALUES (?, ?, ?, ?, 'Admin')`,
+          [projectId, newStatus, title, desc]
+        );
+      }
+
+      createNotification(
+        project.client_id,
+        projectId,
+        `Project ${projectId} Updated`,
+        `Your project status has been updated to "${newStatus}" (Progress: ${newProgress}%).`,
+        'progress'
+      );
+
+      logAudit(projectId, req.user.id, 'Project Updated', `Admin updated project ${projectId}`);
+
+      return res.json({ success: true, message: 'Project updated successfully!' });
+    });
+  });
+});
+
+// POST /api/admin/projects/:id/quote
+app.post('/api/admin/projects/:id/quote', requireAdmin, (req, res) => {
+  const projectId = req.params.id;
+  const { estimated_price, service_fee, discount, final_quote, payment_deadline, notes } = req.body;
+
+  if (!final_quote) {
+    return res.status(400).json({ success: false, message: 'Final quote amount is required.' });
+  }
+
+  db.get('SELECT * FROM projects WHERE id = ?', [projectId], (err, project) => {
+    if (err || !project) return res.status(404).json({ success: false, message: 'Project not found.' });
+
+    const est = parseFloat(estimated_price || final_quote);
+    const sFee = parseFloat(service_fee || 0);
+    const disc = parseFloat(discount || 0);
+    const fin = parseFloat(final_quote);
+
+    db.run(`
+      INSERT INTO quotes (project_id, estimated_price, final_quote, service_fee, discount, total_amount, payment_deadline, status, notes)
+      VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending', ?)
+      ON CONFLICT(project_id) DO UPDATE SET
+        estimated_price = excluded.estimated_price,
+        final_quote = excluded.final_quote,
+        service_fee = excluded.service_fee,
+        discount = excluded.discount,
+        total_amount = excluded.total_amount,
+        payment_deadline = excluded.payment_deadline,
+        notes = excluded.notes,
+        status = 'Pending'
+    `, [projectId, est, fin, sFee, disc, fin, payment_deadline || null, notes || 'Quote generated by Assignment Dai Coordinator'], function (err) {
+      if (err) return res.status(500).json({ success: false, message: 'Failed to save quote.' });
+
+      db.run('UPDATE projects SET total_amount = ?, status = CASE WHEN status = "Submitted" THEN "Reviewed" ELSE status END WHERE id = ?', [fin, projectId]);
+
+      db.run(
+        `INSERT INTO project_timeline (project_id, status, title, description, responsible_party) VALUES (?, 'Reviewed', 'Quote Ready', ?, 'Admin')`,
+        [projectId, `Official quotation generated: $${fin.toFixed(2)}`]
+      );
+
+      createNotification(
+        project.client_id,
+        projectId,
+        'Project Quote Ready for Review',
+        `Your official quote for project ${projectId} is ready ($${fin.toFixed(2)}). Please review in your dashboard.`,
+        'quote'
+      );
+
+      return res.json({ success: true, message: 'Official quote sent to student!' });
+    });
+  });
+});
+
+// GET /api/admin/users
+app.get('/api/admin/users', requireAdmin, (req, res) => {
+  db.all(`
+    SELECT u.id, u.full_name, u.email, u.phone, u.role, u.institution, u.academic_level, u.country, u.created_at,
+           COUNT(p.id) AS total_projects,
+           COALESCE(SUM(p.paid_amount), 0) AS total_spent
+    FROM users u
+    LEFT JOIN projects p ON u.id = p.client_id
+    GROUP BY u.id
+    ORDER BY u.created_at DESC
+  `, (err, users) => {
+    if (err) return res.status(500).json({ success: false, message: 'Failed to fetch users.' });
+    return res.json({ success: true, users: users || [] });
+  });
+});
+
+// POST /api/admin/users
+app.post('/api/admin/users', requireAdmin, async (req, res) => {
+  const { full_name, email, password, phone, role, institution, academic_level, country } = req.body;
+  if (!full_name || !email || !password) {
+    return res.status(400).json({ success: false, message: 'Name, email, and password are required.' });
+  }
+
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    db.run(`
+      INSERT INTO users (full_name, email, password_hash, phone, role, institution, academic_level, country)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    `, [full_name, email.toLowerCase().trim(), hashedPassword, phone || '', role || 'client', institution || '', academic_level || 'Undergraduate', country || 'Nepal'], function(err) {
+      if (err) {
+        if (err.message && err.message.includes('UNIQUE')) return res.status(400).json({ success: false, message: 'Email already exists.' });
+        return res.status(500).json({ success: false, message: 'Database error creating user.' });
+      }
+      return res.status(201).json({ success: true, message: 'User created successfully!', user_id: this.lastID });
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: 'Error creating user.' });
+  }
+});
+
+// DELETE /api/admin/users/:id
+app.delete('/api/admin/users/:id', requireAdmin, (req, res) => {
+  const userId = parseInt(req.params.id);
+  if (userId === req.user.id) {
+    return res.status(400).json({ success: false, message: 'You cannot delete your own admin account.' });
+  }
+
+  db.run('DELETE FROM users WHERE id = ?', [userId], function (err) {
+    if (err) return res.status(500).json({ success: false, message: 'Failed to delete user.' });
+    return res.json({ success: true, message: 'User deleted successfully.' });
+  });
+});
+
+// GET /api/admin/experts
+app.get('/api/admin/experts', requireAdmin, (req, res) => {
+  db.all(`
+    SELECT e.*, COUNT(p.id) AS active_projects
+    FROM experts e
+    LEFT JOIN projects p ON e.id = p.assigned_expert_id AND p.status NOT IN ('Completed', 'Cancelled')
+    GROUP BY e.id
+    ORDER BY e.rating DESC
+  `, (err, experts) => {
+    if (err) return res.status(500).json({ success: false, message: 'Failed to fetch experts.' });
+    return res.json({ success: true, experts: experts || [] });
+  });
+});
+
+// POST /api/admin/experts
+app.post('/api/admin/experts', requireAdmin, (req, res) => {
+  const { full_name, expertise, rating, experience_years, bio, avatar_url } = req.body;
+  if (!full_name || !expertise) {
+    return res.status(400).json({ success: false, message: 'Name and expertise are required.' });
+  }
+
+  db.run(`
+    INSERT INTO experts (full_name, avatar_url, expertise, rating, experience_years, bio)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `, [full_name, avatar_url || 'images/tm.jpg', expertise, parseFloat(rating || 4.9), parseInt(experience_years || 5), bio || ''], function (err) {
+    if (err) return res.status(500).json({ success: false, message: 'Failed to add expert.' });
+    return res.status(201).json({ success: true, message: 'Expert added successfully!', expert_id: this.lastID });
+  });
+});
+
+// PUT /api/admin/experts/:id
+app.put('/api/admin/experts/:id', requireAdmin, (req, res) => {
+  const expertId = req.params.id;
+  const { full_name, expertise, rating, experience_years, bio } = req.body;
+
+  db.run(`
+    UPDATE experts
+    SET full_name = ?, expertise = ?, rating = ?, experience_years = ?, bio = ?
+    WHERE id = ?
+  `, [full_name, expertise, parseFloat(rating), parseInt(experience_years), bio, expertId], function (err) {
+    if (err) return res.status(500).json({ success: false, message: 'Failed to update expert.' });
+    return res.json({ success: true, message: 'Expert updated successfully!' });
+  });
+});
+
+// DELETE /api/admin/experts/:id
+app.delete('/api/admin/experts/:id', requireAdmin, (req, res) => {
+  const expertId = req.params.id;
+  db.run('DELETE FROM experts WHERE id = ?', [expertId], function (err) {
+    if (err) return res.status(500).json({ success: false, message: 'Failed to delete expert.' });
+    return res.json({ success: true, message: 'Expert deleted.' });
+  });
+});
+
+// GET /api/admin/payments
+app.get('/api/admin/payments', requireAdmin, (req, res) => {
+  db.all(`
+    SELECT pm.*, u.full_name AS client_name, u.email AS client_email, p.title AS project_title
+    FROM payments pm
+    LEFT JOIN users u ON pm.client_id = u.id
+    LEFT JOIN projects p ON pm.project_id = p.id
+    ORDER BY pm.created_at DESC
+  `, (err, payments) => {
+    if (err) return res.status(500).json({ success: false, message: 'Failed to fetch payments.' });
+    return res.json({ success: true, payments: payments || [] });
+  });
+});
+
+// PUT /api/admin/payments/:id/status
+app.put('/api/admin/payments/:id/status', requireAdmin, (req, res) => {
+  const paymentId = req.params.id;
+  const { status } = req.body;
+
+  db.get('SELECT * FROM payments WHERE id = ?', [paymentId], (err, payment) => {
+    if (err || !payment) return res.status(404).json({ success: false, message: 'Payment record not found.' });
+
+    db.run('UPDATE payments SET status = ? WHERE id = ?', [status, paymentId], function (err) {
+      if (err) return res.status(500).json({ success: false, message: 'Failed to update payment status.' });
+
+      if (status === 'Paid') {
+        db.run('UPDATE projects SET payment_status = "Paid", paid_amount = total_amount WHERE id = ?', [payment.project_id]);
+        db.run(
+          `INSERT INTO project_timeline (project_id, status, title, description, responsible_party) VALUES (?, 'Paid', 'Payment Verified', ?, 'Admin')`,
+          [payment.project_id, `Payment verified by admin ($${payment.final_amount.toFixed(2)})`]
+        );
+        createNotification(payment.client_id, payment.project_id, 'Payment Verified', `Your payment of $${payment.final_amount} for ${payment.project_id} has been verified.`, 'payment');
+      }
+
+      return res.json({ success: true, message: `Payment marked as ${status}.` });
+    });
+  });
+});
+
+// GET /api/admin/tickets
+app.get('/api/admin/tickets', requireAdmin, (req, res) => {
+  db.all(`
+    SELECT t.*, u.full_name AS client_name, u.email AS client_email
+    FROM support_tickets t
+    LEFT JOIN users u ON t.client_id = u.id
+    ORDER BY CASE WHEN t.status = 'Open' THEN 1 WHEN t.status = 'In Progress' THEN 2 ELSE 3 END, t.updated_at DESC
+  `, (err, tickets) => {
+    if (err) return res.status(500).json({ success: false, message: 'Failed to fetch tickets.' });
+    return res.json({ success: true, tickets: tickets || [] });
+  });
+});
+
+// GET /api/admin/tickets/:id
+app.get('/api/admin/tickets/:id', requireAdmin, (req, res) => {
+  const ticketId = req.params.id;
+
+  db.get(`
+    SELECT t.*, u.full_name AS client_name, u.email AS client_email, u.phone AS client_phone
+    FROM support_tickets t
+    LEFT JOIN users u ON t.client_id = u.id
+    WHERE t.id = ?
+  `, [ticketId], (err, ticket) => {
+    if (err || !ticket) return res.status(404).json({ success: false, message: 'Ticket not found.' });
+
+    db.all('SELECT * FROM support_messages WHERE ticket_id = ? ORDER BY created_at ASC', [ticketId], (err, messages) => {
+      return res.json({ success: true, ticket, messages: messages || [] });
+    });
+  });
+});
+
+// POST /api/admin/tickets/:id/reply
+app.post('/api/admin/tickets/:id/reply', requireAdmin, (req, res) => {
+  const ticketId = req.params.id;
+  const { message } = req.body;
+
+  if (!message) return res.status(400).json({ success: false, message: 'Message content is required.' });
+
+  db.get('SELECT * FROM support_tickets WHERE id = ?', [ticketId], (err, ticket) => {
+    if (err || !ticket) return res.status(404).json({ success: false, message: 'Ticket not found.' });
+
+    db.run(`
+      INSERT INTO support_messages (ticket_id, sender_id, sender_name, sender_role, message)
+      VALUES (?, ?, ?, 'admin', ?)
+    `, [ticketId, req.user.id, req.user.full_name || 'Assignment Dai Support Team', message], function (err) {
+      if (err) return res.status(500).json({ success: false, message: 'Failed to post reply.' });
+
+      db.run('UPDATE support_tickets SET status = "In Progress", updated_at = CURRENT_TIMESTAMP WHERE id = ?', [ticketId]);
+
+      createNotification(ticket.client_id, null, `New Support Reply on ${ticketId}`, `Admin team replied to your support ticket "${ticket.subject}".`, 'support');
+
+      return res.json({ success: true, message: 'Reply sent to student.' });
+    });
+  });
+});
+
+// PUT /api/admin/tickets/:id/status
+app.put('/api/admin/tickets/:id/status', requireAdmin, (req, res) => {
+  const ticketId = req.params.id;
+  const { status } = req.body;
+
+  db.run('UPDATE support_tickets SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?', [status, ticketId], function (err) {
+    if (err) return res.status(500).json({ success: false, message: 'Failed to update ticket status.' });
+    return res.json({ success: true, message: `Ticket status updated to ${status}.` });
+  });
+});
+
+// GET /api/admin/inquiries
+app.get('/api/admin/inquiries', requireAdmin, (req, res) => {
+  db.all('SELECT * FROM contact_inquiries ORDER BY created_at DESC', (err, inquiries) => {
+    if (err) return res.status(500).json({ success: false, message: 'Failed to fetch inquiries.' });
+    return res.json({ success: true, inquiries: inquiries || [] });
+  });
+});
+
+// PUT /api/admin/inquiries/:id/status
+app.put('/api/admin/inquiries/:id/status', requireAdmin, (req, res) => {
+  const inquiryId = req.params.id;
+  const { status } = req.body;
+
+  db.run('UPDATE contact_inquiries SET status = ? WHERE id = ?', [status, inquiryId], function (err) {
+    if (err) return res.status(500).json({ success: false, message: 'Failed to update inquiry status.' });
+    return res.json({ success: true, message: `Inquiry status changed to ${status}.` });
+  });
+});
+
+// DELETE /api/admin/inquiries/:id
+app.delete('/api/admin/inquiries/:id', requireAdmin, (req, res) => {
+  const inquiryId = req.params.id;
+  db.run('DELETE FROM contact_inquiries WHERE id = ?', [inquiryId], function (err) {
+    if (err) return res.status(500).json({ success: false, message: 'Failed to delete inquiry.' });
+    return res.json({ success: true, message: 'Inquiry deleted.' });
+  });
+});
+
+// Fallback Routes for SPA Navigation
+app.get(/^\/admin/, (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+// Fallback Route for Client SPA Dashboard Navigation
 app.get(/^\/dashboard/, (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard.html'));
 });

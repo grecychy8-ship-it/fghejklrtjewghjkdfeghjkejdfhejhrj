@@ -19,7 +19,18 @@ function authenticateToken(req, res, next) {
   });
 }
 
+function requireAdmin(req, res, next) {
+  authenticateToken(req, res, () => {
+    if (req.user && req.user.role === 'admin') {
+      next();
+    } else {
+      return res.status(403).json({ success: false, message: 'Access denied. Administrator privileges required.' });
+    }
+  });
+}
+
 module.exports = {
   authenticateToken,
+  requireAdmin,
   JWT_SECRET
 };
