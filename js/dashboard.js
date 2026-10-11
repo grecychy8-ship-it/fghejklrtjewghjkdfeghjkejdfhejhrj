@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ASSIGNMENTWAALA CLIENT DASHBOARD SPA CLIENT CONTROLLER
+   ASSIGNMENT DAI CLIENT DASHBOARD SPA CLIENT CONTROLLER
    ========================================================================== */
 
 (function () {
@@ -1629,26 +1629,12 @@
   // ==========================================
   // 10. SUPPORT CENTER VIEW
   // ==========================================
-  // 10. SUPPORT CENTER VIEW
-  // ==========================================
   async function renderSupportCenterView(ticketId = null) {
     if (pageTitleEl) pageTitleEl.textContent = 'Support Center';
     showLoadingSkeleton();
 
-    let issues = [];
-    try {
-      const ticketsRes = await apiFetch('/support/tickets');
-      if (ticketsRes && ticketsRes.success && Array.isArray(ticketsRes.tickets)) {
-        issues = ticketsRes.tickets;
-      }
-    } catch (err) {
-      console.error('Failed to load support tickets:', err);
-    }
-
-    const totalIssues = issues.length;
-    const activeIssues = issues.filter(t => t.status !== 'Resolved').length;
-    const resolvedIssues = issues.filter(t => t.status === 'Resolved').length;
-    const resolutionRate = totalIssues > 0 ? Math.round((resolvedIssues / totalIssues) * 100) + '%' : '0%';
+    // For now, using empty data since we don't have active issues
+    const issues = [];
 
     let html = `
       <div style="max-width: 1400px; margin: 0 auto;">
@@ -1682,7 +1668,7 @@
               <i class="fas fa-file-alt" style="color: #2563eb; font-size: 0.9rem;"></i>
               <div style="color: #6b7280; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Total Issues</div>
             </div>
-            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${totalIssues}</div>
+            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">0</div>
             <div style="color: #6b7280; font-size: 0.8rem;">All time issues reported</div>
           </div>
 
@@ -1692,7 +1678,7 @@
               <i class="fas fa-exclamation-circle" style="color: #f59e0b; font-size: 0.9rem;"></i>
               <div style="color: #6b7280; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Active Issues</div>
             </div>
-            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${activeIssues}</div>
+            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">0</div>
             <div style="color: #6b7280; font-size: 0.8rem;">Pending resolution</div>
           </div>
 
@@ -1702,7 +1688,7 @@
               <i class="fas fa-check-circle" style="color: #10b981; font-size: 0.9rem;"></i>
               <div style="color: #6b7280; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Resolved Issues</div>
             </div>
-            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${resolvedIssues}</div>
+            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">0</div>
             <div style="color: #6b7280; font-size: 0.8rem;">Successfully resolved</div>
           </div>
 
@@ -1712,7 +1698,7 @@
               <i class="fas fa-percentage" style="color: #8b5cf6; font-size: 0.9rem;"></i>
               <div style="color: #6b7280; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Resolution Rate</div>
             </div>
-            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">${resolutionRate}</div>
+            <div style="font-size: 2rem; font-weight: 700; color: #1a1a1a; margin-bottom: 4px;">0%</div>
             <div style="color: #6b7280; font-size: 0.8rem;">Resolution success rate</div>
           </div>
         </div>
@@ -1748,7 +1734,7 @@
                 <option>In Progress</option>
                 <option>Resolved</option>
               </select>
-              <button onclick="window.renderSupportCenterView()" style="background: white; border: 1px solid #e5e7eb; padding: 10px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #374151; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+              <button style="background: white; border: 1px solid #e5e7eb; padding: 10px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #374151; cursor: pointer; display: flex; align-items: center; gap: 6px;">
                 <i class="fas fa-redo" style="font-size: 0.8rem;"></i> Refresh
               </button>
             </div>
@@ -1757,10 +1743,10 @@
           <!-- Tabs -->
           <div style="border-bottom: 1px solid #e5e7eb; padding: 0 24px; display: flex; gap: 0;">
             <button style="background: transparent; color: #2563eb; border: none; border-bottom: 2px solid #2563eb; padding: 16px 20px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-              <i class="fas fa-circle-notch" style="font-size: 0.8rem;"></i> Active (${activeIssues})
+              <i class="fas fa-circle-notch" style="font-size: 0.8rem;"></i> Active (0)
             </button>
             <button style="background: transparent; color: #6b7280; border: none; border-bottom: 2px solid transparent; padding: 16px 20px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-              <i class="fas fa-check-circle" style="font-size: 0.8rem;"></i> Resolved (${resolvedIssues})
+              <i class="fas fa-check-circle" style="font-size: 0.8rem;"></i> Resolved (0)
             </button>
           </div>
 
@@ -1773,467 +1759,239 @@
               Status <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
-              Issue Type <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
+              Amount <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
             </div>
             <div style="display: flex; align-items: center; gap: 6px;">
               Date <i class="fas fa-sort" style="font-size: 0.7rem;"></i>
             </div>
-            <div>Priority</div>
+            <div></div>
             <div>Actions</div>
           </div>
 
-          <!-- Content: Empty State or Issues List -->
-          ${issues.length === 0 ? `
-            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 24px; text-align: center;">
-              <div style="width: 120px; height: 120px; background: #d1fae5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; position: relative;">
-                <div style="position: absolute; inset: 10px; background: rgba(255, 255, 255, 0.5); border-radius: 50%;"></div>
-                <i class="fas fa-check-circle" style="font-size: 48px; color: #10b981; position: relative; z-index: 1;"></i>
-              </div>
-              <h3 style="font-size: 1.25rem; font-weight: 700; color: #1a1a1a; margin: 0 0 8px 0;">All Clear! 🎉</h3>
-              <p style="color: #6b7280; margin: 0 0 24px 0; font-size: 0.95rem; max-width: 420px;">You don't have any active issues. Everything looks great!</p>
-              <button onclick="window.openNewIssueModal()" style="background: white; color: #6b7280; border: 1px solid #e5e7eb; padding: 10px 24px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                <i class="fas fa-plus" style="font-size: 0.75rem;"></i> Report New Issue
-              </button>
+          <!-- Empty State -->
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 24px; text-align: center;">
+            <div style="width: 120px; height: 120px; background: #d1fae5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; position: relative;">
+              <div style="position: absolute; inset: 10px; background: rgba(255, 255, 255, 0.5); border-radius: 50%;"></div>
+              <i class="fas fa-check-circle" style="font-size: 48px; color: #10b981; position: relative; z-index: 1;"></i>
             </div>
-          ` : `
-            <div>
-              ${issues.map(t => `
-                <div style="display: grid; grid-template-columns: 2fr 1.5fr 1.5fr 1.5fr 1fr 1fr; padding: 16px 24px; border-bottom: 1px solid #f3f4f6; align-items: center; font-size: 0.9rem;">
-                  <div>
-                    <strong style="color: #111827; display: block; font-size: 0.95rem;">${escapeHtml(t.subject)}</strong>
-                    <span style="color: #6b7280; font-size: 0.8rem;">#${escapeHtml(t.id)}${t.project_id ? ` &bull; ${escapeHtml(t.project_id)}` : ''}</span>
-                  </div>
-                  <div>
-                    <span style="display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; ${t.status === 'Resolved' ? 'background: #d1fae5; color: #065f46;' : (t.status === 'In Progress' ? 'background: #dbeafe; color: #1e40af;' : 'background: #fef3c7; color: #92400e;')}">
-                      ${escapeHtml(t.status)}
-                    </span>
-                  </div>
-                  <div style="color: #4b5563; font-size: 0.85rem;">
-                    ${escapeHtml(t.category || 'General')}
-                  </div>
-                  <div style="color: #6b7280; font-size: 0.85rem;">
-                    ${new Date(t.created_at || Date.now()).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                  </div>
-                  <div>
-                    <span style="display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 500; background: #f3f4f6; color: #4b5563;">
-                      ${escapeHtml(t.priority || 'Medium')}
-                    </span>
-                  </div>
-                  <div>
-                    <button onclick="window.openNewIssueModal()" style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px 12px; font-size: 0.8rem; font-weight: 600; color: #2563eb; cursor: pointer;">
-                      Report
-                    </button>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          `}
+            <h3 style="font-size: 1.25rem; font-weight: 700; color: #1a1a1a; margin: 0 0 8px 0;">All Clear! 🎉</h3>
+            <p style="color: #6b7280; margin: 0 0 24px 0; font-size: 0.95rem; max-width: 420px;">You don't have any active issues. Everything looks great!</p>
+            <button onclick="window.openNewIssueModal()" style="background: white; color: #6b7280; border: 1px solid #e5e7eb; padding: 10px 24px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-plus" style="font-size: 0.75rem;"></i> Report New Issue
+            </button>
+          </div>
         </div>
       </div>
     `;
 
     mainContentEl.innerHTML = html;
-    window.renderSupportCenterView = renderSupportCenterView;
-  }
 
-  // Global function for creating new issue - Matches Reference Images 100%
-  window.openNewIssueModal = async () => {
-    // Remove existing modal if already open
-    const existing = document.getElementById('issue-report-modal-backdrop');
-    if (existing) existing.remove();
+    // Global function for creating new issue
+    window.openNewIssueModal = () => {
+      // Create modal overlay
+      const modalOverlay = document.createElement('div');
+      modalOverlay.id = 'issue-modal-overlay';
+      modalOverlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px;';
 
-    // Create Modal Backdrop
-    const backdrop = document.createElement('div');
-    backdrop.id = 'issue-report-modal-backdrop';
-    backdrop.className = 'issue-modal-backdrop';
+      // Create modal content
+      const modalContent = document.createElement('div');
+      modalContent.style.cssText = 'background: #f5f5f5; border-radius: 12px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);';
 
-    // Populate assignments dropdown if available
-    let projects = AppState.projectsCache || [];
-    if (!projects || projects.length === 0) {
-      try {
-        const projRes = await apiFetch('/projects');
-        if (projRes && projRes.success && Array.isArray(projRes.projects)) {
-          projects = projRes.projects;
-          AppState.projectsCache = projects;
-        }
-      } catch (err) {
-        console.warn('Projects not loaded for issue modal', err);
-      }
-    }
-
-    const assignmentOptionsHtml = (projects || []).map(p =>
-      `<option value="${escapeHtml(p.id)}">${escapeHtml(p.title || p.id)} (${escapeHtml(p.id)})</option>`
-    ).join('');
-
-    backdrop.innerHTML = `
-      <div class="issue-modal-card" id="issue-modal-card" role="dialog" aria-modal="true" aria-labelledby="issue-modal-title">
-        <!-- Header -->
-        <div class="issue-modal-header">
-          <div>
-            <h2 class="issue-modal-title" id="issue-modal-title">Report New Issue</h2>
-            <p class="issue-modal-subtitle">Describe your concern and we'll help resolve it quickly</p>
+      modalContent.innerHTML = `
+        <div style="padding: 28px 32px; background: white; border-radius: 12px 12px 0 0;">
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+            <h2 style="font-size: 24px; font-weight: 700; color: #1f2937; margin: 0;">Report New Issue</h2>
+            <button onclick="window.closeIssueModal()" style="background: transparent; border: none; color: #9ca3af; cursor: pointer; font-size: 28px; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; margin-top: -4px;">
+              ×
+            </button>
           </div>
-          <button type="button" class="issue-modal-close-btn" id="close-issue-modal-btn" aria-label="Close modal">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
+          <p style="font-size: 15px; color: #6b7280; margin: 0;">Describe your concern and we'll help resolve it quickly</p>
         </div>
 
-        <!-- Form -->
-        <form id="issue-report-form" novalidate autocomplete="off">
-          <!-- Issue Type -->
-          <div class="issue-form-group">
-            <label class="issue-field-label" for="issue-type-select">
-              Issue Type <span class="issue-required">*</span>
-            </label>
-            <div class="issue-select-wrapper">
-              <select id="issue-type-select" name="issue_type" required class="issue-custom-select is-placeholder">
-                <option value="" disabled selected hidden>Select issue type</option>
+        <div style="padding: 32px; background: #f5f5f5;">
+          <form id="issue-form" onsubmit="return false;">
+            <!-- Issue Type -->
+            <div style="margin-bottom: 24px;">
+              <label style="display: block; font-size: 15px; font-weight: 600; color: #1f2937; margin-bottom: 10px;">
+                Issue Type <span style="color: #ef4444;">*</span>
+              </label>
+              <select id="issue-type" required style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 15px; color: #6b7280; background: white; appearance: none; background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23cbd5e0%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-repeat: no-repeat; background-position: right 16px center; background-size: 18px; padding-right: 45px;">
+                <option value="" disabled selected>Select issue type</option>
+                <option value="Payment Issue">Payment Issue</option>
                 <option value="Assignment Quality">Assignment Quality</option>
                 <option value="Deadline Concern">Deadline Concern</option>
-                <option value="Payment Issue">Payment Issue</option>
                 <option value="Technical Problem">Technical Problem</option>
-                <option value="Revision Request">Revision Request</option>
-                <option value="Communication Issue">Communication Issue</option>
+                <option value="Account Issue">Account Issue</option>
+                <option value="Communication">Communication</option>
                 <option value="Other">Other</option>
               </select>
-              <div class="issue-select-chevron">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </div>
             </div>
-            <div class="issue-field-error-msg" id="issue-type-error">Please select an issue type.</div>
-          </div>
 
-          <!-- Related Assignment -->
-          <div class="issue-form-group">
-            <label class="issue-field-label" for="issue-assignment-select">
-              Related Assignment <span class="issue-optional">(Optional)</span>
-            </label>
-            <div class="issue-select-wrapper">
-              <select id="issue-assignment-select" name="related_assignment" class="issue-custom-select">
+            <!-- Related Assignment -->
+            <div style="margin-bottom: 24px;">
+              <label style="display: block; font-size: 15px; font-weight: 600; color: #1f2937; margin-bottom: 10px;">
+                Related Assignment <span style="color: #9ca3af; font-weight: 400; font-size: 14px;">(Optional)</span>
+              </label>
+              <select id="related-assignment" style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 15px; color: #1f2937; background: white; appearance: none; background-image: url('data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23cbd5e0%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276 9 12 15 18 9%27%3e%3c/polyline%3e%3c/svg%3e'); background-repeat: no-repeat; background-position: right 16px center; background-size: 18px; padding-right: 45px;">
                 <option value="">No specific assignment</option>
-                ${assignmentOptionsHtml}
               </select>
-              <div class="issue-select-chevron">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
+            </div>
+
+            <!-- Issue Title -->
+            <div style="margin-bottom: 24px;">
+              <label style="display: block; font-size: 15px; font-weight: 600; color: #1f2937; margin-bottom: 10px;">
+                Issue Title <span style="color: #ef4444;">*</span>
+              </label>
+              <input type="text" id="issue-title" required placeholder="Brief description of the issue" style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 15px; color: #1f2937; background: white;">
+            </div>
+
+            <!-- Detailed Description -->
+            <div style="margin-bottom: 24px;">
+              <label style="display: block; font-size: 15px; font-weight: 600; color: #1f2937; margin-bottom: 10px;">
+                Detailed Description <span style="color: #ef4444;">*</span>
+              </label>
+              <textarea id="issue-description" required maxlength="2000" rows="7" placeholder="Provide detailed information about the issue..." style="width: 100%; padding: 14px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 15px; color: #1f2937; resize: vertical; font-family: inherit; background: white; line-height: 1.6;"></textarea>
+              <div style="font-size: 13px; color: #9ca3af; margin-top: 8px;">
+                <span id="desc-char-count">0</span>/2000 characters
               </div>
             </div>
-          </div>
 
-          <!-- Issue Title -->
-          <div class="issue-form-group">
-            <label class="issue-field-label" for="issue-title-input">
-              Issue Title <span class="issue-required">*</span>
-            </label>
-            <input 
-              type="text" 
-              id="issue-title-input" 
-              name="issue_title" 
-              class="issue-custom-input" 
-              placeholder="Brief description of the issue" 
-              required 
-              maxlength="200"
-            >
-            <div class="issue-field-error-msg" id="issue-title-error">Please provide a brief description of the issue.</div>
-          </div>
+            <!-- Attachments -->
+            <div style="margin-bottom: 28px;">
+              <label style="display: block; font-size: 15px; font-weight: 600; color: #1f2937; margin-bottom: 10px;">
+                Attachments <span style="color: #9ca3af; font-weight: 400; font-size: 14px;">(Optional)</span>
+              </label>
+              <div id="issue-upload-area" style="border: 1px solid #d1d5db; border-radius: 8px; padding: 28px 20px; text-align: center; cursor: pointer; background: white;">
+                <i class="fas fa-paperclip" style="font-size: 24px; color: #6b7280; margin-bottom: 10px; display: block;"></i>
+                <p style="font-size: 15px; color: #1f2937; margin: 0; font-weight: 500;">Add Files</p>
+              </div>
+              <input type="file" id="issue-file-input" multiple style="display: none;" accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
+              <div style="font-size: 13px; color: #6b7280; margin-top: 10px;">
+                Max 50MB per file • Supports: Images, PDF, Word documents
+              </div>
+              <div id="issue-file-list" style="margin-top: 12px;"></div>
+            </div>
 
-          <!-- Detailed Description -->
-          <div class="issue-form-group">
-            <label class="issue-field-label" for="issue-description-input">
-              Detailed Description <span class="issue-required">*</span>
-            </label>
-            <textarea 
-              id="issue-description-input" 
-              name="detailed_description" 
-              class="issue-custom-textarea" 
-              placeholder="Provide detailed information about the issue..." 
-              rows="5" 
-              maxlength="2000" 
-              required
-            ></textarea>
-            <div class="issue-char-count" id="issue-char-counter">0/2000 characters</div>
-            <div class="issue-field-error-msg" id="issue-desc-error">Please provide detailed information about the issue.</div>
-          </div>
-
-          <!-- Attachments -->
-          <div class="issue-form-group" style="margin-bottom: 0;">
-            <label class="issue-field-label">
-              Attachments <span class="issue-optional">(Optional)</span>
-            </label>
-            <button type="button" class="issue-add-files-btn" id="issue-add-files-btn">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
-              </svg>
-              <span>Add Files</span>
-            </button>
-            <input 
-              type="file" 
-              id="issue-hidden-file-input" 
-              multiple 
-              style="display: none;" 
-              accept=".jpg,.jpeg,.png,.webp,.gif,.pdf,.doc,.docx"
-            >
-            <p class="issue-file-info">Max 50MB per file • Supports: Images, PDF, Word documents</p>
-            <div class="issue-attached-files-list" id="issue-attached-files-list"></div>
-          </div>
-
-          <!-- Footer with Submit Button -->
-          <div class="issue-modal-footer">
-            <button type="submit" class="issue-modal-submit-btn" id="issue-modal-submit-btn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="22" y1="2" x2="11" y2="13"></line>
-                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-              </svg>
-              <span>Submit Issue</span>
-            </button>
-          </div>
-        </form>
-      </div>
-    `;
-
-    document.body.appendChild(backdrop);
-
-    // Modal elements
-    const cardEl = backdrop.querySelector('.issue-modal-card');
-    const closeBtn = document.getElementById('close-issue-modal-btn');
-    const form = document.getElementById('issue-report-form');
-    const typeSelect = document.getElementById('issue-type-select');
-    const assignmentSelect = document.getElementById('issue-assignment-select');
-    const titleInput = document.getElementById('issue-title-input');
-    const descTextarea = document.getElementById('issue-description-input');
-    const charCounter = document.getElementById('issue-char-counter');
-    const addFilesBtn = document.getElementById('issue-add-files-btn');
-    const fileInput = document.getElementById('issue-hidden-file-input');
-    const filesList = document.getElementById('issue-attached-files-list');
-    const submitBtn = document.getElementById('issue-modal-submit-btn');
-
-    let attachedFiles = [];
-
-    // Close logic
-    function closeModal() {
-      backdrop.style.opacity = '0';
-      if (cardEl) {
-        cardEl.style.transform = 'scale(0.96) translateY(8px)';
-        cardEl.style.opacity = '0';
-        cardEl.style.transition = 'all 0.15s ease';
-      }
-      setTimeout(() => {
-        if (backdrop.parentNode) backdrop.remove();
-        document.removeEventListener('keydown', handleEscKey);
-      }, 150);
-    }
-    window.closeIssueModal = closeModal;
-
-    function handleEscKey(e) {
-      if (e.key === 'Escape') closeModal();
-    }
-    document.addEventListener('keydown', handleEscKey);
-
-    backdrop.addEventListener('click', (e) => {
-      if (e.target === backdrop) closeModal();
-    });
-
-    closeBtn.addEventListener('click', closeModal);
-
-    // Dynamic Select styling
-    typeSelect.addEventListener('change', () => {
-      if (typeSelect.value) {
-        typeSelect.classList.remove('is-placeholder');
-      } else {
-        typeSelect.classList.add('is-placeholder');
-      }
-      clearError('issue-type');
-    });
-
-    // Character counter
-    descTextarea.addEventListener('input', () => {
-      charCounter.textContent = `${descTextarea.value.length}/2000 characters`;
-      clearError('issue-desc');
-    });
-
-    titleInput.addEventListener('input', () => {
-      clearError('issue-title');
-    });
-
-    function clearError(fieldPrefix) {
-      const err = document.getElementById(`${fieldPrefix}-error`);
-      if (err) err.classList.remove('visible');
-      const input = document.getElementById(`${fieldPrefix}-input`) || document.getElementById(`${fieldPrefix}-select`);
-      if (input) input.classList.remove('issue-input-error');
-    }
-
-    function showError(fieldPrefix, msg) {
-      const err = document.getElementById(`${fieldPrefix}-error`);
-      if (err) {
-        if (msg) err.textContent = msg;
-        err.classList.add('visible');
-      }
-      const input = document.getElementById(`${fieldPrefix}-input`) || document.getElementById(`${fieldPrefix}-select`);
-      if (input) {
-        input.classList.add('issue-input-error');
-        input.focus();
-      }
-    }
-
-    // File attachments handling
-    addFilesBtn.addEventListener('click', () => {
-      fileInput.click();
-    });
-
-    fileInput.addEventListener('change', (e) => {
-      const files = Array.from(e.target.files);
-      const maxSizeBytes = 50 * 1024 * 1024; // 50MB
-      const allowedExts = ['.jpg', '.jpeg', '.png', '.webp', '.gif', '.pdf', '.doc', '.docx'];
-
-      for (const file of files) {
-        const ext = '.' + file.name.split('.').pop().toLowerCase();
-        if (!allowedExts.includes(ext)) {
-          alert(`File "${file.name}" has an unsupported format.\nSupported: Images, PDF, Word documents`);
-          continue;
-        }
-        if (file.size > maxSizeBytes) {
-          alert(`File "${file.name}" exceeds the 50MB maximum size limit.`);
-          continue;
-        }
-        if (!attachedFiles.some(f => f.name === file.name && f.size === file.size)) {
-          attachedFiles.push(file);
-        }
-      }
-
-      renderFilesList();
-      fileInput.value = '';
-    });
-
-    function renderFilesList() {
-      if (attachedFiles.length === 0) {
-        filesList.innerHTML = '';
-        return;
-      }
-
-      filesList.innerHTML = attachedFiles.map((f, i) => `
-        <div class="issue-file-item">
-          <div class="issue-file-item-left">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-            </svg>
-            <span class="issue-file-name" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</span>
-            <span class="issue-file-size">(${formatFileSize(f.size)})</span>
-          </div>
-          <button type="button" class="issue-file-remove-btn" data-index="${i}" title="Remove file">&times;</button>
+            <!-- Submit Button -->
+            <div style="display: flex; justify-content: flex-end;">
+              <button type="submit" id="submit-issue-btn" style="background: #2563eb; color: white; border: none; border-radius: 8px; padding: 13px 32px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 10px; box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);">
+                <i class="fas fa-paper-plane" style="font-size: 14px;"></i> Submit Issue
+              </button>
+            </div>
+          </form>
         </div>
-      `).join('');
-
-      filesList.querySelectorAll('.issue-file-remove-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const idx = parseInt(btn.getAttribute('data-index'), 10);
-          attachedFiles.splice(idx, 1);
-          renderFilesList();
-        });
-      });
-    }
-
-    function formatFileSize(bytes) {
-      if (bytes >= 1024 * 1024) {
-        return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-      }
-      return (bytes / 1024).toFixed(1) + ' KB';
-    }
-
-    // Submit Issue Handler
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      let valid = true;
-      const type = typeSelect.value.trim();
-      const title = titleInput.value.trim();
-      const desc = descTextarea.value.trim();
-      const related = assignmentSelect.value.trim();
-
-      if (!type) {
-        showError('issue-type', 'Please select an issue type.');
-        valid = false;
-      }
-      if (!title) {
-        showError('issue-title', 'Please provide a brief title for the issue.');
-        if (valid) valid = false;
-      }
-      if (!desc) {
-        showError('issue-desc', 'Please provide detailed information about the issue.');
-        if (valid) valid = false;
-      }
-
-      if (!valid) return;
-
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `
-        <svg class="fa-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="2" x2="12" y2="6"></line>
-          <line x1="12" y1="18" x2="12" y2="22"></line>
-          <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
-          <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
-          <line x1="2" y1="12" x2="6" y2="12"></line>
-          <line x1="18" y1="12" x2="22" y2="12"></line>
-          <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
-          <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
-        </svg>
-        <span>Submitting...</span>
       `;
 
-      const formData = new FormData();
-      formData.append('subject', title);
-      formData.append('category', type);
-      formData.append('initial_message', desc);
-      if (related) {
-        formData.append('related_assignment', related);
-      }
+      modalOverlay.appendChild(modalContent);
+      document.body.appendChild(modalOverlay);
 
-      attachedFiles.forEach(file => {
-        formData.append('files', file);
+      // Character counter
+      const descTextarea = document.getElementById('issue-description');
+      const charCount = document.getElementById('desc-char-count');
+      descTextarea.addEventListener('input', () => {
+        charCount.textContent = descTextarea.value.length;
       });
 
-      try {
-        const res = await apiFetch('/support/tickets', 'POST', formData, true);
-        if (res && res.success) {
-          closeModal();
-          alert('Issue reported successfully! Our support team will assist you shortly.');
-          renderSupportCenterView();
-        } else {
-          alert(res.message || 'Failed to submit issue. Please check the information and try again.');
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="22" y1="2" x2="11" y2="13"></line>
-              <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-            </svg>
-            <span>Submit Issue</span>
-          `;
-        }
-      } catch (err) {
-        console.error('Error submitting issue:', err);
-        alert('An unexpected error occurred while submitting your issue.');
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="22" y1="2" x2="11" y2="13"></line>
-            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-          </svg>
-          <span>Submit Issue</span>
-        `;
-      }
-    });
-  };
+      // File upload
+      const uploadArea = document.getElementById('issue-upload-area');
+      const fileInput = document.getElementById('issue-file-input');
+      const fileList = document.getElementById('issue-file-list');
+      let selectedFiles = [];
 
-  window.closeIssueModal = () => {
-    const backdrop = document.getElementById('issue-report-modal-backdrop');
-    if (backdrop) backdrop.remove();
-  };
+      uploadArea.addEventListener('click', () => fileInput.click());
+
+      fileInput.addEventListener('change', (e) => {
+        selectedFiles = Array.from(e.target.files);
+        displayIssueFiles();
+      });
+
+      function displayIssueFiles() {
+        if (selectedFiles.length === 0) {
+          fileList.innerHTML = '';
+          return;
+        }
+
+        fileList.innerHTML = selectedFiles.map((file, index) => `
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: white; border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 6px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;">
+              <i class="fas fa-file" style="color: #6b7280; font-size: 12px;"></i>
+              <span style="font-size: 13px; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${escapeHtml(file.name)}</span>
+              <span style="font-size: 11px; color: #9ca3af;">(${(file.size / 1024).toFixed(1)} KB)</span>
+            </div>
+            <button type="button" onclick="window.removeIssueFile(${index})" style="background: transparent; border: none; color: #ef4444; cursor: pointer; padding: 2px 6px; font-size: 16px;">
+              ×
+            </button>
+          </div>
+        `).join('');
+      }
+
+      window.removeIssueFile = (index) => {
+        selectedFiles.splice(index, 1);
+        displayIssueFiles();
+      };
+
+      // Form submission
+      document.getElementById('issue-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const issueType = document.getElementById('issue-type').value;
+        const issueTitle = document.getElementById('issue-title').value;
+        const issueDescription = document.getElementById('issue-description').value;
+        const relatedAssignment = document.getElementById('related-assignment').value;
+
+        if (!issueType || !issueTitle || !issueDescription) {
+          alert('Please fill in all required fields.');
+          return;
+        }
+
+        const submitBtn = document.getElementById('submit-issue-btn');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+        const formData = new FormData();
+        formData.append('subject', issueTitle);
+        formData.append('category', issueType);
+        formData.append('initial_message', issueDescription);
+        if (relatedAssignment) formData.append('related_assignment', relatedAssignment);
+
+        selectedFiles.forEach(file => {
+          formData.append('files', file);
+        });
+
+        try {
+          const res = await apiFetch('/support/tickets', 'POST', formData, true);
+          if (res.success) {
+            alert('Issue reported successfully!');
+            window.closeIssueModal();
+            renderSupportCenterView();
+          } else {
+            alert(res.message || 'Failed to report issue.');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Issue';
+          }
+        } catch (error) {
+          alert('Error submitting issue. Please try again.');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Issue';
+        }
+      });
+
+      // Close on overlay click
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) {
+          window.closeIssueModal();
+        }
+      });
+    };
+
+    // Close modal function
+    window.closeIssueModal = () => {
+      const modal = document.getElementById('issue-modal-overlay');
+      if (modal) {
+        modal.remove();
+      }
+    };
+  }
 
   // ==========================================
   // 11. REFERRAL VIEW
@@ -2353,7 +2111,7 @@
         <div style="background: white; border-radius: 12px; border: 1px solid #e5e7eb; overflow: hidden;">
           <div style="padding: 20px 24px; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
             <h3 style="font-size: 1rem; font-weight: 700; color: #1a1a1a; margin: 0;">Referral History</h3>
-            <button onclick="window.openSendInviteModal()" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+            <button style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
               <i class="fas fa-paper-plane" style="font-size: 0.8rem;"></i> Send Invite
             </button>
           </div>
@@ -2365,8 +2123,8 @@
             </div>
             <h3 style="font-size: 1.1rem; font-weight: 700; color: #1a1a1a; margin: 0 0 8px 0;">No referrals yet</h3>
             <p style="color: #2563eb; margin: 0 0 24px 0; font-size: 0.95rem; max-width: 420px;">Start inviting friends to earn ₹200 for each successful referral!</p>
-            <button onclick="window.openSendInviteModal()" style="background: #2563eb; color: white; border: none; padding: 12px 32px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
-              <i class="fas fa-paper-plane" style="font-size: 0.85rem;"></i> Send Your First Invite
+            <button onclick="window.shareReferralCode('${referralCode}')" style="background: #2563eb; color: white; border: none; padding: 12px 32px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);">
+              <i class="fas fa-share-alt" style="font-size: 0.85rem;"></i> Send Your First Invite
             </button>
           </div>
         </div>
@@ -2383,119 +2141,14 @@
     };
 
     window.shareReferralCode = (code) => {
-      const text = `Hey! Use my referral code ${code} on AssignmentWaala and get help with your assignments. You'll get great support and I'll earn ₹200!`;
+      const text = `Hey! Use my referral code ${code} on Assignment Dai and get help with your assignments. You'll get great support and I'll earn Rs 200!`;
       if (navigator.share) {
         navigator.share({
-          title: 'AssignmentWaala Referral',
+          title: 'Assignment Dai Referral',
           text: text
         });
       } else {
         prompt('Share this message:', text);
-      }
-    };
-
-    // Send Invite Modal
-    window.openSendInviteModal = () => {
-      // Create modal overlay
-      const modalOverlay = document.createElement('div');
-      modalOverlay.id = 'invite-modal-overlay';
-      modalOverlay.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 9999; display: flex; align-items: center; justify-content: center; padding: 20px;';
-
-      // Create modal content
-      const modalContent = document.createElement('div');
-      modalContent.style.cssText = 'background: white; border-radius: 12px; width: 100%; max-width: 560px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3); padding: 32px;';
-
-      modalContent.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 20px;">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <i class="fas fa-paper-plane" style="color: #2563eb; font-size: 24px;"></i>
-            <h2 style="font-size: 24px; font-weight: 700; color: #1f2937; margin: 0;">Send Referral Invite</h2>
-          </div>
-          <button onclick="window.closeSendInviteModal()" style="background: transparent; border: none; color: #9ca3af; cursor: pointer; font-size: 28px; line-height: 1; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; margin-top: -4px;">
-            ×
-          </button>
-        </div>
-
-        <p style="font-size: 15px; color: #6b7280; margin: 0 0 28px 0;">Enter your friend's email to send them an invitation to join Assignment Waala.</p>
-
-        <form id="invite-form" onsubmit="return false;">
-          <!-- Email Address -->
-          <div style="margin-bottom: 24px;">
-            <label style="display: block; font-size: 15px; font-weight: 600; color: #1f2937; margin-bottom: 10px;">
-              Email Address
-            </label>
-            <input 
-              type="email" 
-              id="invite-email" 
-              required 
-              placeholder="friend@example.com" 
-              style="width: 100%; padding: 14px 16px; border: 2px solid #60a5fa; border-radius: 10px; font-size: 15px; color: #1f2937; background: white; outline: none;">
-          </div>
-
-          <!-- Info Box -->
-          <div style="background: #eff6ff; border: 1px solid #dbeafe; border-radius: 8px; padding: 16px; margin-bottom: 28px; display: flex; gap: 12px;">
-            <i class="fas fa-info-circle" style="color: #3b82f6; font-size: 20px; flex-shrink: 0; margin-top: 2px;"></i>
-            <p style="margin: 0; font-size: 14px; color: #1e40af; line-height: 1.6;">
-              They'll receive an email with your referral link. You earn <strong style="color: #2563eb;">₹200</strong> when they complete their first assignment!
-            </p>
-          </div>
-
-          <!-- Action Buttons -->
-          <div style="display: flex; gap: 12px; justify-content: flex-end;">
-            <button type="button" onclick="window.closeSendInviteModal()" style="background: white; border: 1px solid #d1d5db; border-radius: 8px; padding: 12px 24px; font-size: 15px; font-weight: 600; color: #6b7280; cursor: pointer;">
-              Cancel
-            </button>
-            <button type="submit" id="send-invite-btn" style="background: #5b8def; color: white; border: none; border-radius: 8px; padding: 12px 28px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 2px 10px rgba(91, 141, 239, 0.35);">
-              <i class="fas fa-paper-plane" style="font-size: 14px;"></i> Send Invite
-            </button>
-          </div>
-        </form>
-      `;
-
-      modalOverlay.appendChild(modalContent);
-      document.body.appendChild(modalOverlay);
-
-      // Form submission
-      document.getElementById('invite-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const email = document.getElementById('invite-email').value;
-        if (!email) {
-          alert('Please enter an email address.');
-          return;
-        }
-
-        const submitBtn = document.getElementById('send-invite-btn');
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-
-        try {
-          // Simulate API call - replace with actual endpoint
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          
-          alert(`Referral invite sent successfully to ${email}!`);
-          window.closeSendInviteModal();
-          renderReferralView();
-        } catch (error) {
-          alert('Error sending invite. Please try again.');
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Invite';
-        }
-      });
-
-      // Close on overlay click
-      modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) {
-          window.closeSendInviteModal();
-        }
-      });
-    };
-
-    // Close invite modal
-    window.closeSendInviteModal = () => {
-      const modal = document.getElementById('invite-modal-overlay');
-      if (modal) {
-        modal.remove();
       }
     };
   }
@@ -2659,47 +2312,3 @@
   }
 
 })();
-
-// ==========================================
-// THEME TOGGLE FUNCTIONALITY
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-  const themeToggleBtn = document.getElementById('theme-toggle-btn');
-  const sidebarToggle = document.getElementById('mobile-sidebar-toggle');
-  const dashboardSidebar = document.getElementById('dashboard-sidebar');
-  const dashboardMain = document.querySelector('.dashboard-main');
-  
-  // Theme toggle (for future dark mode implementation)
-  if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-      // Placeholder for theme toggle functionality
-      const icon = themeToggleBtn.querySelector('i');
-      if (icon.classList.contains('fa-sun')) {
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
-      } else {
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-      }
-    });
-  }
-
-  // Sidebar toggle functionality
-  if (sidebarToggle && dashboardSidebar) {
-    sidebarToggle.addEventListener('click', () => {
-      dashboardSidebar.classList.toggle('sidebar-collapsed');
-      
-      // Adjust main content margin
-      if (dashboardMain) {
-        if (dashboardSidebar.classList.contains('sidebar-collapsed')) {
-          dashboardMain.style.marginLeft = '80px';
-        } else {
-          dashboardMain.style.marginLeft = 'var(--sidebar-width)';
-        }
-      }
-      
-      // Keep the slider icon - no icon change needed
-      // The slider icon represents settings/control, so it stays the same
-    });
-  }
-});

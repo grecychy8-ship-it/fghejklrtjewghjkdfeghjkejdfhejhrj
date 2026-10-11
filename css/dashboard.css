@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ASSIGNMENTWAALA CLIENT DASHBOARD STYLESHEET
+   ASSIGNMENT DAI CLIENT DASHBOARD STYLESHEET
    ========================================================================== */
 
 :root {
@@ -55,28 +55,8 @@ body.dashboard-body {
   z-index: 1000;
   display: flex;
   flex-direction: column;
-  transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+  transition: transform 0.3s ease-in-out;
   box-shadow: 4px 0 15px rgba(0,0,0,0.1);
-}
-
-.dashboard-sidebar.sidebar-collapsed {
-  width: 80px;
-}
-
-.dashboard-sidebar.sidebar-collapsed .sidebar-brand span,
-.dashboard-sidebar.sidebar-collapsed .nav-item-link span,
-.dashboard-sidebar.sidebar-collapsed .user-name-text,
-.dashboard-sidebar.sidebar-collapsed .menu-category {
-  display: none;
-}
-
-.dashboard-sidebar.sidebar-collapsed .nav-item-link {
-  justify-content: center;
-  padding: 11px 8px;
-}
-
-.dashboard-sidebar.sidebar-collapsed .sidebar-brand {
-  justify-content: center;
 }
 
 .sidebar-header {
@@ -174,13 +154,12 @@ body.dashboard-body {
 }
 
 .navbar-mobile-toggle {
-  display: flex;
+  display: none;
   background: none;
   border: none;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   color: var(--text-main);
   cursor: pointer;
-  padding: 8px;
 }
 
 .navbar-page-title {
@@ -193,7 +172,7 @@ body.dashboard-body {
 .navbar-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
 }
 
 .btn-submit-cta {
@@ -219,7 +198,7 @@ body.dashboard-body {
 
 .notification-bell-btn {
   position: relative;
-  background: transparent;
+  background: #f1f5f9;
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -229,31 +208,10 @@ body.dashboard-body {
   color: var(--text-main);
   text-decoration: none;
   transition: var(--transition);
-  font-size: 1.1rem;
 }
 
 .notification-bell-btn:hover {
-  background-color: #f1f5f9;
-}
-
-.theme-toggle-btn {
-  position: relative;
-  background: transparent;
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-main);
-  cursor: pointer;
-  transition: var(--transition);
-  font-size: 1.1rem;
-}
-
-.theme-toggle-btn:hover {
-  background-color: #f1f5f9;
+  background-color: #e2e8f0;
 }
 
 .notification-badge-dot {
@@ -739,402 +697,4 @@ body.dashboard-body {
     grid-template-columns: 1fr;
     height: auto;
   }
-}
-
-/* ==========================================================================
-   REPORT NEW ISSUE MODAL (PIXEL-PERFECT REPRODUCTION)
-   ========================================================================== */
-
-.issue-modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  z-index: 10500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  opacity: 0;
-  animation: issueModalBackdropFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes issueModalBackdropFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.issue-modal-card {
-  background: #ffffff;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 480px;
-  max-height: 88vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-  padding: 28px 24px 24px 28px;
-  position: relative;
-  box-sizing: border-box;
-  transform: scale(0.96) translateY(8px);
-  animation: issueModalCardPop 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes issueModalCardPop {
-  to {
-    transform: scale(1) translateY(0);
-  }
-}
-
-/* Custom scrollbar matching browser/Windows look */
-.issue-modal-card::-webkit-scrollbar {
-  width: 7px;
-}
-.issue-modal-card::-webkit-scrollbar-track {
-  background: transparent;
-}
-.issue-modal-card::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 4px;
-}
-.issue-modal-card::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
-}
-
-.issue-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 22px;
-}
-
-.issue-modal-title {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 20px;
-  font-weight: 700;
-  color: #111827;
-  margin: 0 0 4px 0;
-  letter-spacing: -0.01em;
-  line-height: 1.3;
-}
-
-.issue-modal-subtitle {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  color: #6b7280;
-  margin: 0;
-  line-height: 1.4;
-}
-
-.issue-modal-close-btn {
-  background: transparent;
-  border: none;
-  color: #6b7280;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: color 0.15s, background-color 0.15s;
-  margin-top: -2px;
-  margin-right: -4px;
-  outline: none;
-}
-
-.issue-modal-close-btn:hover {
-  color: #111827;
-  background-color: #f3f4f6;
-}
-
-.issue-modal-close-btn:focus-visible {
-  box-shadow: 0 0 0 2px #2563eb;
-}
-
-.issue-form-group {
-  margin-bottom: 20px;
-}
-
-.issue-field-label {
-  display: block;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #111827;
-  margin-bottom: 8px;
-  line-height: 1.2;
-}
-
-.issue-required {
-  color: #ef4444;
-  margin-left: 2px;
-  font-weight: 600;
-}
-
-.issue-optional {
-  color: #6b7280;
-  font-weight: 400;
-  font-size: 13.5px;
-  margin-left: 4px;
-}
-
-.issue-select-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-.issue-custom-select {
-  width: 100%;
-  height: 48px;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  background-color: #ffffff;
-  padding: 0 40px 0 16px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 14px;
-  color: #111827;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  cursor: pointer;
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  box-sizing: border-box;
-}
-
-.issue-custom-select.is-placeholder {
-  color: #6b7280;
-}
-
-.issue-custom-select:focus {
-  border-color: #0052ff;
-  box-shadow: 0 0 0 3px rgba(0, 82, 255, 0.12);
-}
-
-.issue-select-chevron {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: #94a3b8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.issue-custom-input {
-  width: 100%;
-  height: 48px;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  background-color: #ffffff;
-  padding: 0 16px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 14px;
-  color: #111827;
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  box-sizing: border-box;
-}
-
-.issue-custom-input::placeholder {
-  color: #cbd5e1;
-  font-weight: 400;
-}
-
-.issue-custom-input:focus {
-  border-color: #0052ff;
-  box-shadow: 0 0 0 3px rgba(0, 82, 255, 0.12);
-}
-
-.issue-custom-textarea {
-  width: 100%;
-  min-height: 140px;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  background-color: #ffffff;
-  padding: 14px 16px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 14px;
-  color: #111827;
-  line-height: 1.5;
-  outline: none;
-  resize: vertical;
-  transition: border-color 0.15s, box-shadow 0.15s;
-  box-sizing: border-box;
-}
-
-.issue-custom-textarea::placeholder {
-  color: #cbd5e1;
-  font-weight: 400;
-}
-
-.issue-custom-textarea:focus {
-  border-color: #0052ff;
-  box-shadow: 0 0 0 3px rgba(0, 82, 255, 0.12);
-}
-
-.issue-char-count {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 12.5px;
-  color: #6b7280;
-  margin-top: 6px;
-  text-align: left;
-}
-
-.issue-add-files-btn {
-  width: 100%;
-  height: 48px;
-  background-color: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  cursor: pointer;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  color: #111827;
-  outline: none;
-  transition: background-color 0.15s, border-color 0.15s;
-  box-sizing: border-box;
-}
-
-.issue-add-files-btn:hover {
-  background-color: #f8fafc;
-  border-color: #cbd5e1;
-}
-
-.issue-add-files-btn:focus-visible {
-  border-color: #0052ff;
-  box-shadow: 0 0 0 3px rgba(0, 82, 255, 0.12);
-}
-
-.issue-file-info {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 13px;
-  color: #6b7280;
-  margin: 8px 0 0 0;
-  line-height: 1.4;
-}
-
-.issue-attached-files-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.issue-file-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 12px;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-size: 13px;
-}
-
-.issue-file-item-left {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.issue-file-name {
-  font-weight: 500;
-  color: #111827;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 250px;
-}
-
-.issue-file-size {
-  color: #6b7280;
-  font-size: 11.5px;
-}
-
-.issue-file-remove-btn {
-  background: transparent;
-  border: none;
-  color: #ef4444;
-  cursor: pointer;
-  padding: 2px 6px;
-  font-size: 16px;
-  border-radius: 4px;
-  line-height: 1;
-}
-
-.issue-file-remove-btn:hover {
-  background: #fee2e2;
-}
-
-.issue-modal-footer {
-  border-top: 1px solid #f1f5f9;
-  margin-top: 24px;
-  padding-top: 20px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.issue-modal-submit-btn {
-  background-color: #0052ff;
-  color: #ffffff;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 24px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-size: 14.5px;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  outline: none;
-  transition: background-color 0.15s ease, transform 0.05s ease;
-}
-
-.issue-modal-submit-btn:hover {
-  background-color: #0045d8;
-}
-
-.issue-modal-submit-btn:active {
-  transform: translateY(1px);
-}
-
-.issue-modal-submit-btn:focus-visible {
-  box-shadow: 0 0 0 3px rgba(0, 82, 255, 0.3);
-}
-
-.issue-modal-submit-btn:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-.issue-field-error-msg {
-  color: #ef4444;
-  font-size: 12.5px;
-  margin-top: 5px;
-  display: none;
-}
-.issue-field-error-msg.visible {
-  display: block;
-}
-.issue-input-error {
-  border-color: #ef4444 !important;
 }
