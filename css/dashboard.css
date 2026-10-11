@@ -77,6 +77,16 @@ body.dashboard-body {
   font-weight: 700;
   font-size: 1.35rem;
   letter-spacing: -0.3px;
+  width: 100%;
+  justify-content: center;
+}
+
+.sidebar-logo-img {
+  max-width: 100%;
+  height: auto;
+  max-height: 50px;
+  object-fit: contain;
+  display: block;
 }
 
 .sidebar-menu {
@@ -727,4 +737,128 @@ body.dashboard-body {
     grid-template-columns: 1fr;
     height: auto;
   }
+}
+
+
+/* ==========================================
+   THEME TOGGLE DROPDOWN
+   ========================================== */
+.theme-toggle-wrapper {
+  position: relative;
+}
+
+.theme-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  min-width: 140px;
+  padding: 8px;
+  display: none;
+  z-index: 1000;
+}
+
+.theme-dropdown.show {
+  display: block;
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #374151;
+  font-size: 14px;
+}
+
+.theme-option:hover {
+  background-color: #f3f4f6;
+}
+
+.theme-option.active {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+.theme-option i {
+  width: 16px;
+  font-size: 14px;
+}
+
+/* ==========================================
+   DARK THEME
+   ========================================== */
+body.dark-theme {
+  --bg-main: #111827;
+  --bg-secondary: #1f2937;
+  --text-main: #f9fafb;
+  --text-secondary: #d1d5db;
+  --border-color: #374151;
+  --secondary-color: #1f2937;
+}
+
+body.dark-theme .dashboard-navbar {
+  background-color: #1f2937;
+  border-bottom-color: #374151;
+}
+
+body.dark-theme .dashboard-container {
+  background-color: #111827;
+}
+
+body.dark-theme .navbar-mobile-toggle,
+body.dark-theme .notification-bell-btn,
+body.dark-theme .theme-toggle-btn {
+  color: #f9fafb;
+}
+
+body.dark-theme .navbar-mobile-toggle:hover,
+body.dark-theme .notification-bell-btn:hover,
+body.dark-theme .theme-toggle-btn:hover {
+  background-color: #374151;
+}
+
+body.dark-theme .theme-dropdown {
+  background-color: #1f2937;
+  border-color: #374151;
+}
+
+body.dark-theme .theme-option {
+  color: #d1d5db;
+}
+
+body.dark-theme .theme-option:hover {
+  background-color: #374151;
+}
+
+body.dark-theme .theme-option.active {
+  background-color: #1e3a8a;
+  color: #dbeafe;
+}
+
+body.dark-theme .card-box,
+body.dark-theme .dashboard-card,
+body.dark-theme [style*="background: white"],
+body.dark-theme [style*="background: #fff"],
+body.dark-theme [style*="background-color: white"],
+body.dark-theme [style*="background-color: #fff"] {
+  background-color: #1f2937 !important;
+  color: #f9fafb;
+}
+
+body.dark-theme [style*="color: #1f2937"],
+body.dark-theme [style*="color: #1a1a1a"],
+body.dark-theme [style*="color: #374151"] {
+  color: #f9fafb !important;
+}
+
+body.dark-theme [style*="border: 1px solid #e5e7eb"],
+body.dark-theme [style*="border: 1px solid #d1d5db"] {
+  border-color: #374151 !important;
 }

@@ -20,7 +20,7 @@
     <aside class="dashboard-sidebar" id="dashboard-sidebar">
       <div class="sidebar-header">
         <a href="#/dashboard" class="sidebar-brand">
-          <img src="images/logo1.png" alt="Assignment Dai" style="height: 38px; width: auto; object-fit: contain;">
+          <img src="images/logo dashboard.png" alt="Assignment Dai" class="sidebar-logo-img">
         </a>
       </div>
 
@@ -62,9 +62,25 @@
             <i class="fas fa-bell"></i>
           </button>
 
-          <button class="theme-toggle-btn" id="theme-toggle-btn" title="Toggle theme">
-            <i class="fas fa-sun"></i>
-          </button>
+          <div class="theme-toggle-wrapper">
+            <button class="theme-toggle-btn" id="theme-toggle-btn" title="Theme settings">
+              <i class="fas fa-sun"></i>
+            </button>
+            <div class="theme-dropdown" id="theme-dropdown">
+              <div class="theme-option" data-theme="light">
+                <i class="fas fa-sun"></i>
+                <span>Light</span>
+              </div>
+              <div class="theme-option" data-theme="dark">
+                <i class="fas fa-moon"></i>
+                <span>Dark</span>
+              </div>
+              <div class="theme-option" data-theme="system">
+                <i class="fas fa-desktop"></i>
+                <span>System</span>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 

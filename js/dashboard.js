@@ -2312,3 +2312,96 @@
   }
 
 })();
+
+
+/* ==========================================================================
+   THEME TOGGLE FUNCTIONALITY
+   ========================================================================== */
+(function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const themeDropdown = document.getElementById('theme-dropdown');
+    const themeOptions = document.querySelectorAll('.theme-option');
+    
+    // Get saved theme or default to 'light'
+    let currentTheme = localStorage.getItem('theme') || 'light';
+    
+    // Apply theme on page load
+    applyTheme(currentTheme);
+    updateActiveOption(currentTheme);
+    
+    // Toggle dropdown
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        themeDropdown.classList.toggle('show');
+      });
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.theme-toggle-wrapper')) {
+        themeDropdown.classList.remove('show');
+      }
+    });
+    
+    // Handle theme selection
+    themeOptions.forEach(function(option) {
+      option.addEventListener('click', function() {
+        const selectedTheme = this.getAttribute('data-theme');
+        currentTheme = selectedTheme;
+        
+        // Save to localStorage
+        localStorage.setItem('theme', selectedTheme);
+        
+        // Apply theme
+        applyTheme(selectedTheme);
+        
+        // Update active state
+        updateActiveOption(selectedTheme);
+        
+        // Close dropdown
+        themeDropdown.classList.remove('show');
+      });
+    });
+    
+    // Apply theme function
+    function applyTheme(theme) {
+      const body = document.body;
+      
+      if (theme === 'dark') {
+        body.classList.add('dark-theme');
+      } else if (theme === 'light') {
+        body.classList.remove('dark-theme');
+      } else if (theme === 'system') {
+        // Check system preference
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (prefersDark) {
+          body.classList.add('dark-theme');
+        } else {
+          body.classList.remove('dark-theme');
+        }
+      }
+    }
+    
+    // Update active option
+    function updateActiveOption(theme) {
+      themeOptions.forEach(function(option) {
+        if (option.getAttribute('data-theme') === theme) {
+          option.classList.add('active');
+        } else {
+          option.classList.remove('active');
+        }
+      });
+    }
+    
+    // Listen for system theme changes when system mode is active
+    if (currentTheme === 'system') {
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        if (localStorage.getItem('theme') === 'system') {
+          applyTheme('system');
+        }
+      });
+    }
+  });
+})();
