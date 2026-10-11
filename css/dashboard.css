@@ -154,12 +154,19 @@ body.dashboard-body {
 }
 
 .navbar-mobile-toggle {
-  display: none;
-  background: none;
+  display: flex;
+  background: transparent;
   border: none;
-  font-size: 1.4rem;
-  color: var(--text-main);
+  font-size: 1.2rem;
+  color: #1f2937;
   cursor: pointer;
+  padding: 8px;
+  transition: var(--transition);
+}
+
+.navbar-mobile-toggle:hover {
+  background-color: #f3f4f6;
+  border-radius: 6px;
 }
 
 .navbar-page-title {
@@ -172,7 +179,7 @@ body.dashboard-body {
 .navbar-actions {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 8px;
 }
 
 .btn-submit-cta {
@@ -198,20 +205,43 @@ body.dashboard-body {
 
 .notification-bell-btn {
   position: relative;
-  background: #f1f5f9;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-main);
+  color: #1f2937;
   text-decoration: none;
   transition: var(--transition);
+  font-size: 1.1rem;
+  cursor: pointer;
 }
 
 .notification-bell-btn:hover {
-  background-color: #e2e8f0;
+  background-color: #f3f4f6;
+}
+
+.theme-toggle-btn {
+  position: relative;
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1f2937;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 1.1rem;
+}
+
+.theme-toggle-btn:hover {
+  background-color: #f3f4f6;
 }
 
 .notification-badge-dot {
