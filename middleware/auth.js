@@ -19,6 +19,22 @@ function authenticateToken(req, res, next) {
   });
 }
 
+function optionalAuth(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return next();
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (!err) {
+      req.user = user;
+    }
+    next();
+  });
+}
+
 function requireAdmin(req, res, next) {
   authenticateToken(req, res, () => {
     if (req.user && req.user.role === 'admin') {
@@ -31,6 +47,7 @@ function requireAdmin(req, res, next) {
 
 module.exports = {
   authenticateToken,
+  optionalAuth,
   requireAdmin,
   JWT_SECRET
 };

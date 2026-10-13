@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 
 const db = require('./db');
-const { authenticateToken, requireAdmin, JWT_SECRET } = require('./middleware/auth');
+const { authenticateToken, optionalAuth, requireAdmin, JWT_SECRET } = require('./middleware/auth');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -308,78 +308,124 @@ app.get('/api/projects', authenticateToken, (req, res) => {
 });
 
 // POST /api/projects (Submit New Project)
-app.post('/api/projects', authenticateToken, upload.array('files'), (req, res) => {
-  const clientId = req.user.id;
-  const {
-    title, category, subject, academic_level, institution, project_type,
-    description, requirements, word_count, page_count, citation_style,
-    formatting, start_date, deadline, priority
-  } = req.body;
+app.post('/api/projects', optionalAuth, upload.any(), async (req, res) => {
+  let clientId = req.user ? req.user.id : null;
+  let clientName = req.user ? req.user.full_name : (req.body.full_name || req.body.client_name || 'Student');
+  let clientEmail = req.user ? req.user.email : (req.body.email || req.body.client_email);
 
-  if (!title || !category || !subject || !deadline) {
-    return res.status(400).json({ success: false, message: 'Title, category, subject, and deadline are required.' });
+  const title = (req.body.title || '').trim();
+  const category = req.body.category || req.body.stream || req.body.academic_stream || 'General Academic';
+  const subject = req.body.subject || req.body.stream || req.body.academic_stream || 'General';
+  const project_type = req.body.project_type || req.body.type || req.body.assignment_type || 'Assignment';
+  const deadline = req.body.deadline || req.body.due_date;
+  const description = req.body.description || req.body.requirements || '';
+  const academic_level = req.body.academic_level || 'Undergraduate';
+  const institution = req.body.institution || '';
+  const priority = req.body.priority || 'Medium';
+  const word_count = req.body.word_count || 2500;
+  const citation_style = req.body.citation_style || 'APA 7th';
+  const formatting = req.body.formatting || 'Standard 12pt';
+
+  if (!title) {
+    return res.status(400).json({ success: false, message: 'Assignment title is required.' });
+  }
+  if (!deadline) {
+    return res.status(400).json({ success: false, message: 'Due date is required.' });
   }
 
-  const randomNum = Math.floor(1000 + Math.random() * 9000);
-  const projectId = `PRJ-${randomNum}`;
+  const proceedWithProjectCreation = (resolvedClientId, resolvedClientName, newAuthToken = null) => {
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    const projectId = `PRJ-${randomNum}`;
 
-  // Estimate price calculation based on word count & deadline
-  const calculatedWordCount = parseInt(word_count) || 2500;
-  const estPrice = Math.max(50, Math.round((calculatedWordCount / 250) * 15));
+    const calculatedWordCount = parseInt(word_count) || 2500;
+    const estPrice = Math.max(50, Math.round((calculatedWordCount / 250) * 15));
 
-  db.run(
-    `INSERT INTO projects (
-      id, client_id, title, category, subject, academic_level, institution, project_type,
-      description, requirements, word_count, page_count, citation_style, formatting,
-      start_date, deadline, priority, status, progress_percent, total_amount, paid_amount,
-      payment_status, assigned_expert_id
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Submitted', 10, ?, 0, 'Pending', 1)`,
-    [
-      projectId, clientId, title, category, subject, academic_level || 'Undergraduate',
-      institution || '', project_type || 'Essay', description || '', requirements || '',
-      calculatedWordCount, parseInt(page_count) || Math.ceil(calculatedWordCount / 250),
-      citation_style || 'APA 7th', formatting || 'Standard 12pt', start_date || new Date().toISOString().split('T')[0],
-      deadline, priority || 'Medium', estPrice
-    ],
-    function (err) {
-      if (err) {
-        return res.status(500).json({ success: false, message: 'Failed to create project.' });
-      }
+    db.run(
+      `INSERT INTO projects (
+        id, client_id, title, category, subject, academic_level, institution, project_type,
+        description, requirements, word_count, page_count, citation_style, formatting,
+        start_date, deadline, priority, status, progress_percent, total_amount, paid_amount,
+        payment_status, assigned_expert_id
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Submitted', 10, ?, 0, 'Pending', 1)`,
+      [
+        projectId, resolvedClientId, title, category, subject, academic_level,
+        institution, project_type, description, req.body.requirements || '',
+        calculatedWordCount, parseInt(req.body.page_count) || Math.ceil(calculatedWordCount / 250),
+        citation_style, formatting, req.body.start_date || new Date().toISOString().split('T')[0],
+        deadline, priority, estPrice
+      ],
+      function (err) {
+        if (err) {
+          console.error('Project creation DB error:', err);
+          return res.status(500).json({ success: false, message: 'Failed to create project.' });
+        }
 
-      // Add timeline initial entries
-      db.run(`INSERT INTO project_timeline (project_id, status, title, description, responsible_party) VALUES (?, 'Submitted', 'Project Submitted', 'Client created project submission', 'Client')`, [projectId]);
-      db.run(`INSERT INTO project_timeline (project_id, status, title, description, responsible_party) VALUES (?, 'Reviewed', 'Requirements Under Review', 'Academic team assigned for verification', 'Support')`, [projectId]);
+        // Add timeline initial entries
+        db.run(`INSERT INTO project_timeline (project_id, status, title, description, responsible_party) VALUES (?, 'Submitted', 'Project Submitted', 'Client created project submission', 'Client')`, [projectId]);
+        db.run(`INSERT INTO project_timeline (project_id, status, title, description, responsible_party) VALUES (?, 'Reviewed', 'Requirements Under Review', 'Academic team assigned for verification', 'Support')`, [projectId]);
 
-      // Add default Quote
-      db.run(`INSERT INTO quotes (project_id, estimated_price, final_quote, service_fee, additional_charges, discount, total_amount, payment_deadline, quote_expiry, status, notes) VALUES (?, ?, ?, 5.00, 0, 10.00, ?, ?, ?, 'Pending', 'Initial quote generated automatically.')`,
-        [projectId, estPrice, estPrice, estPrice, deadline, deadline]);
+        // Add default Quote
+        db.run(`INSERT INTO quotes (project_id, estimated_price, final_quote, service_fee, additional_charges, discount, total_amount, payment_deadline, quote_expiry, status, notes) VALUES (?, ?, ?, 5.00, 0, 10.00, ?, ?, ?, 'Pending', 'Initial quote generated automatically.')`,
+          [projectId, estPrice, estPrice, estPrice, deadline, deadline]);
 
-      // Add Invoice
-      db.run(`INSERT INTO payments (invoice_number, project_id, client_id, amount, tax, discount, final_amount, status) VALUES (?, ?, ?, ?, 0, 10.00, ?, 'Pending')`,
-        [`INV-2026-${randomNum}`, projectId, clientId, estPrice, estPrice]);
+        // Add Invoice
+        db.run(`INSERT INTO payments (invoice_number, project_id, client_id, amount, tax, discount, final_amount, status) VALUES (?, ?, ?, ?, 0, 10.00, ?, 'Pending')`,
+          [`INV-2026-${randomNum}`, projectId, resolvedClientId, estPrice, estPrice]);
 
-      // Create conversation
-      db.run(`INSERT INTO conversations (project_id, client_id, expert_id) VALUES (?, ?, 1)`, [projectId, clientId]);
+        // Create conversation
+        db.run(`INSERT INTO conversations (project_id, client_id, expert_id) VALUES (?, ?, 1)`, [projectId, resolvedClientId]);
 
-      // Handle uploaded files
-      if (req.files && req.files.length > 0) {
-        const stmt = db.prepare(`INSERT INTO attachments (project_id, uploaded_by_id, uploaded_by_name, category, filename, original_name, file_size, file_type, file_path) VALUES (?, ?, ?, 'Client Files', ?, ?, ?, ?, ?)`);
-        req.files.forEach(f => {
-          stmt.run(projectId, clientId, req.user.full_name || 'Client', f.filename, f.originalname, f.size, f.mimetype, `uploads/${f.filename}`);
+        // Handle uploaded files
+        if (req.files && req.files.length > 0) {
+          const stmt = db.prepare(`INSERT INTO attachments (project_id, uploaded_by_id, uploaded_by_name, category, filename, original_name, file_size, file_type, file_path) VALUES (?, ?, ?, 'Client Files', ?, ?, ?, ?, ?)`);
+          req.files.forEach(f => {
+            stmt.run(projectId, resolvedClientId, resolvedClientName, f.filename, f.originalname, f.size, f.mimetype, `uploads/${f.filename}`);
+          });
+          stmt.finalize();
+        }
+
+        logAudit(projectId, resolvedClientId, 'PROJECT_CREATED', `Project ${projectId} created: ${title}`);
+        createNotification(resolvedClientId, projectId, 'Project Created Successfully', `Your project ${projectId} has been created and is under review.`, 'project');
+
+        return res.status(201).json({
+          success: true,
+          message: 'Assignment project created successfully!',
+          project_id: projectId,
+          token: newAuthToken
         });
-        stmt.finalize();
       }
+    );
+  };
 
-      logAudit(projectId, clientId, 'PROJECT_CREATED', `Project ${projectId} created: ${title}`);
-      createNotification(clientId, projectId, 'Project Created Successfully', `Your project ${projectId} has been created and is under review.`, 'project');
-
-      return res.status(201).json({
-        success: true,
-        message: 'Project created successfully!',
-        project_id: projectId
-      });
-    }
-  );
+  if (clientId) {
+    proceedWithProjectCreation(clientId, clientName);
+  } else if (clientEmail) {
+    db.get('SELECT * FROM users WHERE email = ?', [clientEmail.toLowerCase()], async (err, existingUser) => {
+      if (existingUser) {
+        proceedWithProjectCreation(existingUser.id, existingUser.full_name);
+      } else {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash('Password123!', salt);
+        db.run(
+          `INSERT INTO users (full_name, email, password_hash, phone, role, institution, academic_level, country)
+           VALUES (?, ?, ?, ?, 'client', ?, ?, 'Nepal')`,
+          [clientName, clientEmail.toLowerCase(), hashedPassword, req.body.phone || '', institution, academic_level],
+          function (err2) {
+            if (err2) {
+              return proceedWithProjectCreation(1, clientName);
+            }
+            const newUserId = this.lastID;
+            const userPayload = { id: newUserId, email: clientEmail.toLowerCase(), full_name: clientName, role: 'client' };
+            const token = jwt.sign(userPayload, JWT_SECRET, { expiresIn: '7d' });
+            proceedWithProjectCreation(newUserId, clientName, token);
+          }
+        );
+      }
+    });
+  } else {
+    // Default to demo user
+    proceedWithProjectCreation(1, 'Gareema Sharma');
+  }
 });
 
 // GET /api/projects/:id (Single Project Workspace)

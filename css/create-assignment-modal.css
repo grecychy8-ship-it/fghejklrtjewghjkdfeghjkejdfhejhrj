@@ -1,0 +1,445 @@
+/* ==========================================================================
+   ASSIGNMENT DAI - CREATE NEW ASSIGNMENT MODAL STYLESHEET
+   Clean, modern, responsive dialog matching user specifications
+   ========================================================================== */
+
+/*
+   Site header uses z-index: 99999 (index.html). Bootstrap modals default to
+   ~1050, so the nav was drawing on top and clipping the modal title.
+*/
+body.modal-open .modal-backdrop {
+    z-index: 100000 !important;
+}
+
+#createAssignmentModal {
+    z-index: 100010 !important;
+    padding: 1rem !important;
+}
+
+#createAssignmentModal.show {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+#createAssignmentModal .modal-dialog {
+    max-width: 750px;
+    width: calc(100% - 2rem);
+    margin: 0 auto;
+    min-height: auto !important;
+    display: block !important;
+    flex: 0 0 auto;
+}
+
+#createAssignmentModal.modal.fade .modal-dialog {
+    transform: translate(0, -24px);
+}
+
+#createAssignmentModal.modal.show .modal-dialog {
+    transform: none;
+}
+
+#createAssignmentModal .modal-content {
+    border-radius: 20px;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: 0 25px 60px -10px rgba(15, 23, 42, 0.35);
+    background: #ffffff;
+    overflow: hidden;
+}
+
+/* MODAL HEADER */
+.create-assign-header {
+    background: #ffffff;
+    border-bottom: 1px solid #f1f5f9;
+    padding: 20px 20px 16px 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    overflow: visible;
+}
+
+.create-assign-header-content h3 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.4px;
+    line-height: 1.35;
+}
+
+.create-assign-header-content p {
+    font-size: 0.88rem;
+    color: #64748b;
+    margin: 0;
+}
+
+.create-assign-close-btn {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 14px;
+}
+
+.create-assign-close-btn:hover {
+    background: #fee2e2;
+    color: #dc2626;
+    border-color: #fca5a5;
+    transform: rotate(90deg);
+}
+
+/* MODAL BODY */
+.create-assign-body {
+    padding: 14px 20px;
+    max-height: calc(88vh - 140px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+.create-assign-body::-webkit-scrollbar {
+    width: 6px;
+}
+
+.create-assign-body::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+/* FORM GROUP */
+.assign-form-group {
+    margin-bottom: 12px;
+}
+
+.assign-form-label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 6px;
+}
+
+.assign-form-label .required-star {
+    color: #ef4444;
+    margin-left: 2px;
+}
+
+/* INPUTS & SELECTS */
+.assign-form-input,
+.assign-form-select,
+.assign-form-textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 0.84rem;
+    color: #0f172a;
+    background-color: #ffffff;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    line-height: 1.4;
+}
+
+.assign-form-input:focus,
+.assign-form-select:focus,
+.assign-form-textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.assign-form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 38px;
+    cursor: pointer;
+}
+
+.assign-form-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* CHARACTER COUNTER ROW */
+.assign-counter-row {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+}
+
+.assign-char-counter {
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+/* GRID ROW */
+.assign-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+@media (max-width: 576px) {
+    .assign-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* SUPPORTING DOCUMENTS DROPZONE */
+.assign-dropzone {
+    border: 2px dashed #cbd5e1;
+    border-radius: 14px;
+    padding: 18px 14px;
+    text-align: center;
+    background-color: #f8fafc;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.assign-dropzone:hover,
+.assign-dropzone.drag-active {
+    border-color: #2563eb;
+    background-color: #eff6ff;
+    transform: translateY(-1px);
+}
+
+.assign-dropzone-icon {
+    font-size: 1.8rem;
+    color: #3b82f6;
+    margin-bottom: 8px;
+}
+
+.assign-dropzone-title {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 4px 0;
+}
+
+.assign-dropzone-desc {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* UPLOADED FILES LIST */
+.assign-files-list {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.assign-file-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 14px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 0.84rem;
+}
+
+.assign-file-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    flex: 1;
+}
+
+.assign-file-name {
+    font-weight: 600;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.assign-file-size {
+    font-size: 0.74rem;
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.assign-file-remove-btn {
+    background: transparent;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 4px 8px;
+    font-size: 0.88rem;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+}
+
+.assign-file-remove-btn:hover {
+    background: #fee2e2;
+}
+
+/* USER CONTACT / LOGGED IN BANNER */
+.assign-auth-banner {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.assign-auth-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: #1e40af;
+    font-weight: 600;
+}
+
+/* MODAL FOOTER */
+.create-assign-footer {
+    background: #f8fafc;
+    border-top: 1px solid #f1f5f9;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.create-assign-footer-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.create-assign-footer-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-assign-cancel {
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    color: #475569;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-assign-cancel:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.btn-assign-reset {
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    color: #475569;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-assign-reset:hover {
+    background: #f1f5f9;
+    color: #0f172a;
+}
+
+.btn-assign-create {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    border: none;
+    color: #ffffff;
+    padding: 11px 26px;
+    border-radius: 12px;
+    font-size: 0.92rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    transition: all 0.2s ease;
+}
+
+.btn-assign-create:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
+}
+
+.btn-assign-create:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* SUCCESS CARD IN MODAL */
+.assign-success-card {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.assign-success-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #ecfdf5;
+    color: #10b981;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
+}
+
+.assign-success-title {
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 8px;
+}
+
+.assign-success-desc {
+    font-size: 0.92rem;
+    color: #64748b;
+    max-width: 440px;
+    margin: 0 auto 24px auto;
+    line-height: 1.55;
+}
+
+.assign-ref-badge {
+    display: inline-block;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1d4ed8;
+    font-weight: 800;
+    font-size: 1.1rem;
+    padding: 6px 18px;
+    border-radius: 30px;
+    margin-bottom: 24px;
+}

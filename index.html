@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="css/owl.carousel.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/mobile-responsive.css">
+    <link rel="stylesheet" href="css/auth-modal.css">
+    <link rel="stylesheet" href="css/create-assignment-modal.css">
     <style>
         /* OVERRIDE HEADER STYLES FOR PERFECT ALIGNMENT & ZERO OVERLAPS */
         .saas_two_main_header {
@@ -72,17 +74,32 @@
         .header-nav-link:hover, .header-nav-link.active {
             color: #2b56f5 !important;
         }
-        .btn-header-login {
-            color: #1e293b !important;
-            font-weight: 700 !important;
-            font-size: 0.95rem !important;
-            text-decoration: none !important;
-            padding: 8px 18px !important;
-            margin-right: 8px !important;
-            transition: color 0.2s ease;
-        }
-        .btn-header-login:hover {
+        .btn-header-signup, .btn-header-login {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            padding: 9px 22px !important;
+            border: 1.5px solid #2b56f5 !important;
+            background-color: #ffffff !important;
             color: #2b56f5 !important;
+            border-radius: 30px !important;
+            font-weight: 700 !important;
+            font-size: 0.92rem !important;
+            text-decoration: none !important;
+            margin-right: 12px !important;
+            transition: all 0.25s ease !important;
+            box-shadow: 0 2px 8px rgba(43, 86, 245, 0.08) !important;
+            cursor: pointer !important;
+            line-height: 1.2 !important;
+        }
+        .btn-header-signup:hover, .btn-header-login:hover {
+            background-color: #2b56f5 !important;
+            color: #ffffff !important;
+            border-color: #2b56f5 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(43, 86, 245, 0.25) !important;
+            text-decoration: none !important;
         }
         /* Disable old template float overrides */
         .s_main_menu, .main_menu_list, .s2-main-navigation {
@@ -1122,7 +1139,9 @@
 
                 <!-- Action Buttons -->
                 <div class="d-none d-lg-flex align-items-center">
-                    <a href="dashboard.html" class="btn-header-login">Login</a>
+                    <a href="signup.html" class="btn-header-signup" id="headerSignUpBtn">
+                        Sign Up
+                    </a>
                     <a href="dashboard.html#/submit-project" class="btn-blue-primary" style="padding: 10px 24px; font-size: 0.9rem;">Submit Project</a>
                 </div>
 
@@ -1230,8 +1249,8 @@
                         <i class="fas fa-paper-plane mr-2"></i> Submit Project
                         <i class="fas fa-arrow-right ml-auto"></i>
                     </a>
-                    <a href="dashboard.html" class="aw-btn-secondary-action">
-                        <i class="fas fa-user-circle mr-2"></i> Login / Dashboard
+                    <a href="signup.html" class="aw-btn-secondary-action">
+                        <i class="fas fa-user-plus mr-2"></i> Sign Up
                     </a>
                 </div>
 
@@ -1910,6 +1929,7 @@
                                     <li><a href="#s2-faq"> FAQ</a></li>
                                     <li><a href="#saas_two_about"> About Us</a></li>
                                     <li><a href="contact.html"> Contact Us</a></li>
+                                    <li><a href="signup.html"> Student Sign Up / Login</a></li>
                                     <li><a href="dashboard.html"> Client Dashboard</a></li>
                                     <li><a href="dashboard.html#/submit-project"> Submit Project</a></li>
                                     <li><a href="admin.html"><i class="fas fa-user-shield text-muted mr-1"></i> Admin Portal</a></li>
@@ -1943,6 +1963,388 @@
         © 2026 <strong>Assignment Dai</strong>. All rights reserved. Premium Academic Assistance Platform.
     </div>
 
+    <!-- ========================================================
+         MODAL 1: SITE AUTHENTICATION (STUDENT / REGISTER / ADMIN)
+         ======================================================== -->
+    <div class="modal fade" id="siteAuthModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="auth-modal-header">
+                    <button type="button" class="auth-modal-close-btn" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <img src="images/logo1.png" alt="Assignment Dai" class="auth-modal-brand-logo">
+                    <h3 class="auth-modal-title">Welcome to Assignment Dai</h3>
+                    <p class="auth-modal-subtitle">Access your academic assignments, quotes, and expert support</p>
+
+                    <!-- Auth Nav Tabs -->
+                    <div class="auth-nav-tabs">
+                        <button type="button" class="auth-nav-tab-btn active" id="tabBtn_student" data-tab="student">
+                            <i class="fas fa-user-graduate mr-1"></i> Student Login
+                        </button>
+                        <button type="button" class="auth-nav-tab-btn" id="tabBtn_register" data-tab="register">
+                            <i class="fas fa-user-plus mr-1"></i> Register Account
+                        </button>
+                    </div>
+                </div>
+
+                <div class="auth-modal-body">
+                    <!-- 1. STUDENT LOGIN PANE -->
+                    <div class="auth-tab-pane" id="tabPane_student">
+                        <div id="studentLoginAlert" class="auth-alert-box"></div>
+
+                        <!-- Demo Chips -->
+                        <div class="auth-demo-chips">
+                            <div class="auth-demo-chip-title">
+                                <i class="fas fa-magic"></i> Quick Demo Access:
+                            </div>
+                            <button type="button" class="auth-demo-pill" onclick="AssignmentDaiAuth.fillDemo('student')">
+                                <i class="fas fa-bolt mr-1"></i> 1-Click Demo Login (student@demo.com)
+                            </button>
+                        </div>
+
+                        <form id="formStudentLogin">
+                            <div class="auth-input-group">
+                                <label class="auth-input-label">Student Email</label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-envelope auth-input-icon"></i>
+                                    <input type="email" id="studentEmail" class="auth-input-field" placeholder="student@demo.com" required>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-group">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label class="auth-input-label mb-0">Password</label>
+                                    <a href="https://wa.me/?text=Hello%20Assignment%20Dai%2C%20I%20need%20help%20logging%20in" target="_blank" class="small text-muted font-weight-bold">Forgot?</a>
+                                </div>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-lock auth-input-icon"></i>
+                                    <input type="password" id="studentPassword" class="auth-input-field" placeholder="••••••••" required>
+                                    <button type="button" class="auth-toggle-pwd-btn" onclick="AssignmentDaiAuth.togglePassword('studentPassword', this)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="btnSubmitStudentLogin" class="auth-submit-btn mt-3">
+                                <i class="fas fa-sign-in-alt mr-1"></i> Sign In to Student Dashboard
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-3">
+                            <span class="small text-muted">Don't have an account yet? </span>
+                            <a href="javascript:void(0)" onclick="AssignmentDaiAuth.switchTab('register')" class="small font-weight-bold text-primary">Register Free</a>
+                        </div>
+                        <div class="text-center mt-2">
+                            <a href="dashboard.html" class="small text-secondary font-weight-bold">
+                                <i class="fas fa-th-large mr-1"></i> Open Dashboard Directly &rarr;
+                            </a>
+                        </div>
+                        <div class="text-center mt-3 pt-2 border-top">
+                            <a href="javascript:void(0)" onclick="AssignmentDaiAuth.switchTab('admin')" class="small text-muted">
+                                <i class="fas fa-shield-alt mr-1"></i> Staff / Operations Console
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- 2. REGISTER PANE -->
+                    <div class="auth-tab-pane" id="tabPane_register" style="display: none;">
+                        <div id="registerAlert" class="auth-alert-box"></div>
+
+                        <form id="formRegister">
+                            <div class="auth-input-group">
+                                <label class="auth-input-label">Full Name *</label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-user auth-input-icon"></i>
+                                    <input type="text" id="regFullName" class="auth-input-field" placeholder="e.g. Rohan Adhikari" required>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-group">
+                                <label class="auth-input-label">Email Address *</label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-envelope auth-input-icon"></i>
+                                    <input type="email" id="regEmail" class="auth-input-field" placeholder="student@university.edu" required>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-group">
+                                <label class="auth-input-label">Create Password *</label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-lock auth-input-icon"></i>
+                                    <input type="password" id="regPassword" class="auth-input-field" placeholder="Min 6 characters" required>
+                                    <button type="button" class="auth-toggle-pwd-btn" onclick="AssignmentDaiAuth.togglePassword('regPassword', this)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6 pr-1">
+                                    <div class="auth-input-group">
+                                        <label class="auth-input-label">WhatsApp / Phone</label>
+                                        <input type="text" id="regPhone" class="auth-input-field px-3" placeholder="+977 980-0000000">
+                                    </div>
+                                </div>
+                                <div class="col-6 pl-1">
+                                    <div class="auth-input-group">
+                                        <label class="auth-input-label">Academic Level</label>
+                                        <select id="regAcademicLevel" class="auth-input-field px-3" style="cursor: pointer;">
+                                            <option value="Undergraduate">Undergraduate</option>
+                                            <option value="Postgraduate" selected>Postgraduate</option>
+                                            <option value="PhD">PhD / Doctorate</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-group mb-3">
+                                <label class="auth-input-label">University / College</label>
+                                <input type="text" id="regInstitution" class="auth-input-field px-3" placeholder="e.g. Tribhuvan University">
+                            </div>
+
+                            <button type="submit" id="btnSubmitRegister" class="auth-submit-btn">
+                                <i class="fas fa-user-plus mr-1"></i> Create Student Account
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-3">
+                            <span class="small text-muted">Already registered? </span>
+                            <a href="javascript:void(0)" onclick="AssignmentDaiAuth.switchTab('student')" class="small font-weight-bold text-primary">Sign In</a>
+                        </div>
+                    </div>
+
+                    <!-- 3. ADMIN PORTAL PANE -->
+                    <div class="auth-tab-pane" id="tabPane_admin" style="display: none;">
+                        <div id="adminLoginAlert" class="auth-alert-box"></div>
+
+                        <div class="auth-demo-chips">
+                            <div class="auth-demo-chip-title">
+                                <i class="fas fa-shield-alt"></i> Default Admin Credentials:
+                            </div>
+                            <button type="button" class="auth-demo-pill" onclick="AssignmentDaiAuth.fillDemo('admin')">
+                                Click to Auto-fill Super Admin
+                            </button>
+                        </div>
+
+                        <form id="formAdminLogin">
+                            <div class="auth-input-group">
+                                <label class="auth-input-label">Administrator Email</label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-user-shield auth-input-icon"></i>
+                                    <input type="email" id="siteAdminEmail" class="auth-input-field" placeholder="admin@assignmentdai.com" required>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-group">
+                                <label class="auth-input-label">Administrator Password</label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-key auth-input-icon"></i>
+                                    <input type="password" id="siteAdminPassword" class="auth-input-field" placeholder="••••••••" required>
+                                    <button type="button" class="auth-toggle-pwd-btn" onclick="AssignmentDaiAuth.togglePassword('siteAdminPassword', this)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="btnSubmitAdminLogin" class="auth-submit-btn mt-3" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+                                <i class="fas fa-shield-alt mr-1"></i> Sign In to Operations Console
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-3">
+                            <a href="javascript:void(0)" onclick="AssignmentDaiAuth.switchTab('student')" class="small font-weight-bold text-primary">
+                                <i class="fas fa-arrow-left mr-1"></i> Back to Student Login
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================
+         MODAL 2: CREATE NEW ASSIGNMENT (SUBMIT PROJECT)
+         ======================================================== -->
+    <div class="modal fade" id="createAssignmentModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <!-- Header -->
+                <div class="create-assign-header">
+                    <div class="create-assign-header-content">
+                        <h3>Create New Assignment</h3>
+                        <p>Submit your assignment for expert help</p>
+                    </div>
+                    <button type="button" class="create-assign-close-btn" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Form View -->
+                <div id="createAssignFormView">
+                    <form id="createAssignmentForm">
+                        <div class="create-assign-body">
+                            <div id="assignAlertBox" style="display: none;"></div>
+
+                            <!-- User info banner if logged in -->
+                            <div id="assignAuthBanner" class="assign-auth-banner" style="display: none;">
+                                <div class="assign-auth-meta">
+                                    <i class="fas fa-check-circle text-success" style="font-size: 1.1rem;"></i>
+                                    <span>Submitting as: <strong id="assignAuthUserName">Student</strong> (<span id="assignAuthUserEmail"></span>)</span>
+                                </div>
+                                <span class="badge badge-light border text-muted">Verified</span>
+                            </div>
+
+                            <!-- Assignment Title -->
+                            <div class="assign-form-group">
+                                <label class="assign-form-label" for="assignTitle">
+                                    Assignment Title <span class="required-star">*</span>
+                                </label>
+                                <input type="text" id="assignTitle" class="assign-form-input" placeholder="Enter assignment title" maxlength="100" required>
+                                <div class="assign-counter-row">
+                                    <span class="assign-char-counter" id="assignTitleCounter">0/100</span>
+                                </div>
+                            </div>
+
+                            <!-- Type & Stream Grid -->
+                            <div class="assign-form-row">
+                                <!-- Assignment Type -->
+                                <div class="assign-form-group">
+                                    <label class="assign-form-label" for="assignType">
+                                        Assignment Type <span class="required-star">*</span>
+                                    </label>
+                                    <select id="assignType" class="assign-form-select" required>
+                                        <option value="" disabled selected>Select type</option>
+                                        <option value="Essay">Essay</option>
+                                        <option value="Research Paper">Research Paper</option>
+                                        <option value="Dissertation / Thesis">Dissertation / Thesis</option>
+                                        <option value="Case Study">Case Study</option>
+                                        <option value="Coursework / Homework">Coursework / Homework</option>
+                                        <option value="Programming Project">Programming Project</option>
+                                        <option value="Data Science Project">Data Science Project</option>
+                                        <option value="Business Report">Business Report</option>
+                                        <option value="Literature Review">Literature Review</option>
+                                        <option value="Lab Report">Lab Report</option>
+                                        <option value="Term Paper">Term Paper</option>
+                                        <option value="Other">Other Academic Writing</option>
+                                    </select>
+                                </div>
+
+                                <!-- Academic Stream -->
+                                <div class="assign-form-group">
+                                    <label class="assign-form-label" for="assignStream">
+                                        Academic Stream <span class="required-star">*</span>
+                                    </label>
+                                    <select id="assignStream" class="assign-form-select" required>
+                                        <option value="" disabled selected>Select stream</option>
+                                        <option value="Computer Science & IT">Computer Science & IT</option>
+                                        <option value="Data Science & AI">Data Science & AI</option>
+                                        <option value="Business & Management">Business & Management</option>
+                                        <option value="Economics & Finance">Economics & Finance</option>
+                                        <option value="Engineering">Engineering & Technology</option>
+                                        <option value="Health Sciences & Nursing">Health Sciences & Nursing</option>
+                                        <option value="Law & Legal Studies">Law & Legal Studies</option>
+                                        <option value="Humanities & Social Sciences">Humanities & Social Sciences</option>
+                                        <option value="Mathematics & Statistics">Mathematics & Statistics</option>
+                                        <option value="Natural Sciences">Natural Sciences</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Due Date -->
+                            <div class="assign-form-group">
+                                <label class="assign-form-label" for="assignDueDate">
+                                    Due Date <span class="required-star">*</span>
+                                </label>
+                                <input type="date" id="assignDueDate" class="assign-form-input" placeholder="dd/mm/yyyy" required>
+                            </div>
+
+                            <!-- Assignment Description -->
+                            <div class="assign-form-group">
+                                <label class="assign-form-label" for="assignDescription">
+                                    Assignment Description <span class="required-star">*</span>
+                                </label>
+                                <textarea id="assignDescription" class="assign-form-textarea" placeholder="Provide detailed requirements, instructions, and any specific guidelines..." maxlength="2000" rows="4" required></textarea>
+                                <div class="assign-counter-row">
+                                    <span class="assign-char-counter" id="assignDescCounter">0/2000</span>
+                                </div>
+                            </div>
+
+                            <!-- Supporting Documents Dropzone -->
+                            <div class="assign-form-group">
+                                <label class="assign-form-label">Supporting Documents</label>
+                                <div class="assign-dropzone" id="assignDropzone">
+                                    <i class="fas fa-cloud-upload-alt assign-dropzone-icon"></i>
+                                    <p class="assign-dropzone-title">Drag & drop files here or click to browse</p>
+                                    <p class="assign-dropzone-desc">Supported formats: PDF, DOC, DOCX, PPT, XLS, ZIP, PNG, JPG (Max 50MB)</p>
+                                    <input type="file" id="assignFileInput" multiple style="display: none;" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.png,.jpg,.jpeg">
+                                </div>
+                                <div class="assign-files-list" id="assignFilesList"></div>
+                            </div>
+
+                            <!-- Guest Contact Info (if not logged in) -->
+                            <div id="assignGuestFields">
+                                <hr class="my-3">
+                                <div class="assign-form-label mb-2">
+                                    <i class="fas fa-id-card text-primary mr-1"></i> Your Contact Details (For Project Delivery & Quotes)
+                                </div>
+                                <div class="assign-form-row">
+                                    <div class="assign-form-group mb-2">
+                                        <input type="text" id="assignGuestName" class="assign-form-input" placeholder="Your Full Name *">
+                                    </div>
+                                    <div class="assign-form-group mb-2">
+                                        <input type="email" id="assignGuestEmail" class="assign-form-input" placeholder="Your Email Address *">
+                                    </div>
+                                </div>
+                                <div class="assign-form-group mb-0">
+                                    <input type="text" id="assignGuestPhone" class="assign-form-input" placeholder="WhatsApp / Phone Number (Optional)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="create-assign-footer">
+                            <div class="create-assign-footer-left">
+                                <button type="button" class="btn-assign-cancel" data-dismiss="modal">Cancel</button>
+                            </div>
+                            <div class="create-assign-footer-right">
+                                <button type="button" id="btnAssignReset" class="btn-assign-reset">Reset</button>
+                                <button type="submit" id="btnAssignSubmit" class="btn-assign-create">
+                                    <i class="fas fa-paper-plane mr-1"></i> Create Assignment
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Success View -->
+                <div id="createAssignSuccessView" style="display: none;">
+                    <div class="assign-success-card">
+                        <div class="assign-success-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h4 class="assign-success-title">Assignment Submitted!</h4>
+                        <p class="assign-success-desc">
+                            Your assignment <span id="successProjectTitle" class="font-weight-bold text-dark"></span> has been received. Our expert scholars have been notified to evaluate your requirements and generate your quotation.
+                        </p>
+                        <div>
+                            <span class="small text-muted d-block mb-1">Your Tracking Reference ID:</span>
+                            <div class="assign-ref-badge" id="successProjectIdBadge">PRJ-0000</div>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 flex-wrap mt-3">
+                            <a href="dashboard.html" class="btn btn-primary rounded-pill px-4 font-weight-bold">
+                                <i class="fas fa-th-large mr-1"></i> View in Dashboard
+                            </a>
+                            <button type="button" class="btn btn-outline-secondary rounded-pill px-4 font-weight-bold" data-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- JS library -->
     <script src="js/jquery.js"></script>
     <script src="js/popper.min.js"></script>
@@ -1953,5 +2355,7 @@
     <script src="js/wow.min.js"></script>
     <script src="js/script.js"></script>
     <script src="js/mobile-drawer.js"></script>
+    <script src="js/auth-modal.js"></script>
+    <script src="js/create-assignment-modal.js"></script>
 </body>
 </html>

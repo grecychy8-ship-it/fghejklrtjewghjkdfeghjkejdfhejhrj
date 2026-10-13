@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sign Up & Login - Assignment Dai</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="images/fv.png" type="image/x-icon">
+  <link rel="icon" href="images/fv.png" type="image/x-icon">
+
+  <!-- Google Fonts: Poppins & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Dedicated Signup Stylesheet (Project Theme with Animations) -->
+  <link rel="stylesheet" href="css/signup-new.css">
+</head>
+
+<body class="signup-page-body">
+
+  <div class="signup-page-shell">
+    <a href="index.html" class="signup-home-link" aria-label="Back to home">
+      <i class="fas fa-arrow-left" aria-hidden="true"></i>
+      <span>Back to Home</span>
+    </a>
+
+  <!-- MAIN AUTH CONTAINER -->
+  <main class="signup-main-container">
+    <div class="signup-auth-card">
+
+      <!-- LEFT COLUMN: AUTHENTICATION FORMS -->
+      <div class="auth-form-column">
+        <a href="index.html" class="auth-form-brand">
+          <img src="images/logo1.png" alt="" class="auth-form-brand-logo" width="36" height="36">
+          <span class="auth-form-brand-name">Assignment Dai</span>
+        </a>
+
+        <!-- Message Banner for Errors or Success -->
+        <div id="authAlertBox" class="auth-msg-banner">
+          <i id="authAlertIcon" class="fas fa-exclamation-circle"></i>
+          <span id="authAlertText"></span>
+        </div>
+
+        <!-- ==============================================
+             1. SIGN UP FORM VIEW (Default)
+             ============================================== -->
+        <div id="signupFormView">
+          <h1 class="auth-card-title">Create your account</h1>
+          <p class="auth-card-subtitle">Sign up for your Assignment Dai account</p>
+
+          <form id="signupForm" autocomplete="on">
+            <!-- Full Name -->
+            <div class="auth-field-group">
+              <div class="auth-field-label-row">
+                <label for="regFullName" class="auth-field-label">Full Name</label>
+              </div>
+              <div class="auth-input-container">
+                <input type="text" id="regFullName" class="auth-text-input" placeholder="Enter your full name" required>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="auth-field-group">
+              <div class="auth-field-label-row">
+                <label for="regEmail" class="auth-field-label">Email</label>
+              </div>
+              <div class="auth-input-container">
+                <input type="email" id="regEmail" class="auth-text-input" placeholder="Enter your email" required>
+              </div>
+            </div>
+
+            <!-- WhatsApp / Phone -->
+            <div class="auth-field-group">
+              <div class="auth-field-label-row">
+                <label for="regPhone" class="auth-field-label">WhatsApp / Phone</label>
+              </div>
+              <div class="auth-input-container">
+                <input type="tel" id="regPhone" class="auth-text-input" placeholder="Enter your phone number">
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="auth-field-group">
+              <div class="auth-field-label-row">
+                <label for="regPassword" class="auth-field-label">Password</label>
+              </div>
+              <div class="auth-input-container">
+                <input type="password" id="regPassword" class="auth-text-input" placeholder="Create a strong password (min 6 chars)" required>
+                <button type="button" class="auth-pwd-toggle-btn" onclick="togglePasswordVisibility('regPassword', this)" aria-label="Toggle password visibility">
+                  <i class="far fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Submit Sign Up Button -->
+            <button type="submit" id="btnSubmitSignup" class="btn-auth-primary">
+              <span>Sign Up</span>
+            </button>
+          </form>
+
+          <!-- OR DIVIDER -->
+          <div class="auth-or-divider">
+            <span>OR</span>
+          </div>
+
+          <!-- GOOGLE SOCIAL BUTTON -->
+          <button type="button" class="btn-auth-google" onclick="handleGoogleAuth()">
+            <svg class="google-icon-svg" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+            </svg>
+            <span>Continue with Google</span>
+          </button>
+
+          <!-- SWITCH TO LOGIN -->
+          <div class="auth-switch-row">
+            <span>Already have an account?</span>
+            <a href="javascript:void(0)" class="auth-switch-link" onclick="switchAuthMode('login')">Log in</a>
+          </div>
+        </div>
+
+        <!-- ==============================================
+             2. LOGIN FORM VIEW
+             ============================================== -->
+        <div id="loginFormView" style="display: none;">
+          <h1 class="auth-card-title">Welcome back</h1>
+          <p class="auth-card-subtitle">Login to your Assignment Dai account</p>
+
+          <form id="loginForm" autocomplete="on">
+            <!-- Email -->
+            <div class="auth-field-group">
+              <div class="auth-field-label-row">
+                <label for="loginEmail" class="auth-field-label">Email</label>
+              </div>
+              <div class="auth-input-container">
+                <input type="email" id="loginEmail" class="auth-text-input" placeholder="Enter your email" required>
+              </div>
+            </div>
+
+            <!-- Password -->
+            <div class="auth-field-group">
+              <div class="auth-field-label-row">
+                <label for="loginPassword" class="auth-field-label">Password</label>
+                <div>
+                  <a href="https://wa.me/?text=Hello%20Assignment%20Dai%2C%20I%20forgot%20my%20password" target="_blank" class="auth-field-link">Forgot your password?</a>
+                </div>
+              </div>
+              <div class="auth-input-container">
+                <input type="password" id="loginPassword" class="auth-text-input" placeholder="Enter your password" required>
+                <button type="button" class="auth-pwd-toggle-btn" onclick="togglePasswordVisibility('loginPassword', this)" aria-label="Toggle password visibility">
+                  <i class="far fa-eye"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Submit Login Button -->
+            <button type="submit" id="btnSubmitLogin" class="btn-auth-primary">
+              <span>Login</span>
+            </button>
+          </form>
+
+          <!-- OR DIVIDER -->
+          <div class="auth-or-divider">
+            <span>OR</span>
+          </div>
+
+          <!-- GOOGLE SOCIAL BUTTON -->
+          <button type="button" class="btn-auth-google" onclick="handleGoogleAuth()">
+            <svg class="google-icon-svg" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/>
+              <path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.33 24 12 24z"/>
+              <path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.99 0 12s.45 3.82 1.25 5.42l4.03-3.15z"/>
+              <path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/>
+            </svg>
+            <span>Login with Google</span>
+          </button>
+
+          <!-- Quick 1-Click Demo Shortcut -->
+          <div class="auth-demo-shortcut">
+            <span><i class="fas fa-bolt text-warning mr-1"></i> Demo: <code>student@demo.com</code></span>
+            <button type="button" class="auth-demo-btn" onclick="fillDemoStudent()">Auto-fill</button>
+          </div>
+
+          <!-- SWITCH TO SIGN UP -->
+          <div class="auth-switch-row">
+            <span>Don't have an account?</span>
+            <a href="javascript:void(0)" class="auth-switch-link" onclick="switchAuthMode('signup')">Sign up</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: BRAND & VALUE PROPOSITIONS -->
+      <div class="auth-benefits-column">
+        <!-- Illustration from images folder -->
+        <div class="benefits-illustration-box">
+          <img src="images/why choose us.png" alt="Why Choose Assignment Dai" class="benefits-img">
+        </div>
+
+        <h2 class="benefits-title">Why Choose Assignment Dai?</h2>
+
+        <div class="benefits-list">
+          <!-- 1. Expert Academic Support -->
+          <div class="benefit-item">
+            <div class="benefit-icon-badge">
+              <i class="fas fa-book-open"></i>
+            </div>
+            <div class="benefit-content">
+              <h3 class="benefit-heading">Expert Academic Support</h3>
+              <p class="benefit-desc">Qualified writers and domain scholars across 60+ university disciplines</p>
+            </div>
+          </div>
+
+          <!-- 2. On-time Delivery -->
+          <div class="benefit-item">
+            <div class="benefit-icon-badge">
+              <i class="far fa-clock"></i>
+            </div>
+            <div class="benefit-content">
+              <h3 class="benefit-heading">On-time Delivery</h3>
+              <p class="benefit-desc">Never miss a deadline again with our strict punctuality guarantee</p>
+            </div>
+          </div>
+
+          <!-- 3. 100% Original Work -->
+          <div class="benefit-item">
+            <div class="benefit-icon-badge">
+              <i class="far fa-thumbs-up"></i>
+            </div>
+            <div class="benefit-content">
+              <h3 class="benefit-heading">100% Original Work</h3>
+              <p class="benefit-desc">Plagiarism-free custom assignments with complimentary Turnitin report</p>
+            </div>
+          </div>
+
+          <!-- 4. Secure & Confidential -->
+          <div class="benefit-item">
+            <div class="benefit-icon-badge">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="benefit-content">
+              <h3 class="benefit-heading">Secure & Confidential</h3>
+              <p class="benefit-desc">Your personal information, assignments, and payments stay 100% private</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- LEGAL FOOTER -->
+  <footer class="signup-legal-footer">
+    By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+  </footer>
+
+  </div>
+
+  <!-- CONTROLLER SCRIPT -->
+  <script>
+    // Mode Switcher (signup vs login)
+    function switchAuthMode(mode) {
+      hideAlert();
+      const signupView = document.getElementById('signupFormView');
+      const loginView = document.getElementById('loginFormView');
+
+      if (mode === 'login') {
+        signupView.style.display = 'none';
+        loginView.style.display = 'block';
+        window.location.hash = 'login';
+        document.title = 'Login - Assignment Dai';
+      } else {
+        loginView.style.display = 'none';
+        signupView.style.display = 'block';
+        window.location.hash = 'signup';
+        document.title = 'Sign Up - Assignment Dai';
+      }
+    }
+
+    // Toggle Password Visibility
+    function togglePasswordVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      const isPwd = input.type === 'password';
+      input.type = isPwd ? 'text' : 'password';
+      btn.innerHTML = isPwd ? '<i class="far fa-eye-slash"></i>' : '<i class="far fa-eye"></i>';
+    }
+
+    // Show Alert Banner
+    function showAlert(msg, isSuccess = false) {
+      const box = document.getElementById('authAlertBox');
+      const text = document.getElementById('authAlertText');
+      const icon = document.getElementById('authAlertIcon');
+
+      box.className = `auth-msg-banner ${isSuccess ? 'success' : 'error'}`;
+      icon.className = `fas fa-${isSuccess ? 'check-circle' : 'exclamation-circle'}`;
+      text.textContent = msg;
+      box.style.display = 'flex';
+      box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideAlert() {
+      const box = document.getElementById('authAlertBox');
+      if (box) box.style.display = 'none';
+    }
+
+    // Quick Auto-Fill Demo Student
+    function fillDemoStudent() {
+      document.getElementById('loginEmail').value = 'student@demo.com';
+      document.getElementById('loginPassword').value = 'Password123!';
+      hideAlert();
+    }
+
+    // Google Sign-in Mock Handler
+    function handleGoogleAuth() {
+      showAlert('Google OAuth initialising... Redirecting to secure verification.', true);
+      setTimeout(() => {
+        // Quick student mock session
+        const demoUser = {
+          id: 1,
+          full_name: 'Gareema Sharma',
+          email: 'gareema.sharma@gmail.com',
+          role: 'student'
+        };
+        localStorage.setItem('aw_token', 'demo-google-token-' + Date.now());
+        localStorage.setItem('aw_user', JSON.stringify(demoUser));
+        window.location.href = 'dashboard.html';
+      }, 700);
+    }
+
+    // 1. SIGN UP FORM SUBMISSION
+    document.getElementById('signupForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      hideAlert();
+
+      const btn = document.getElementById('btnSubmitSignup');
+      const fullName = document.getElementById('regFullName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const phone = document.getElementById('regPhone').value.trim();
+      const password = document.getElementById('regPassword').value;
+
+      if (!fullName || !email || !password) {
+        showAlert('Please fill in all required fields.');
+        return;
+      }
+
+      if (password.length < 6) {
+        showAlert('Password must be at least 6 characters long.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creating Account...';
+
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            full_name: fullName,
+            email: email,
+            phone: phone,
+            password: password,
+            academic_level: 'Undergraduate'
+          })
+        });
+
+        const data = await res.json();
+
+        if (data.success && data.token) {
+          localStorage.setItem('aw_token', data.token);
+          localStorage.setItem('aw_user', JSON.stringify(data.user));
+          showAlert('Account created successfully! Taking you to your dashboard...', true);
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 600);
+        } else {
+          showAlert(data.message || 'Unable to register. Please check your credentials or try logging in.');
+          btn.disabled = false;
+          btn.innerHTML = '<span>Sign Up</span>';
+        }
+      } catch (err) {
+        showAlert('Network error. Please try again or sign in with demo credentials.');
+        btn.disabled = false;
+        btn.innerHTML = '<span>Sign Up</span>';
+      }
+    });
+
+    // 2. LOGIN FORM SUBMISSION
+    document.getElementById('loginForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      hideAlert();
+
+      const btn = document.getElementById('btnSubmitLogin');
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      if (!email || !password) {
+        showAlert('Please enter both your email and password.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Authenticating...';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (data.success && data.token) {
+          localStorage.setItem('aw_token', data.token);
+          localStorage.setItem('aw_user', JSON.stringify(data.user));
+          showAlert('Login successful! Redirecting to dashboard...', true);
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 500);
+        } else {
+          showAlert(data.message || 'Invalid email or password.');
+          btn.disabled = false;
+          btn.innerHTML = '<span>Login</span>';
+        }
+      } catch (err) {
+        showAlert('Network error. Please try again or auto-fill demo credentials.');
+        btn.disabled = false;
+        btn.innerHTML = '<span>Login</span>';
+      }
+    });
+
+    // Handle URL Hash on Load (#login or #signup)
+    window.addEventListener('DOMContentLoaded', () => {
+      const hash = window.location.hash.toLowerCase();
+      if (hash === '#login') {
+        switchAuthMode('login');
+      } else {
+        switchAuthMode('signup');
+      }
+    });
+  </script>
+
+</body>
+</html>
