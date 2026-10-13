@@ -62,26 +62,16 @@
       });
     }
 
-    // Login / Register Form Submits
-    const loginForm = document.getElementById('auth-login-form');
-    if (loginForm) {
-      loginForm.addEventListener('submit', handleLoginSubmit);
-    }
-
-    const regForm = document.getElementById('auth-register-form');
-    if (regForm) {
-      regForm.addEventListener('submit', handleRegisterSubmit);
-    }
   }
 
   function checkAuthAndInit() {
     if (!AppState.token || !AppState.user) {
-      showAuthModal('login');
-    } else {
-      updateUserUI();
-      fetchUnreadNotificationsCount();
-      handleRouteHash();
+      window.location.href = 'login.html';
+      return;
     }
+    updateUserUI();
+    fetchUnreadNotificationsCount();
+    handleRouteHash();
   }
 
   function updateUserUI() {
@@ -2181,64 +2171,12 @@
     }
   }
 
-  // Auth Functions
-  async function handleLoginSubmit(e) {
-    e.preventDefault();
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-
-    const res = await apiFetch('/auth/login', 'POST', { email, password });
-    if (res.success) {
-      AppState.token = res.token;
-      AppState.user = res.user;
-      localStorage.setItem('aw_token', res.token);
-      localStorage.setItem('aw_user', JSON.stringify(res.user));
-
-      $('#authModal').modal('hide');
-      updateUserUI();
-      renderDashboardOverview();
-    } else {
-      alert(res.message || 'Login failed.');
-    }
-  }
-
-  async function handleRegisterSubmit(e) {
-    e.preventDefault();
-    const full_name = document.getElementById('reg-name').value;
-    const email = document.getElementById('reg-email').value;
-    const password = document.getElementById('reg-password').value;
-    const institution = document.getElementById('reg-institution').value;
-
-    const res = await apiFetch('/auth/register', 'POST', { full_name, email, password, institution });
-    if (res.success) {
-      AppState.token = res.token;
-      AppState.user = res.user;
-      localStorage.setItem('aw_token', res.token);
-      localStorage.setItem('aw_user', JSON.stringify(res.user));
-
-      $('#authModal').modal('hide');
-      updateUserUI();
-      renderDashboardOverview();
-    } else {
-      alert(res.message || 'Registration failed.');
-    }
-  }
-
-  function showAuthModal(type = 'login') {
-    $('#authModal').modal({ backdrop: 'static', keyboard: false, show: true });
-    if (type === 'login') {
-      $('#auth-login-tab').tab('show');
-    } else {
-      $('#auth-register-tab').tab('show');
-    }
-  }
-
   function logoutUser() {
     localStorage.removeItem('aw_token');
     localStorage.removeItem('aw_user');
     AppState.token = null;
     AppState.user = null;
-    showAuthModal('login');
+    window.location.href = 'login.html';
   }
 
   async function fetchUnreadNotificationsCount() {

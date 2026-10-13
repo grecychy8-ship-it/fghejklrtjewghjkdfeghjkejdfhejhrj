@@ -92,68 +92,7 @@
 
   </div>
 
-  <!-- AUTHENTICATION MODAL DIALOG -->
-  <div class="modal fade" id="authModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header border-0 pb-0">
-          <ul class="nav nav-tabs border-0" id="authTab" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active font-weight-bold h5 mb-0 border-0" id="auth-login-tab" data-toggle="tab" href="#login-pane" role="tab">Sign In</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link font-weight-bold h5 mb-0 border-0" id="auth-register-tab" data-toggle="tab" href="#register-pane" role="tab">Register Account</a>
-            </li>
-          </ul>
-        </div>
-        <div class="modal-body p-4">
-          <div class="tab-content" id="authTabContent">
-            <!-- LOGIN PANE -->
-            <div class="tab-pane fade show active" id="login-pane" role="tabpanel">
-              <div class="alert alert-info py-2 px-3 small mb-3">
-                <strong>Demo Student Credentials:</strong><br>
-                Email: <code>student@demo.com</code> | Password: <code>Password123!</code>
-              </div>
-              <form id="auth-login-form">
-                <div class="form-group">
-                  <label>Email Address</label>
-                  <input type="email" id="login-email" class="form-control" value="student@demo.com" required>
-                </div>
-                <div class="form-group">
-                  <label>Password</label>
-                  <input type="password" id="login-password" class="form-control" value="Password123!" required>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block rounded-pill font-weight-bold mt-4">Sign In to Dashboard</button>
-              </form>
-            </div>
 
-            <!-- REGISTER PANE -->
-            <div class="tab-pane fade" id="register-pane" role="tabpanel">
-              <form id="auth-register-form">
-                <div class="form-group">
-                  <label>Full Name *</label>
-                  <input type="text" id="reg-name" class="form-control" placeholder="e.g. Gareema Sharma" required>
-                </div>
-                <div class="form-group">
-                  <label>Email Address *</label>
-                  <input type="email" id="reg-email" class="form-control" placeholder="student@university.edu" required>
-                </div>
-                <div class="form-group">
-                  <label>Password *</label>
-                  <input type="password" id="reg-password" class="form-control" placeholder="Minimum 6 characters" required>
-                </div>
-                <div class="form-group">
-                  <label>Institution / University</label>
-                  <input type="text" id="reg-institution" class="form-control" placeholder="e.g. Tribhuvan University / Kathmandu University">
-                </div>
-                <button type="submit" class="btn btn-success btn-block rounded-pill font-weight-bold mt-4">Create Account & Continue</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- JavaScript Dependencies -->
   <script src="js/jquery.js"></script>

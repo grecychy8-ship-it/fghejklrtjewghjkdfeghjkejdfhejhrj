@@ -5,12 +5,17 @@ const fs = require('fs');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+const { OAuth2Client } = require('google-auth-library');
+
+require('dotenv').config();
 
 const db = require('./db');
 const { authenticateToken, optionalAuth, requireAdmin, JWT_SECRET } = require('./middleware/auth');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const googleOAuthClient = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 // Enable CORS & Body Parsing
 app.use(cors());
@@ -192,6 +197,91 @@ app.put('/api/auth/settings', authenticateToken, async (req, res) => {
     });
   } else {
     return res.json({ success: true, message: 'Settings saved successfully!' });
+  }
+});
+
+// ==========================================
+// 1b. GOOGLE OAUTH 2.0 ENDPOINTS
+// ==========================================
+
+// GET /api/auth/google-config — expose Client ID to frontend
+app.get('/api/auth/google-config', (req, res) => {
+  return res.json({ success: true, clientId: GOOGLE_CLIENT_ID });
+});
+
+// POST /api/auth/google — verify Google ID token, upsert user, return app JWT
+app.post('/api/auth/google', async (req, res) => {
+  const { credential } = req.body;
+  if (!credential) {
+    return res.status(400).json({ success: false, message: 'No Google credential provided.' });
+  }
+
+  try {
+    const ticket = await googleOAuthClient.verifyIdToken({
+      idToken: credential,
+      audience: GOOGLE_CLIENT_ID,
+    });
+    const { sub: googleId, email, email_verified, name, picture } = ticket.getPayload();
+
+    if (!email_verified) {
+      return res.status(401).json({ success: false, message: 'Google email is not verified.' });
+    }
+
+    // Check if user already exists
+    db.get('SELECT * FROM users WHERE email = ?', [email.toLowerCase()], async (err, existingUser) => {
+      if (err) return res.status(500).json({ success: false, message: 'Database error.' });
+
+      if (existingUser) {
+        // Update avatar if user signed up with password before
+        if (picture && !existingUser.avatar_url) {
+          db.run('UPDATE users SET avatar_url = ? WHERE id = ?', [picture, existingUser.id]);
+        }
+        const userPayload = {
+          id: existingUser.id,
+          email: existingUser.email,
+          full_name: existingUser.full_name,
+          role: existingUser.role,
+          institution: existingUser.institution,
+          academic_level: existingUser.academic_level,
+          country: existingUser.country,
+          avatar_url: picture || existingUser.avatar_url,
+        };
+        const token = jwt.sign(userPayload, JWT_SECRET, { expiresIn: '7d' });
+        return res.json({ success: true, message: 'Google login successful!', token, user: userPayload });
+      }
+
+      // Create new user from Google profile (no password needed)
+      const randomPwd = 'google_oauth_' + googleId.slice(0, 12);
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(randomPwd, salt);
+
+      db.run(
+        `INSERT INTO users (full_name, email, password_hash, phone, role, institution, academic_level, country, avatar_url)
+         VALUES (?, ?, ?, '', 'client', '', 'Undergraduate', '', ?)`,
+        [name || email.split('@')[0], email.toLowerCase(), hashedPassword, picture || ''],
+        function (err2) {
+          if (err2) {
+            console.error('Google user creation error:', err2);
+            return res.status(500).json({ success: false, message: 'Failed to create account from Google profile.' });
+          }
+          const userPayload = {
+            id: this.lastID,
+            email: email.toLowerCase(),
+            full_name: name || email.split('@')[0],
+            role: 'client',
+            institution: '',
+            academic_level: 'Undergraduate',
+            country: '',
+            avatar_url: picture || '',
+          };
+          const token = jwt.sign(userPayload, JWT_SECRET, { expiresIn: '7d' });
+          return res.status(201).json({ success: true, message: 'Account created via Google!', token, user: userPayload });
+        }
+      );
+    });
+  } catch (verifyErr) {
+    console.error('Google token verification error:', verifyErr.message);
+    return res.status(401).json({ success: false, message: 'Invalid Google token. Please try again.' });
   }
 });
 

@@ -235,19 +235,6 @@ window.AssignmentDaiAuth = (function () {
     }
   }
 
-  // Demo Credentials Quick Filler
-  function fillDemo(type) {
-    if (type === 'student') {
-      switchTab('student');
-      document.getElementById('studentEmail').value = 'student@demo.com';
-      document.getElementById('studentPassword').value = 'Password123!';
-    } else if (type === 'admin') {
-      switchTab('admin');
-      document.getElementById('siteAdminEmail').value = 'admin@assignmentdai.com';
-      document.getElementById('siteAdminPassword').value = 'Admin123!';
-    }
-  }
-
   // Password Visibility Toggle
   function togglePassword(inputId, btnEl) {
     const input = document.getElementById(inputId);
@@ -271,7 +258,6 @@ window.AssignmentDaiAuth = (function () {
   return {
     openModal,
     switchTab,
-    fillDemo,
     togglePassword,
     logout
   };

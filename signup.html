@@ -17,6 +17,9 @@
   
   <!-- Dedicated Signup Stylesheet (Project Theme with Animations) -->
   <link rel="stylesheet" href="css/signup-new.css">
+
+  <!-- Google Identity Services (GIS) -- real OAuth -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body class="signup-page-body">
@@ -180,12 +183,6 @@
             <span>Login with Google</span>
           </button>
 
-          <!-- Quick 1-Click Demo Shortcut -->
-          <div class="auth-demo-shortcut">
-            <span><i class="fas fa-bolt text-warning mr-1"></i> Demo: <code>student@demo.com</code></span>
-            <button type="button" class="auth-demo-btn" onclick="fillDemoStudent()">Auto-fill</button>
-          </div>
-
           <!-- SWITCH TO SIGN UP -->
           <div class="auth-switch-row">
             <span>Don't have an account?</span>
@@ -308,28 +305,76 @@
       if (box) box.style.display = 'none';
     }
 
-    // Quick Auto-Fill Demo Student
-    function fillDemoStudent() {
-      document.getElementById('loginEmail').value = 'student@demo.com';
-      document.getElementById('loginPassword').value = 'Password123!';
-      hideAlert();
+    // ── Google OAuth (real) ──────────────────────────────────────────────
+    let _googleClientId = '';
+
+    // Fetch client ID from server on load
+    async function initGoogleOAuth() {
+      try {
+        const r = await fetch('/api/auth/google-config');
+        const d = await r.json();
+        if (d.success && d.clientId && !d.clientId.startsWith('YOUR_')) {
+          _googleClientId = d.clientId;
+          google.accounts.id.initialize({
+            client_id: _googleClientId,
+            callback: handleGoogleCredentialResponse,
+          });
+          // Render Google's own button inside our styled wrapper (optional)
+          // google.accounts.id.renderButton(document.getElementById('googleBtnWrap'), { theme:'outline', size:'large' });
+        }
+      } catch (e) { console.warn('Google OAuth config not available:', e); }
     }
 
-    // Google Sign-in Mock Handler
+    // Called by GIS after user selects a Google account
+    async function handleGoogleCredentialResponse(response) {
+      const credential = response.credential; // Google ID token
+      if (!credential) { showAlert('Google sign-in failed. Please try again.'); return; }
+
+      try {
+        const res = await fetch('/api/auth/google', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ credential }),
+        });
+        const data = await res.json();
+        if (data.success && data.token) {
+          localStorage.setItem('aw_token', data.token);
+          localStorage.setItem('aw_user', JSON.stringify(data.user));
+          showAlert('Google sign-in successful! Redirecting...', true);
+          setTimeout(() => { window.location.href = 'dashboard.html'; }, 600);
+        } else {
+          showAlert(data.message || 'Google authentication failed.');
+        }
+      } catch (err) {
+        showAlert('Network error during Google sign-in.');
+      }
+    }
+
+    // Clicking our custom Google button → trigger GIS prompt
     function handleGoogleAuth() {
-      showAlert('Google OAuth initialising... Redirecting to secure verification.', true);
-      setTimeout(() => {
-        // Quick student mock session
-        const demoUser = {
-          id: 1,
-          full_name: 'Gareema Sharma',
-          email: 'gareema.sharma@gmail.com',
-          role: 'student'
-        };
-        localStorage.setItem('aw_token', 'demo-google-token-' + Date.now());
-        localStorage.setItem('aw_user', JSON.stringify(demoUser));
-        window.location.href = 'dashboard.html';
-      }, 700);
+      if (!_googleClientId) {
+        showAlert('Google Sign-In is not configured yet. Add your GOOGLE_CLIENT_ID to .env and restart the server.');
+        return;
+      }
+      google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          // Fallback: open consent URL directly
+          const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${_googleClientId}&redirect_uri=${encodeURIComponent(window.location.origin + '/signup.html')}&response_type=id_token&scope=openid email profile&nonce=${Date.now()}`;
+          window.location.href = url;
+        }
+      });
+    }
+
+    // Handle redirect with id_token in URL hash (fallback path)
+    function handleGoogleHashToken() {
+      const hash = window.location.hash;
+      const match = hash.match(/id_token=([^&]+)/);
+      if (match) {
+        const credential = decodeURIComponent(match[1]);
+        handleGoogleCredentialResponse({ credential });
+        // Clean URL
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+      }
     }
 
     // 1. SIGN UP FORM SUBMISSION
@@ -384,7 +429,7 @@
           btn.innerHTML = '<span>Sign Up</span>';
         }
       } catch (err) {
-        showAlert('Network error. Please try again or sign in with demo credentials.');
+        showAlert('Network error. Please check your connection and try again.');
         btn.disabled = false;
         btn.innerHTML = '<span>Sign Up</span>';
       }
@@ -429,7 +474,7 @@
           btn.innerHTML = '<span>Login</span>';
         }
       } catch (err) {
-        showAlert('Network error. Please try again or auto-fill demo credentials.');
+        showAlert('Network error. Please check your connection and try again.');
         btn.disabled = false;
         btn.innerHTML = '<span>Login</span>';
       }
@@ -437,10 +482,12 @@
 
     // Handle URL Hash on Load (#login or #signup)
     window.addEventListener('DOMContentLoaded', () => {
+      initGoogleOAuth();
+      handleGoogleHashToken(); // handle id_token from Google redirect fallback
       const hash = window.location.hash.toLowerCase();
       if (hash === '#login') {
         switchAuthMode('login');
-      } else {
+      } else if (!hash.includes('id_token')) {
         switchAuthMode('signup');
       }
     });

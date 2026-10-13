@@ -903,22 +903,12 @@
                     <div class="auth-tab-pane" id="tabPane_student">
                         <div id="studentLoginAlert" class="auth-alert-box"></div>
 
-                        <!-- Demo Chips -->
-                        <div class="auth-demo-chips">
-                            <div class="auth-demo-chip-title">
-                                <i class="fas fa-magic"></i> Quick Demo Access:
-                            </div>
-                            <button type="button" class="auth-demo-pill" onclick="AssignmentDaiAuth.fillDemo('student')">
-                                <i class="fas fa-bolt mr-1"></i> 1-Click Demo Login (student@demo.com)
-                            </button>
-                        </div>
-
                         <form id="formStudentLogin">
                             <div class="auth-input-group">
                                 <label class="auth-input-label">Student Email</label>
                                 <div class="auth-input-wrapper">
                                     <i class="fas fa-envelope auth-input-icon"></i>
-                                    <input type="email" id="studentEmail" class="auth-input-field" placeholder="student@demo.com" required>
+                                    <input type="email" id="studentEmail" class="auth-input-field" placeholder="you@university.edu" required>
                                 </div>
                             </div>
 
@@ -946,8 +936,8 @@
                             <a href="javascript:void(0)" onclick="AssignmentDaiAuth.switchTab('register')" class="small font-weight-bold text-primary">Register Free</a>
                         </div>
                         <div class="text-center mt-2">
-                            <a href="dashboard.html" class="small text-secondary font-weight-bold">
-                                <i class="fas fa-th-large mr-1"></i> Open Dashboard Directly &rarr;
+                            <a href="signup.html" class="small text-secondary font-weight-bold">
+                                <i class="fas fa-external-link-alt mr-1"></i> Full-Page Sign Up / Login &rarr;
                             </a>
                         </div>
                         <div class="text-center mt-3 pt-2 border-top">
@@ -1027,15 +1017,6 @@
                     <!-- 3. ADMIN PORTAL PANE -->
                     <div class="auth-tab-pane" id="tabPane_admin" style="display: none;">
                         <div id="adminLoginAlert" class="auth-alert-box"></div>
-
-                        <div class="auth-demo-chips">
-                            <div class="auth-demo-chip-title">
-                                <i class="fas fa-shield-alt"></i> Default Admin Credentials:
-                            </div>
-                            <button type="button" class="auth-demo-pill" onclick="AssignmentDaiAuth.fillDemo('admin')">
-                                Click to Auto-fill Super Admin
-                            </button>
-                        </div>
 
                         <form id="formAdminLogin">
                             <div class="auth-input-group">
