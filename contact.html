@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Contact Us - Assignment Dai</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="images/fv.png" type="image/x-icon">
+    <link rel="icon" href="images/fv.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/fontawesome-all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/mobile-responsive.css">
+    <link rel="stylesheet" href="css/auth-modal.css">
+    <link rel="stylesheet" href="css/create-assignment-modal.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600;700;800&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+            overflow-x: hidden;
+        }
+
+        /* HEADER */
+        .saas_two_main_header {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            background: #ffffff !important;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05) !important;
+            z-index: 99999 !important;
+            padding: 8px 0 !important;
+        }
+        .header-flex-wrapper {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+        }
+        .brand-logo-text {
+            font-weight: 800;
+            font-size: 1.45rem;
+            color: #2b56f5;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none !important;
+        }
+        .header-nav-list {
+            display: flex !important;
+            align-items: center !important;
+            list-style: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            gap: 24px !important;
+        }
+        .header-nav-list li {
+            margin: 0 !important;
+            padding: 0 !important;
+            display: inline-block !important;
+        }
+        .header-nav-link {
+            color: #1e293b !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+            text-decoration: none !important;
+            transition: color 0.2s ease;
+            padding: 6px 0 !important;
+            display: inline-block !important;
+            background: none !important;
+            border: none !important;
+        }
+        .header-nav-link:hover, .header-nav-link.active {
+            color: #2563eb !important;
+        }
+        .header-nav-link.active {
+            border-bottom: 2.5px solid #2563eb !important;
+            font-weight: 700 !important;
+        }
+        .btn-header-signup, .btn-header-login {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 8px !important;
+            padding: 9px 22px !important;
+            border: 1.5px solid #2b56f5 !important;
+            background-color: #ffffff !important;
+            color: #2b56f5 !important;
+            border-radius: 30px !important;
+            font-weight: 700 !important;
+            font-size: 0.92rem !important;
+            text-decoration: none !important;
+            margin-right: 12px !important;
+            transition: all 0.25s ease !important;
+            box-shadow: 0 2px 8px rgba(43, 86, 245, 0.08) !important;
+            cursor: pointer !important;
+            line-height: 1.2 !important;
+        }
+        .btn-header-signup:hover, .btn-header-login:hover {
+            background-color: #2b56f5 !important;
+            color: #ffffff !important;
+            border-color: #2b56f5 !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 16px rgba(43, 86, 245, 0.25) !important;
+            text-decoration: none !important;
+        }
+        .btn-blue-primary {
+            background-color: #2563eb;
+            color: #ffffff !important;
+            border-radius: 30px;
+            padding: 10px 24px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none !important;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            transition: all 0.25s ease;
+            border: none;
+        }
+        .btn-blue-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+        }
+
+        /* CONTACT PAGE WRAPPER & AMBIENT BLOB SHAPES */
+        .contact-page-wrapper {
+            position: relative;
+            padding: 140px 0 100px 0;
+            background: #f8fafc;
+            overflow: hidden;
+            min-height: 90vh;
+        }
+        .ambient-shape-top-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 480px;
+            height: 480px;
+            background: radial-gradient(circle, rgba(237, 233, 254, 0.7) 0%, rgba(248, 250, 252, 0) 70%);
+            border-bottom-left-radius: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .ambient-shape-bottom-left {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(224, 231, 255, 0.6) 0%, rgba(248, 250, 252, 0) 70%);
+            border-top-right-radius: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .contact-container {
+            width: 100%;
+            max-width: 1350px;
+            margin: 0 auto;
+            padding: 0 35px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* LEFT COLUMN INFO */
+        .contact-pill-badge {
+            background: #ede9fe;
+            color: #4338ca;
+            font-weight: 700;
+            font-size: 0.88rem;
+            padding: 6px 16px;
+            border-radius: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 22px;
+        }
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #2563eb;
+            display: inline-block;
+        }
+        .contact-heading {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.15;
+            color: #0f172a;
+            margin-bottom: 18px;
+            letter-spacing: -0.5px;
+        }
+        .contact-heading span {
+            color: #2563eb;
+            display: block;
+        }
+        .contact-subtext {
+            color: #64748b;
+            font-size: 1.05rem;
+            line-height: 1.65;
+            max-width: 460px;
+            margin-bottom: 36px;
+        }
+        .decorative-rays {
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        /* CONTACT DETAILS ITEMS */
+        .contact-info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            margin-bottom: 45px;
+        }
+        .contact-info-item {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+        .contact-info-icon-badge {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background-color: #e0f2fe;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+        }
+        .contact-info-text .label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 2px;
+        }
+        .contact-info-text .value {
+            color: #64748b;
+            font-size: 0.95rem;
+            text-decoration: none !important;
+            transition: color 0.2s ease;
+        }
+        .contact-info-text a.value:hover {
+            color: #2563eb;
+        }
+
+        /* DOODLE QUOTE */
+        .contact-doodle-wrapper {
+            margin-top: 10px;
+        }
+        .doodle-text {
+            font-family: 'Caveat', cursive;
+            font-size: 1.85rem;
+            color: #2563eb;
+            line-height: 1.1;
+            transform: rotate(-3deg);
+            display: inline-block;
+        }
+
+        /* RIGHT COLUMN: FORM CARD */
+        .contact-form-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 44px 40px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.04);
+            border: 1.5px solid #f1f5f9;
+            position: relative;
+        }
+        .card-rays-top-right {
+            position: absolute;
+            top: 24px;
+            right: 28px;
+        }
+        .form-top-tag {
+            color: #2563eb;
+            font-weight: 800;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .form-card-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        .form-card-subtitle {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        /* FORM INPUT CONTAINERS WITH ICONS */
+        .custom-form-group {
+            margin-bottom: 20px;
+        }
+        .custom-form-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .custom-input-box {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #ffffff;
+            transition: all 0.25s ease;
+        }
+        .custom-input-box:focus-within {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        .custom-input-box i {
+            color: #2563eb;
+            font-size: 1.05rem;
+            flex-shrink: 0;
+        }
+        .custom-input-box input, 
+        .custom-input-box select {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            font-size: 0.95rem;
+            color: #0f172a;
+        }
+        .custom-input-box input::placeholder {
+            color: #94a3b8;
+        }
+
+        /* TEXTAREA BOX */
+        .custom-textarea-box {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px 16px;
+            background: #ffffff;
+            transition: all 0.25s ease;
+        }
+        .custom-textarea-box:focus-within {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        .textarea-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+        .custom-textarea-box textarea {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            font-size: 0.95rem;
+            color: #0f172a;
+            resize: vertical;
+            min-height: 110px;
+        }
+        .custom-textarea-box textarea::placeholder {
+            color: #94a3b8;
+        }
+
+        /* SUBMIT BUTTON */
+        .btn-send-message {
+            width: 100%;
+            background-color: #2563eb;
+            color: #ffffff;
+            border-radius: 12px;
+            padding: 15px 24px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
+            transition: all 0.25s ease;
+            margin-top: 10px;
+        }
+        .btn-send-message:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(37, 99, 235, 0.45);
+        }
+
+        /* SUCCESS MESSAGE BANNER */
+        .contact-alert-banner {
+            display: none;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .contact-alert-success {
+            background-color: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        /* WHATSAPP FLOAT BUTTON */
+        @keyframes pulse-whatsapp {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); transform: scale(1); }
+            70% { box-shadow: 0 0 0 18px rgba(37, 211, 102, 0); transform: scale(1.08); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); transform: scale(1); }
+        }
+        .whatsapp-float-btn {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 60px;
+            height: 60px;
+            background-color: #25d366;
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.1rem;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            z-index: 99999;
+            text-decoration: none !important;
+            animation: pulse-whatsapp 2s infinite ease-in-out;
+            transition: transform 0.25s ease;
+        }
+        .whatsapp-float-btn:hover {
+            transform: scale(1.18);
+            color: #ffffff;
+        }
+
+        /* MOBILE RESPONSIVE TWEAKS */
+        @media (max-width: 768px) {
+            .contact-page-wrapper {
+                padding: 105px 0 60px 0;
+            }
+            .contact-container {
+                padding: 0 18px;
+            }
+            .contact-heading {
+                font-size: 2.2rem;
+            }
+            .contact-form-card {
+                padding: 28px 20px;
+                border-radius: 18px;
+            }
+            .form-card-title {
+                font-size: 1.6rem;
+            }
+            .ambient-shape-top-right, .ambient-shape-bottom-left {
+                width: 250px;
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Floating WhatsApp Quick Support -->
+    <a href="https://wa.me/?text=Hello%20Assignment%20Dai%20Support" target="_blank" class="whatsapp-float-btn" title="Contact Support on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- Start of Header Section -->
+    <header id="header_main" class="saas_two_main_header">
+        <div class="container-fluid px-lg-5">
+            <div class="header-flex-wrapper">
+                <!-- Brand Logo (Official Assignment Dai Logo) -->
+                <a href="index.html" class="brand-logo-link">
+                    <img src="images/logo1.png" alt="Assignment Dai" class="brand-logo-img">
+                </a>
+
+                <!-- Desktop Navigation Menu -->
+                <nav class="d-none d-lg-block">
+                    <ul class="header-nav-list">
+                        <li><a href="index.html#saas_two_banner" class="header-nav-link">Home</a></li>
+                        <li><a href="index.html#saas_two_service" class="header-nav-link">Services <i class="fas fa-chevron-down ml-1" style="font-size: 0.75rem;"></i></a></li>
+                        <li><a href="index.html#how_it_works" class="header-nav-link">How It Works</a></li>
+                        <li><a href="index.html#testimonials" class="header-nav-link">Testimonials</a></li>
+                        <li><a href="index.html#s2-faq" class="header-nav-link">FAQ</a></li>
+                        <li><a href="index.html#saas_two_about" class="header-nav-link">About</a></li>
+                        <li><a href="contact.html" class="header-nav-link active">Contact</a></li>
+                    </ul>
+                </nav>
+
+                <!-- Action Buttons -->
+                <div class="d-none d-lg-flex align-items-center">
+                    <a href="signup.html" class="btn-header-signup" id="headerSignUpBtn">
+                        Sign Up
+                    </a>
+                    <a href="dashboard.html#/submit-project" class="btn-blue-primary">
+                        Submit Project <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+
+                <!-- Modern Mobile Menu Trigger Button -->
+                <button class="d-lg-none btn-mobile-toggle aw-open-drawer-btn s2-open_mobile_menu" aria-label="Open mobile menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+    <!-- End of Header Section -->
+
+    <!-- Modern Premium Mobile Navigation Drawer -->
+    <div id="awMobileDrawer" class="aw-mobile-drawer">
+        <!-- Backdrop with Glassmorphism Blur -->
+        <div class="aw-drawer-backdrop" id="awDrawerBackdrop"></div>
+
+        <!-- Sliding Sheet Container -->
+        <div class="aw-drawer-panel">
+            <!-- Drawer Header -->
+            <div class="aw-drawer-header">
+                <a href="index.html" class="aw-drawer-brand">
+                    <img src="images/logo1.png" alt="Assignment Dai" class="aw-drawer-logo-img">
+                </a>
+                <button type="button" class="aw-drawer-close-btn" id="awDrawerCloseBtn" aria-label="Close menu">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- 24/7 Live Scholars Status Badge -->
+            <div class="aw-drawer-status-wrap">
+                <div class="aw-drawer-status-pill">
+                    <span class="aw-pulse-dot"></span>
+                    <span>Scholars Online &bull; 24/7 Active</span>
+                </div>
+            </div>
+
+            <!-- Scrollable Navigation Area -->
+            <div class="aw-drawer-scroll-body">
+                <div class="aw-nav-section-title">NAVIGATION MENU</div>
+                <ul class="aw-nav-list">
+                    <li>
+                        <a href="index.html#saas_two_banner" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-home"><i class="fas fa-home"></i></span>
+                            <span class="aw-nav-text">Home</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.html#saas_two_service" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-services"><i class="fas fa-graduation-cap"></i></span>
+                            <span class="aw-nav-text">Services</span>
+                            <span class="aw-nav-tag">6 Areas</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.html#how_it_works" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-process"><i class="fas fa-layer-group"></i></span>
+                            <span class="aw-nav-text">How It Works</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.html#why_choose_us" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-why"><i class="fas fa-shield-alt"></i></span>
+                            <span class="aw-nav-text">Why Choose Us</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.html#testimonials" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-testimonials"><i class="fas fa-star"></i></span>
+                            <span class="aw-nav-text">Testimonials</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.html#s2-faq" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-faq"><i class="fas fa-question-circle"></i></span>
+                            <span class="aw-nav-text">FAQ</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="index.html#saas_two_about" class="aw-nav-link">
+                            <span class="aw-nav-icon ic-about"><i class="fas fa-info-circle"></i></span>
+                            <span class="aw-nav-text">About Us</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="contact.html" class="aw-nav-link is-current">
+                            <span class="aw-nav-icon ic-contact"><i class="fas fa-envelope"></i></span>
+                            <span class="aw-nav-text">Contact Us</span>
+                            <span class="aw-nav-tag tag-primary">Current</span>
+                            <i class="fas fa-chevron-right aw-nav-arrow"></i>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Quick Action Area -->
+                <div class="aw-drawer-actions">
+                    <a href="dashboard.html#/submit-project" class="aw-btn-primary-action">
+                        <i class="fas fa-paper-plane mr-2"></i> Submit Project
+                        <i class="fas fa-arrow-right ml-auto"></i>
+                    </a>
+                    <a href="signup.html" class="aw-btn-secondary-action">
+                        <i class="fas fa-user-plus mr-2"></i> Sign Up
+                    </a>
+                </div>
+
+                <!-- Instant Support Mini Card -->
+                <div class="aw-drawer-support-box">
+                    <div class="aw-support-header">
+                        <i class="fas fa-headset mr-2 text-primary"></i>
+                        <strong>Need Instant Help?</strong>
+                    </div>
+                    <p class="aw-support-desc">Talk directly to an academic coordinator for quotes or questions.</p>
+                    <div class="aw-support-btn-group">
+                        <a href="https://wa.me/?text=Hello%20Assignment%20Dai%20Support" target="_blank" class="aw-btn-wa">
+                            <i class="fab fa-whatsapp mr-1"></i> WhatsApp
+                        </a>
+                        <a href="tel:+9779801234567" class="aw-btn-tel">
+                            <i class="fas fa-phone-alt mr-1"></i> Call
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Header Section -->
+
+    <!-- Start of Contact Page Main Section -->
+    <main class="contact-page-wrapper">
+        <div class="ambient-shape-top-right"></div>
+        <div class="ambient-shape-bottom-left"></div>
+
+        <div class="contact-container">
+            <div class="row align-items-center">
+                <!-- Left Column: Get in Touch & Information -->
+                <div class="col-lg-5 col-md-12 mb-5 mb-lg-0">
+                    <div class="contact-pill-badge">
+                        <span class="badge-dot"></span> Get in Touch
+                    </div>
+
+                    <h1 class="contact-heading">
+                        We’re Here to
+                        <span>Help You</span>
+                    </h1>
+
+                    <p class="contact-subtext">
+                        Have a question, need support, or want to discuss your project? Our team is always ready to assist you. Reach out anytime — we’ll get back to you soon!
+                        <svg class="decorative-rays" width="30" height="26" viewBox="0 0 30 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M 5 22 L 20 14" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M 12 10 L 26 6" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M 20 2 L 28 3" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
+                    </p>
+
+                    <!-- Contact Details List -->
+                    <div class="contact-info-list">
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon-badge">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div class="contact-info-text">
+                                <div class="label">Phone</div>
+                                <a href="tel:+9779801234567" class="value">+977 980-123-4567</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon-badge">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-info-text">
+                                <div class="label">Email</div>
+                                <a href="mailto:support@assignmentdai.com" class="value">support@assignmentdai.com</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-info-item">
+                            <div class="contact-info-icon-badge">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-info-text">
+                                <div class="label">Location</div>
+                                <div class="value">Kathmandu, Nepal</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Doodle Quote -->
+                    <div class="contact-doodle-wrapper">
+                        <svg width="240" height="75" viewBox="0 0 240 75" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <text x="8" y="26" fill="#2563eb" font-family="'Caveat', cursive, sans-serif" font-size="24" font-weight="700" transform="rotate(-3 8 26)">Your success</text>
+                            <text x="16" y="52" fill="#2563eb" font-family="'Caveat', cursive, sans-serif" font-size="24" font-weight="700" transform="rotate(-3 16 52)">is our priority!</text>
+                            <!-- Doodle Rays -->
+                            <path d="M 185 14 L 196 8" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M 192 22 L 205 22" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+                            <path d="M 186 28 L 198 35" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+                            <!-- Doodle Underline loop -->
+                            <path d="M 35 63 Q 95 72 155 60 Q 95 66 50 71" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Right Column: Drop Us a Message Card -->
+                <div class="col-lg-7 col-md-12">
+                    <div class="contact-form-card">
+                        <!-- Top-Right Accent Rays -->
+                        <div class="card-rays-top-right">
+                            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M 18 4 L 8 16" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M 24 10 L 10 18" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+                                <path d="M 22 20 L 12 24" stroke="#2563eb" stroke-width="2.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+
+                        <span class="form-top-tag">SEND US A MESSAGE</span>
+                        <h2 class="form-card-title">Drop Us a Message</h2>
+                        <p class="form-card-subtitle">Fill out the form below and we’ll get back to you as soon as possible.</p>
+
+                        <!-- Alert Box -->
+                        <div id="contactAlert" class="contact-alert-banner contact-alert-success">
+                            <i class="fas fa-check-circle mr-2"></i> <span id="contactAlertMsg">Thank you! Your message has been sent successfully. Our team will contact you shortly.</span>
+                        </div>
+
+                        <!-- Form -->
+                        <form id="contactForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="custom-form-group">
+                                        <label class="custom-form-label">Full Name *</label>
+                                        <div class="custom-input-box">
+                                            <i class="far fa-user"></i>
+                                            <input type="text" id="fullName" name="full_name" placeholder="Enter your name" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="custom-form-group">
+                                        <label class="custom-form-label">Email Address *</label>
+                                        <div class="custom-input-box">
+                                            <i class="far fa-envelope"></i>
+                                            <input type="email" id="emailAddress" name="email" placeholder="Enter your email" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="custom-form-group">
+                                <label class="custom-form-label">Subject *</label>
+                                <div class="custom-input-box">
+                                    <i class="fas fa-list-ul"></i>
+                                    <select id="subjectSelect" name="subject" required>
+                                        <option value="" disabled selected>Select a subject</option>
+                                        <option value="Academic Assignment Help">Academic Assignment Help</option>
+                                        <option value="Technical & Coding Project">Technical & Coding Project</option>
+                                        <option value="Dissertation & Thesis Mentorship">Dissertation & Thesis Mentorship</option>
+                                        <option value="Turnitin & AI Detection Check">Turnitin & AI Detection Check</option>
+                                        <option value="1-on-1 Tutoring Session">1-on-1 Tutoring Session</option>
+                                        <option value="Billing & Payment Inquiry">Billing & Payment Inquiry</option>
+                                        <option value="Other Subject Inquiry">Other Subject Inquiry</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="custom-form-group">
+                                <label class="custom-form-label">Message *</label>
+                                <div class="custom-textarea-box">
+                                    <div class="textarea-header">
+                                        <i class="far fa-comment-dots"></i>
+                                    </div>
+                                    <textarea id="messageText" name="message" placeholder="Write your message here..." required></textarea>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-send-message" id="btnSubmitContact">
+                                <i class="fas fa-paper-plane"></i> Send Message <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- End of Contact Page Main Section -->
+
+    <!-- Start of Footer Section -->
+    <footer id="saas_two_footer" class="saas_two_footer_section relative-position" style="padding-top: 60px;">
+        <div class="footer_content pera-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4 col-md-12">
+                        <div class="s2_footer_widget clearfix ul-li-block saas2-headline">
+                            <div class="s2_footer_about">
+                                <div class="s2-footer_logo mb-3">
+                                    <a href="index.html" class="footer-logo-brand">
+                                        <img src="images/logo1.png" alt="Assignment Dai" class="footer-logo-img">
+                                    </a>
+                                </div>
+                                <div class="footer_about mb-3">
+                                    Assignment Dai Academic Writing & Homework Assistance Platform. Connecting university students with top subject scholars worldwide.
+                                </div>
+                                <span>Support Hours: </span>
+                                <p>Mon - Sun: 24/7 Round-the-Clock Support</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-12">
+                        <div class="s2_footer_widget clearfix ul-li-block saas2-headline">
+                            <div class="s2_footer_menu">
+                                <h3 class="s2_widget_title">
+                                    <span>Quick Links</span>
+                                    <i></i>
+                                </h3>
+                                <ul>
+                                    <li><a href="index.html#saas_two_banner"> Home</a></li>
+                                    <li><a href="index.html#saas_two_service"> Services</a></li>
+                                    <li><a href="index.html#how_it_works"> How It Works</a></li>
+                                    <li><a href="index.html#testimonials"> Testimonials</a></li>
+                                    <li><a href="index.html#s2-faq"> FAQ</a></li>
+                                    <li><a href="index.html#saas_two_about"> About Us</a></li>
+                                    <li><a href="contact.html"> Contact Us</a></li>
+                                    <li><a href="signup.html"> Student Sign Up / Login</a></li>
+                                    <li><a href="dashboard.html"> Client Dashboard</a></li>
+                                    <li><a href="dashboard.html#/submit-project"> Submit Project</a></li>
+                                    <li><a href="admin.html"><i class="fas fa-user-shield text-muted mr-1"></i> Admin Portal</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-12">
+                        <div class="s2_footer_widget clearfix ul-li-block saas2-headline">
+                            <div class="s2_footer_support_box">
+                                <h3 class="s2_widget_title">
+                                    <span>Support Desk</span> 
+                                    <i></i>
+                                </h3>
+                                <p>Have an urgent project? Get an instant quote from our academic coordinators.</p>
+                                <div class="mt-3">
+                                    <a href="dashboard.html#/submit-project" class="footer-support-bar-btn">
+                                        <i class="fas fa-headset mr-2"></i> Open Support Desk
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="s2-copyright text-center py-3">
+        © 2026 <strong>Assignment Dai</strong>. All rights reserved. Premium Academic Assistance Platform.
+    </div>
+
+    <!-- ========================================================
+         MODAL 1: SITE AUTHENTICATION (STUDENT / REGISTER / ADMIN)
+         ======================================================== -->
+    <div class="modal fade" id="siteAuthModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="auth-modal-header">
+                    <button type="button" class="auth-modal-close-btn" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <img src="images/logo1.png" alt="Assignment Dai" class="auth-modal-brand-logo">
+                    <h3 class="auth-modal-title">Welcome to Assignment Dai</h3>
+                    <p class="auth-modal-subtitle">Access your academic assignments, quotes, and expert support</p>
+
+                    <!-- Auth Nav Tabs -->
+                    <div class="auth-nav-tabs">
+                        <button type="button" class="auth-nav-tab-btn active" id="tabBtn_student" data-tab="student">
+                            <i class="fas fa-user-graduate mr-1"></i> Student Login
+                        </button>
+                        <button type="button" class="auth-nav-tab-btn" id="tabBtn_register" data-tab="register">
+                            <i class="fas fa-user-plus mr-1"></i> Register Account
+                        </button>
+                    </div>
+                </div>
+
+                <div class="auth-modal-body">
+                    <!-- 1. STUDENT LOGIN PANE -->
+                    <div class="auth-tab-pane" id="tabPane_student">
+                        <div id="studentLoginAlert" class="auth-alert-box"></div>
+
+                        <form id="formStudentLogin">
+                            <div class="auth-input-group">
+                                <label class="auth-input-label">Student Email</label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-envelope auth-input-icon"></i>
+                                    <input type="email" id="studentEmail" class="auth-input-field" placeholder="you@university.edu" required>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-group">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label class="auth-input-label mb-0">Password</label>
+                                    <a href="https://wa.me/?text=Hello%20Assignment%20Dai%2C%20I%20need%20help%20logging%20in" target="_blank" class="small text-muted font-weight-bold">Forgot?</a>
+                                </div>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-lock auth-input-icon"></i>
+                                    <input type="password" id="studentPassword" class="auth-input-field" placeholder="••••••••" required>
+                                    <button type="button" class="auth-toggle-pwd-btn" onclick="AssignmentDaiAuth.togglePassword('studentPassword', this)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="btnSubmitStudentLogin" class="auth-submit-btn mt-3">
+                                <i class="fas fa-sign-in-alt mr-1"></i> Sign In to Student Dashboard
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-3">
+                            <span class="small text-muted">Don't have an account yet? </span>
+                            <a href="javascript:void(0)" onclick="AssignmentDaiAuth.switchTab('register')" class="small font-weight-bold text-primary">Register Free</a>
+                        </div>
+                        <div class="text-center mt-2">
+                            <a href="signup.html" class="small text-secondary font-weight-bold">
+                                <i class="fas fa-external-link-alt mr-1"></i> Full-Page Sign Up / Login &rarr;
+                            </a>
+                        </div>
+                        <div class="text-center mt-3 pt-2 border-top">
+                            <a href="javascript:void(0)" onclick="AssignmentDaiAuth.switchTab('admin')" class="small text-muted">
+                                <i class="fas fa-shield-alt mr-1"></i> Staff / Operations Console
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- 2. REGISTER PANE -->
+                    <div class="auth-tab-pane" id="tabPane_register" style="display: none;">
+                        <div id="registerAlert" class="auth-alert-box"></div>
+
+                        <form id="formRegister">
+                            <div class="auth-input-group">
+                                <label class="auth-input-label">Full Name *</label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-user auth-input-icon"></i>
+                                    <input type="text" id="regFullName" class="auth-input-field" placeholder="e.g. Rohan Adhikari" required>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-group">
+                                <label class="auth-input-label">Email Address *</label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-envelope auth-input-icon"></i>
+                                    <input type="email" id="regEmail" class="auth-input-field" placeholder="student@university.edu" required>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-group">
+                                <label class="auth-input-label">Create Password *</label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-lock auth-input-icon"></i>
+                                    <input type="password" id="regPassword" class="auth-input-field" placeholder="Min 6 characters" required>
+                                    <button type="button" class="auth-toggle-pwd-btn" onclick="AssignmentDaiAuth.togglePassword('regPassword', this)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6 pr-1">
+                                    <div class="auth-input-group">
+                                        <label class="auth-input-label">WhatsApp / Phone</label>
+                                        <input type="text" id="regPhone" class="auth-input-field px-3" placeholder="+977 980-0000000">
+                                    </div>
+                                </div>
+                                <div class="col-6 pl-1">
+                                    <div class="auth-input-group">
+                                        <label class="auth-input-label">Academic Level</label>
+                                        <select id="regAcademicLevel" class="auth-input-field px-3" style="cursor: pointer;">
+                                            <option value="Undergraduate">Undergraduate</option>
+                                            <option value="Postgraduate" selected>Postgraduate</option>
+                                            <option value="PhD">PhD / Doctorate</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-group mb-3">
+                                <label class="auth-input-label">University / College</label>
+                                <input type="text" id="regInstitution" class="auth-input-field px-3" placeholder="e.g. Tribhuvan University">
+                            </div>
+
+                            <button type="submit" id="btnSubmitRegister" class="auth-submit-btn">
+                                <i class="fas fa-user-plus mr-1"></i> Create Student Account
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-3">
+                            <span class="small text-muted">Already registered? </span>
+                            <a href="javascript:void(0)" onclick="AssignmentDaiAuth.switchTab('student')" class="small font-weight-bold text-primary">Sign In</a>
+                        </div>
+                    </div>
+
+                    <!-- 3. ADMIN PORTAL PANE -->
+                    <div class="auth-tab-pane" id="tabPane_admin" style="display: none;">
+                        <div id="adminLoginAlert" class="auth-alert-box"></div>
+
+                        <form id="formAdminLogin">
+                            <div class="auth-input-group">
+                                <label class="auth-input-label">Administrator Email</label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-user-shield auth-input-icon"></i>
+                                    <input type="email" id="siteAdminEmail" class="auth-input-field" placeholder="admin@assignmentdai.com" required>
+                                </div>
+                            </div>
+
+                            <div class="auth-input-group">
+                                <label class="auth-input-label">Administrator Password</label>
+                                <div class="auth-input-wrapper">
+                                    <i class="fas fa-key auth-input-icon"></i>
+                                    <input type="password" id="siteAdminPassword" class="auth-input-field" placeholder="••••••••" required>
+                                    <button type="button" class="auth-toggle-pwd-btn" onclick="AssignmentDaiAuth.togglePassword('siteAdminPassword', this)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="btnSubmitAdminLogin" class="auth-submit-btn mt-3" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
+                                <i class="fas fa-shield-alt mr-1"></i> Sign In to Operations Console
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-3">
+                            <a href="javascript:void(0)" onclick="AssignmentDaiAuth.switchTab('student')" class="small font-weight-bold text-primary">
+                                <i class="fas fa-arrow-left mr-1"></i> Back to Student Login
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================
+         MODAL 2: CREATE NEW ASSIGNMENT (SUBMIT PROJECT)
+         ======================================================== -->
+    <div class="modal fade" id="createAssignmentModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <!-- Header -->
+                <div class="create-assign-header">
+                    <div>
+                        <h3 class="create-assign-title">Create New Assignment</h3>
+                        <p class="create-assign-subtitle">Submit your assignment for expert help</p>
+                    </div>
+                    <button type="button" class="create-assign-close-btn" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <!-- Form View -->
+                <div id="createAssignFormView">
+                    <form id="createAssignmentForm">
+                        <div class="create-assign-body">
+                            <div id="assignAlertBox" style="display: none;"></div>
+
+                            <!-- User info banner if logged in -->
+                            <div id="assignAuthBanner" class="assign-auth-banner" style="display: none;">
+                                <div class="assign-auth-meta">
+                                    <i class="fas fa-check-circle text-success" style="font-size: 1.1rem;"></i>
+                                    <span>Submitting as: <strong id="assignAuthUserName">Student</strong> (<span id="assignAuthUserEmail"></span>)</span>
+                                </div>
+                                <span class="badge badge-light border text-muted">Verified</span>
+                            </div>
+
+                            <!-- Assignment Title -->
+                            <div class="assign-form-group">
+                                <label class="assign-form-label" for="assignTitle">
+                                    Assignment Title <span class="required-star">*</span>
+                                </label>
+                                <input type="text" id="assignTitle" class="assign-form-input" placeholder="Enter assignment title" maxlength="100" required>
+                                <div class="assign-counter-row">
+                                    <span class="assign-char-counter" id="assignTitleCounter">0/100</span>
+                                </div>
+                            </div>
+
+                            <!-- Type & Stream Grid -->
+                            <div class="assign-form-row">
+                                <!-- Assignment Type -->
+                                <div class="assign-form-group">
+                                    <label class="assign-form-label" for="assignType">
+                                        Assignment Type <span class="required-star">*</span>
+                                    </label>
+                                    <select id="assignType" class="assign-form-select" required>
+                                        <option value="" disabled selected>Select type</option>
+                                        <option value="Essay">Essay</option>
+                                        <option value="Research Paper">Research Paper</option>
+                                        <option value="Dissertation / Thesis">Dissertation / Thesis</option>
+                                        <option value="Case Study">Case Study</option>
+                                        <option value="Coursework / Homework">Coursework / Homework</option>
+                                        <option value="Programming Project">Programming Project</option>
+                                        <option value="Data Science Project">Data Science Project</option>
+                                        <option value="Business Report">Business Report</option>
+                                        <option value="Literature Review">Literature Review</option>
+                                        <option value="Lab Report">Lab Report</option>
+                                        <option value="Term Paper">Term Paper</option>
+                                        <option value="Other">Other Academic Writing</option>
+                                    </select>
+                                </div>
+
+                                <!-- Academic Stream -->
+                                <div class="assign-form-group">
+                                    <label class="assign-form-label" for="assignStream">
+                                        Academic Stream <span class="required-star">*</span>
+                                    </label>
+                                    <select id="assignStream" class="assign-form-select" required>
+                                        <option value="" disabled selected>Select stream</option>
+                                        <option value="Computer Science & IT">Computer Science & IT</option>
+                                        <option value="Data Science & AI">Data Science & AI</option>
+                                        <option value="Business & Management">Business & Management</option>
+                                        <option value="Economics & Finance">Economics & Finance</option>
+                                        <option value="Engineering">Engineering & Technology</option>
+                                        <option value="Health Sciences & Nursing">Health Sciences & Nursing</option>
+                                        <option value="Law & Legal Studies">Law & Legal Studies</option>
+                                        <option value="Humanities & Social Sciences">Humanities & Social Sciences</option>
+                                        <option value="Mathematics & Statistics">Mathematics & Statistics</option>
+                                        <option value="Natural Sciences">Natural Sciences</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Due Date -->
+                            <div class="assign-form-group">
+                                <label class="assign-form-label" for="assignDueDate">
+                                    Due Date <span class="required-star">*</span>
+                                </label>
+                                <input type="date" id="assignDueDate" class="assign-form-input" placeholder="dd/mm/yyyy" required>
+                            </div>
+
+                            <!-- Assignment Description -->
+                            <div class="assign-form-group">
+                                <label class="assign-form-label" for="assignDescription">
+                                    Assignment Description <span class="required-star">*</span>
+                                </label>
+                                <textarea id="assignDescription" class="assign-form-textarea" placeholder="Provide detailed requirements, instructions, and any specific guidelines..." maxlength="2000" rows="4" required></textarea>
+                                <div class="assign-counter-row">
+                                    <span class="assign-char-counter" id="assignDescCounter">0/2000</span>
+                                </div>
+                            </div>
+
+                            <!-- Supporting Documents Dropzone -->
+                            <div class="assign-form-group">
+                                <label class="assign-form-label">Supporting Documents</label>
+                                <div class="assign-dropzone" id="assignDropzone">
+                                    <i class="fas fa-cloud-upload-alt assign-dropzone-icon"></i>
+                                    <p class="assign-dropzone-title">Drag & drop files here or click to browse</p>
+                                    <p class="assign-dropzone-desc">Supported formats: PDF, DOC, DOCX, PPT, XLS, ZIP, PNG, JPG (Max 50MB)</p>
+                                    <input type="file" id="assignFileInput" multiple style="display: none;" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.zip,.png,.jpg,.jpeg">
+                                </div>
+                                <div class="assign-files-list" id="assignFilesList"></div>
+                            </div>
+
+                            <!-- Guest Contact Info (if not logged in) -->
+                            <div id="assignGuestFields">
+                                <hr class="my-3">
+                                <div class="assign-form-label mb-2">
+                                    <i class="fas fa-id-card text-primary mr-1"></i> Your Contact Details (For Project Delivery & Quotes)
+                                </div>
+                                <div class="assign-form-row">
+                                    <div class="assign-form-group mb-2">
+                                        <input type="text" id="assignGuestName" class="assign-form-input" placeholder="Your Full Name *">
+                                    </div>
+                                    <div class="assign-form-group mb-2">
+                                        <input type="email" id="assignGuestEmail" class="assign-form-input" placeholder="Your Email Address *">
+                                    </div>
+                                </div>
+                                <div class="assign-form-group mb-0">
+                                    <input type="text" id="assignGuestPhone" class="assign-form-input" placeholder="WhatsApp / Phone Number (Optional)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="create-assign-footer">
+                            <div class="create-assign-footer-left">
+                                <button type="button" class="btn-assign-cancel" data-dismiss="modal">Cancel</button>
+                            </div>
+                            <div class="create-assign-footer-right">
+                                <button type="button" id="btnAssignReset" class="btn-assign-reset">Reset</button>
+                                <button type="submit" id="btnAssignSubmit" class="btn-assign-create">
+                                    <i class="fas fa-paper-plane mr-1"></i> Create Assignment
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Success View -->
+                <div id="createAssignSuccessView" style="display: none;">
+                    <div class="assign-success-card">
+                        <div class="assign-success-icon">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <h4 class="assign-success-title">Assignment Submitted!</h4>
+                        <p class="assign-success-desc">
+                            Your assignment <span id="successProjectTitle" class="font-weight-bold text-dark"></span> has been received. Our expert scholars have been notified to evaluate your requirements and generate your quotation.
+                        </p>
+                        <div>
+                            <span class="small text-muted d-block mb-1">Your Tracking Reference ID:</span>
+                            <div class="assign-ref-badge" id="successProjectIdBadge">PRJ-0000</div>
+                        </div>
+                        <div class="d-flex justify-content-center gap-2 flex-wrap mt-3">
+                            <a href="dashboard.html" class="btn btn-primary rounded-pill px-4 font-weight-bold">
+                                <i class="fas fa-th-large mr-1"></i> View in Dashboard
+                            </a>
+                            <button type="button" class="btn btn-outline-secondary rounded-pill px-4 font-weight-bold" data-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Scripts -->
+    <script src="js/jquery.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/mobile-drawer.js"></script>
+    <script src="js/auth-modal.js"></script>
+    <script src="js/create-assignment-modal.js"></script>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmitContact');
+            const alertBox = document.getElementById('contactAlert');
+            const alertMsg = document.getElementById('contactAlertMsg');
+
+            const payload = {
+                full_name: document.getElementById('fullName').value.trim(),
+                email: document.getElementById('emailAddress').value.trim(),
+                subject: document.getElementById('subjectSelect').value,
+                message: document.getElementById('messageText').value.trim()
+            };
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...';
+
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    alertBox.className = 'contact-alert-banner contact-alert-success';
+                    alertMsg.textContent = data.message || 'Thank you! Your message has been sent successfully.';
+                    alertBox.style.display = 'block';
+                    document.getElementById('contactForm').reset();
+                } else {
+                    alertBox.className = 'contact-alert-banner alert alert-danger';
+                    alertMsg.textContent = data.message || 'Failed to send message. Please try again.';
+                    alertBox.style.display = 'block';
+                }
+            } catch (err) {
+                alertBox.className = 'contact-alert-banner alert alert-danger';
+                alertMsg.textContent = 'Network error. Please try again or reach us directly via WhatsApp.';
+                alertBox.style.display = 'block';
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i> Send Message <i class="fas fa-arrow-right ml-2"></i>';
+            }
+        });
+    </script>
+</body>
+</html>
